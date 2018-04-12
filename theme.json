@@ -1,7 +1,7 @@
 {
-  "logo": "./static/logo.svg",
-  "organizationLogo": "./static/Microsoft-logo_rgb_c-white.png",
-  "organizationWideLogo": "./static/Microsoft-logo_rgb_c-white.png",
+  "logo": "docs/static/logo.svg",
+  "organizationLogo": "docs/static/Microsoft-logo_rgb_c-white.png",
+  "organizationWideLogo": "docs/static/Microsoft-logo_rgb_c-white.png",
   "logoUrl": "https://github.com/Microsoft/pxt-sample",
   "homeUrl": "http://microsoft.github.io/pxt-sample/",
   "privacyUrl": "https://go.microsoft.com/fwlink/?LinkId=521839",
@@ -21,7 +21,7 @@
   "monacoToolbox": true,
   "invertedMenu": true,
   "showHomeScreen": true,
-  "homeScreenHero": "./static/hero.png",
+  "homeScreenHero": "docs/static/hero.png",
   "blocklyOptions": {
     "grid": {
       "spacing": 45,
