@@ -57,13 +57,13 @@ https://az416426.vo.msecnd.net/scripts/a/ai.0.js
 /test-pxt-sample/worker.js
 /test-pxt-sample/monacoworker.js
 
-# ver Thu Apr 12 2018 10:26:51 GMT-0700 (PDT)
+# ver Thu Apr 12 2018 10:36:23 GMT-0700 (PDT)
 
 # target
-/test-pxt-sample/logo
-/test-pxt-sample/organizationLogo
-/test-pxt-sample/organizationWideLogo
-/test-pxt-sample/homeScreenHero
+/test-pxt-sample/./static/logo.svg
+/test-pxt-sample/./static/Microsoft-logo_rgb_c-white.png
+/test-pxt-sample/./static/Microsoft-logo_rgb_c-white.png
+/test-pxt-sample/./static/hero.png
 
 /test-pxt-sample/target.js
   
