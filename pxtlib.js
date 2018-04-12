@@ -2558,9 +2558,9 @@ var pxt;
                     style.innerHTML = ".ui.accent { color: " + theme.accentColor + "; }\n                .ui.inverted.menu .accent.active.item, .ui.inverted.accent.menu  { background-color: " + theme.accentColor + "; }";
                     document.getElementsByTagName('head')[0].appendChild(style);
                 }
-                theme.appLogo = patchCdn(theme.appLogo);
-                theme.cardLogo = patchCdn(theme.cardLogo);
-                theme.homeScreenHero = patchCdn(theme.homeScreenHero);
+                var targetImages = Object.keys(theme)
+                    .filter(function (k) { return /(logo|hero)$/i.test(k) && /^@cdnUrl@/.test(theme[k]); })
+                    .forEach(function (k) { return theme[k] = patchCdn(theme[k]); });
             }
             // RTL languages
             if (pxt.Util.isUserLanguageRtl()) {
@@ -4485,7 +4485,7 @@ var pxt;
                 params["homeurl"] = html2Quote(theme.homeUrl);
             params["targetid"] = theme.id || "???";
             params["targetname"] = theme.name || "Microsoft MakeCode";
-            params["targetlogo"] = theme.docsLogo ? "<img aria-hidden=\"true\" role=\"presentation\" class=\"ui mini image\" src=\"" + U.toDataUri(theme.docsLogo) + "\" />" : "";
+            params["targetlogo"] = theme.docsLogo ? "<img aria-hidden=\"true\" role=\"presentation\" class=\"ui mini image\" src=\"" + theme.docsLogo + "\" />" : "";
             var ghURLs = d.ghEditURLs || [];
             if (ghURLs.length) {
                 var ghText = "<p style=\"margin-top:1em\">\n";
