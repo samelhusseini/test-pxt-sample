@@ -23,6 +23,9 @@
         "autoRun": true
     },
     "appTheme": {
+        "logo": "./static/logo.svg",
+        "organizationLogo": "./static/Microsoft-logo_rgb_c-white.png",
+        "organizationWideLogo": "./static/Microsoft-logo_rgb_c-white.png",
         "logoUrl": "https://github.com/Microsoft/pxt-sample",
         "homeUrl": "http://microsoft.github.io/pxt-sample/",
         "privacyUrl": "https://go.microsoft.com/fwlink/?LinkId=521839",
