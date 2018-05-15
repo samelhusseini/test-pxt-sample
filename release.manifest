@@ -3,11 +3,10 @@ CACHE MANIFEST
 CACHE:
 /test-pxt-sample/semantic.js
 /test-pxt-sample/main.js
+/test-pxt-sample/pxtapp.js
 /test-pxt-sample/typescript.js
 /test-pxt-sample/marked/marked.min.js
 /test-pxt-sample/highlight.js/highlight.pack.js
-/test-pxt-sample/lzma/lzma_worker-min.js
-/test-pxt-sample/fuse.min.js
 /test-pxt-sample/jquery.js
 /test-pxt-sample/pxtlib.js
 /test-pxt-sample/pxtcompiler.js
@@ -15,11 +14,12 @@ CACHE:
 /test-pxt-sample/pxtwinrt.js
 /test-pxt-sample/pxteditor.js
 /test-pxt-sample/pxtsim.js
+/test-pxt-sample/pxtembed.js
+/test-pxt-sample/pxtworker.js
+/test-pxt-sample/pxtweb.js
 /test-pxt-sample/blockly.css
 /test-pxt-sample/semantic.css
 /test-pxt-sample/rtlsemantic.css
-/test-pxt-sample/custom.css
-/test-pxt-sample/icons.css
 
 
 
@@ -55,7 +55,7 @@ https://az416426.vo.msecnd.net/scripts/a/ai.0.js
 /test-pxt-sample/worker.js
 /test-pxt-sample/monacoworker.js
 
-# ver Fri Apr 13 2018 23:00:41 GMT-0700 (PDT)
+# ver Mon May 14 2018 22:19:58 GMT-0700 (PDT)
 
 # target
 /test-pxt-sample/docs/static/logo.svg

@@ -160,6 +160,7 @@ var pxt;
         runner.DebugRunner = DebugRunner;
     })(runner = pxt.runner || (pxt.runner = {}));
 })(pxt || (pxt = {}));
+/* tslint:disable:no-jquery-raw-elements TODO(tslint): get rid of jquery html() calls */
 var pxt;
 (function (pxt) {
     var runner;
@@ -340,9 +341,12 @@ var pxt;
                     return;
                 var file = r.compileJS.ast.getSourceFile("main.ts");
                 var info = decompileCallInfo(file.statements[0]);
-                if (!info)
+                if (!info || !r.apiInfo)
                     return;
-                var block = Blockly.Blocks[info.attrs.blockId];
+                var symbolInfo = r.apiInfo.byQName[info.qName];
+                if (!symbolInfo)
+                    return;
+                var block = Blockly.Blocks[symbolInfo.attributes.blockId];
                 var xml = block && block.codeCard ? block.codeCard.blocksXml : undefined;
                 var s = xml ? $(pxt.blocks.render(xml)) : r.compileBlocks && r.compileBlocks.success ? $(r.blocksSvg) : undefined;
                 var sig = info.decl.getText().replace(/^export/, '');
@@ -463,8 +467,12 @@ var pxt;
                         var file = r.compileJS.ast.getSourceFile("main.ts");
                         var stmt = file.statements[0];
                         var info = decompileCallInfo(stmt);
-                        if (info && info.attrs.help)
-                            $newel = $("<a class=\"ui link\"/>").attr("href", "/reference/" + info.attrs.help).append($newel);
+                        if (info && r.apiInfo) {
+                            var symbolInfo = r.apiInfo.byQName[info.qName];
+                            if (symbolInfo && symbolInfo.attributes.help) {
+                                $newel = $("<a class=\"ui link\"/>").attr("href", "/reference/" + symbolInfo.attributes.help).append($newel);
+                            }
+                        }
                         $el.replaceWith($newel);
                     }
                     return Promise.delay(1, renderNextAsync());
@@ -515,8 +523,9 @@ var pxt;
                 };
                 stmts.forEach(function (stmt) {
                     var info = decompileCallInfo(stmt);
-                    if (info) {
-                        var block = Blockly.Blocks[info.attrs.blockId];
+                    if (info && r.apiInfo && r.apiInfo.byQName[info.qName]) {
+                        var attributes = r.apiInfo.byQName[info.qName].attributes;
+                        var block = Blockly.Blocks[attributes.blockId];
                         if (ns) {
                             var ii = r.compileBlocks.blocksInfo.apis.byQName[info.qName];
                             var nsi = r.compileBlocks.blocksInfo.apis.byQName[ii.namespace];
@@ -526,8 +535,8 @@ var pxt;
                                 description: nsi.attributes.jsDoc,
                                 blocksXml: block && block.codeCard
                                     ? block.codeCard.blocksXml
-                                    : info.attrs.blockId
-                                        ? "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"" + info.attrs.blockId + "\"></block></xml>"
+                                    : attributes.blockId
+                                        ? "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"" + attributes.blockId + "\"></block></xml>"
                                         : undefined
                             });
                         }
@@ -541,8 +550,8 @@ var pxt;
                             // no block available here
                             addItem({
                                 name: info.qName,
-                                description: info.attrs.jsDoc,
-                                url: info.attrs.help || undefined
+                                description: attributes.jsDoc,
+                                url: attributes.help || undefined
                             });
                         }
                     }
@@ -784,6 +793,7 @@ var pxt;
         runner.renderAsync = renderAsync;
     })(runner = pxt.runner || (pxt.runner = {}));
 })(pxt || (pxt = {}));
+/* tslint:disable:no-inner-html TODO(tslint): get rid of jquery html() calls */
 /// <reference path="../built/pxtlib.d.ts" />
 /// <reference path="../built/pxteditor.d.ts" />
 /// <reference path="../built/pxtcompiler.d.ts" />
@@ -1121,7 +1131,8 @@ var pxt;
                 if (!msg)
                     return; // no more work
                 pxt.tickEvent("renderer.job");
-                jobPromise = runner.decompileToBlocksAsync(msg.code, msg.options)
+                jobPromise = pxt.BrowserUtils.loadBlocklyAsync()
+                    .then(function () { return runner.decompileToBlocksAsync(msg.code, msg.options); })
                     .then(function (result) { return result.blocksSvg ? pxt.blocks.layout.blocklyToSvgAsync(result.blocksSvg, 0, 0, result.blocksSvg.viewBox.baseVal.width, result.blocksSvg.viewBox.baseVal.height) : undefined; })
                     .then(function (res) {
                     window.parent.postMessage({
@@ -1164,6 +1175,11 @@ var pxt;
                 Promise.delay(100) // allow UI to update
                     .then(function () {
                     switch (doctype) {
+                        case "print":
+                            var data = window.localStorage["printjob"];
+                            delete window.localStorage["printjob"];
+                            return renderProjectFilesAsync(content, JSON.parse(data))
+                                .then(function () { return pxsim.print(1000); });
                         case "project":
                             return renderProjectFilesAsync(content, JSON.parse(src))
                                 .then(function () { return pxsim.print(1000); });
@@ -1172,11 +1188,6 @@ var pxt;
                                 .then(function () { return pxsim.print(1000); });
                         case "doc":
                             return renderDocAsync(content, src);
-                        case "tutorial":
-                            var body = $('body');
-                            body.addClass('tutorial');
-                            $(loading).hide();
-                            return renderTutorialAsync(content, src);
                         case "book":
                             return renderBookAsync(content, src);
                         default:
@@ -1202,7 +1213,7 @@ var pxt;
                     .done(function () { });
             }
             function renderHash() {
-                var m = /^#(doc|md|tutorial|book|project|projectid):([^&?:]+)(:([^&?:]+):([^&?:]+))?/i.exec(window.location.hash);
+                var m = /^#(doc|md|tutorial|book|project|projectid|print):([^&?:]+)(:([^&?:]+):([^&?:]+))?/i.exec(window.location.hash);
                 if (m) {
                     // navigation occured
                     var p = m[4] ? setEditorContextAsync(/^blocks$/.test(m[4]) ? LanguageMode.Blocks : LanguageMode.TypeScript, m[5]) : Promise.resolve();
@@ -1350,110 +1361,6 @@ var pxt;
             });
         }
         runner.renderMarkdownAsync = renderMarkdownAsync;
-        function renderTutorialAsync(content, tutorialid) {
-            tutorialid = tutorialid.replace(/^\//, "");
-            var initPromise = Promise.resolve();
-            if (pxt.Cloud.isLocalHost()) {
-                initPromise = waitForLocalTokenAsync();
-            }
-            return initPromise.then(function () { return pxt.Cloud.downloadMarkdownAsync(tutorialid, runner.editorLocale, pxt.Util.localizeLive); })
-                .then(function (tutorialmd) {
-                var steps = tutorialmd.split(/^##[^#].*$/gmi);
-                var newAuthoring = true;
-                if (steps.length <= 1) {
-                    // try again, using old logic.
-                    steps = tutorialmd.split(/^###[^#].*$/gmi);
-                    newAuthoring = false;
-                }
-                if (steps[0].indexOf("# Not found") == 0) {
-                    pxt.log("Tutorial not found: " + tutorialid);
-                    throw new Error("Tutorial not found: " + tutorialid);
-                }
-                var stepInfo = [];
-                tutorialmd.replace(newAuthoring ? /^##[^#](.*)$/gmi : /^###[^#](.*)$/gmi, function (f, s) {
-                    var info = {
-                        fullscreen: /@(fullscreen|unplugged)/.test(s),
-                        unplugged: /@unplugged/.test(s)
-                    };
-                    stepInfo.push(info);
-                    return "";
-                });
-                if (steps.length < 1)
-                    return Promise.resolve();
-                var options = steps[0];
-                steps = steps.slice(1, steps.length); // Remove tutorial title
-                // Extract toolbox block ids
-                var toolboxSubset = {};
-                return Promise.resolve()
-                    .then(function () { return renderMarkdownAsync(content, tutorialmd, { tutorial: true }); })
-                    .then(function () {
-                    var uptoSteps = steps.join();
-                    uptoSteps = uptoSteps.replace(/((?!.)\s)+/g, "\n");
-                    var regex = /```(sim|block|blocks|filterblocks)\s*\n([\s\S]*?)\n```/gmi;
-                    var match;
-                    var code = '';
-                    while ((match = regex.exec(uptoSteps)) != null) {
-                        code += match[2] + "\n";
-                    }
-                    if (code != '') {
-                        return pxt.runner.decompileToBlocksAsync(code, {
-                            emPixels: 14,
-                            layout: pxt.blocks.BlockLayout.Flow,
-                            useViewWidth: true,
-                            package: undefined
-                        }).then(function (r) {
-                            var blocksxml = r.compileBlocks.outfiles['main.blocks'];
-                            if (blocksxml) {
-                                var headless = pxt.blocks.loadWorkspaceXml(blocksxml);
-                                var allblocks = headless.getAllBlocks();
-                                for (var bi = 0; bi < allblocks.length; ++bi) {
-                                    var blk = allblocks[bi];
-                                    toolboxSubset[blk.type] = 1;
-                                }
-                            }
-                        }).catch(function () {
-                            pxt.log("Failed to decompile tutorial: " + tutorialid);
-                            throw new Error("Failed to decompile tutorial: " + tutorialid);
-                        });
-                    }
-                    return Promise.resolve();
-                })
-                    .then(function () {
-                    // Split the steps
-                    var stepcontent = content.innerHTML.split(newAuthoring ? /<h2.*?>(.*?)<\/h2>/gi : /<h3.*?>(.*?)<\/h3>/gi);
-                    // drop first section
-                    stepcontent.shift();
-                    for (var i = 0; i < stepcontent.length; i += 2) {
-                        content.innerHTML = stepcontent[i + 1];
-                        stepInfo[i / 2].titleContent = (stepcontent[i] || "").replace(/@(fullscreen|unplugged)/g, "").trim();
-                        stepInfo[i / 2].headerContent = "<p>" + content.firstElementChild.innerHTML + "</p>";
-                        stepInfo[i / 2].ariaLabel = content.firstElementChild.textContent;
-                        stepInfo[i / 2].content = stepcontent[i + 1];
-                        stepInfo[i / 2].hasHint = content.childElementCount > 1;
-                    }
-                    content.innerHTML = '';
-                    // return the result
-                    window.parent.postMessage({
-                        type: "tutorial",
-                        tutorial: tutorialid,
-                        subtype: "loaded",
-                        stepInfo: stepInfo,
-                        toolboxSubset: toolboxSubset
-                    }, "*");
-                });
-            })
-                .catch(function (e) {
-                pxt.log("Failed to load tutorial: " + tutorialid);
-                pxt.log(e.message);
-                // return the result
-                window.parent.postMessage({
-                    type: "tutorial",
-                    tutorial: tutorialid,
-                    subtype: "error"
-                }, "*");
-            });
-        }
-        runner.renderTutorialAsync = renderTutorialAsync;
         function decompileToBlocksAsync(code, options) {
             // code may be undefined or empty!!!
             var packageid = options && options.packageId ? "pub:" + options.packageId :
@@ -1476,17 +1383,18 @@ var pxt;
                 return ts.pxtc.localizeApisAsync(apis, runner.mainPkg)
                     .then(function () {
                     var blocksInfo = pxtc.getBlocksInfo(apis);
-                    pxt.blocks.initBlocks(blocksInfo);
+                    pxt.blocks.initializeAndInject(blocksInfo);
                     var bresp = pxtc.decompiler.decompileToBlocks(blocksInfo, resp.ast.getSourceFile("main.ts"), { snippetMode: options && options.snippetMode });
                     if (bresp.diagnostics && bresp.diagnostics.length > 0)
                         bresp.diagnostics.forEach(function (diag) { return console.error(diag.messageText); });
                     if (!bresp.success)
-                        return { package: runner.mainPkg, compileJS: resp, compileBlocks: bresp };
+                        return { package: runner.mainPkg, compileJS: resp, compileBlocks: bresp, apiInfo: apis };
                     pxt.debug(bresp.outfiles["main.blocks"]);
                     return {
                         package: runner.mainPkg,
                         compileJS: resp,
                         compileBlocks: bresp,
+                        apiInfo: apis,
                         blocksSvg: pxt.blocks.render(bresp.outfiles["main.blocks"], options)
                     };
                 });
@@ -1506,10 +1414,11 @@ var pxt;
                 return ts.pxtc.localizeApisAsync(apis, runner.mainPkg)
                     .then(function () {
                     var blocksInfo = pxtc.getBlocksInfo(apis);
-                    pxt.blocks.initBlocks(blocksInfo);
+                    pxt.blocks.initializeAndInject(blocksInfo);
                     return {
                         package: runner.mainPkg,
-                        blocksSvg: pxt.blocks.render(code, options)
+                        blocksSvg: pxt.blocks.render(code, options),
+                        apiInfo: apis
                     };
                 });
             });

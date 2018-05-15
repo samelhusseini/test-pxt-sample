@@ -17,8 +17,14 @@ var data = require("./data");
 var sui = require("./sui");
 var EditorAccessibilityMenu = /** @class */ (function (_super) {
     __extends(EditorAccessibilityMenu, _super);
-    function EditorAccessibilityMenu() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function EditorAccessibilityMenu(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.openJavaScript = _this.openJavaScript.bind(_this);
+        _this.showLanguagePicker = _this.showLanguagePicker.bind(_this);
+        _this.toggleHighContrast = _this.toggleHighContrast.bind(_this);
+        _this.goHome = _this.goHome.bind(_this);
+        return _this;
     }
     EditorAccessibilityMenu.prototype.openJavaScript = function () {
         pxt.tickEvent("accmenu.editor.openJS", undefined, { interactiveConsent: true });
@@ -48,22 +54,27 @@ var EditorAccessibilityMenu = /** @class */ (function (_super) {
         return this.state.highContrast != nextState.highContrast;
     };
     EditorAccessibilityMenu.prototype.renderCore = function () {
-        var _this = this;
         var highContrast = this.props.parent.state.highContrast;
         var targetTheme = pxt.appTarget.appTheme;
         return React.createElement("div", { className: "ui accessibleMenu borderless fixed menu", role: "menubar" },
-            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon js", text: lf("Skip to JavaScript editor"), onClick: function () { return _this.openJavaScript(); } }),
-            targetTheme.selectLanguage ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon globe", text: lf("Select Language"), onClick: function () { return _this.showLanguagePicker(); } }) : undefined,
-            targetTheme.highContrast ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: function () { return _this.toggleHighContrast(); } }) : undefined,
-            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "home", text: lf("Go Home"), onClick: function () { return _this.goHome(); } }));
+            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon js", text: lf("Skip to JavaScript editor"), onClick: this.openJavaScript }),
+            targetTheme.selectLanguage ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon globe", text: lf("Select Language"), onClick: this.showLanguagePicker }) : undefined,
+            targetTheme.highContrast ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: this.toggleHighContrast }) : undefined,
+            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "home", text: lf("Go Home"), onClick: this.goHome }));
     };
     return EditorAccessibilityMenu;
 }(data.Component));
 exports.EditorAccessibilityMenu = EditorAccessibilityMenu;
 var HomeAccessibilityMenu = /** @class */ (function (_super) {
     __extends(HomeAccessibilityMenu, _super);
-    function HomeAccessibilityMenu() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function HomeAccessibilityMenu(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.newProject = _this.newProject.bind(_this);
+        _this.importProjectDialog = _this.importProjectDialog.bind(_this);
+        _this.showLanguagePicker = _this.showLanguagePicker.bind(_this);
+        _this.toggleHighContrast = _this.toggleHighContrast.bind(_this);
+        return _this;
     }
     HomeAccessibilityMenu.prototype.newProject = function () {
         pxt.tickEvent("accmenu.home.new", undefined, { interactiveConsent: true });
@@ -93,20 +104,19 @@ var HomeAccessibilityMenu = /** @class */ (function (_super) {
         return this.state.highContrast != nextState.highContrast;
     };
     HomeAccessibilityMenu.prototype.renderCore = function () {
-        var _this = this;
         var highContrast = this.state.highContrast;
         var targetTheme = pxt.appTarget.appTheme;
         return React.createElement("div", { className: "ui accessibleMenu borderless fixed menu", role: "menubar" },
-            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "add circle", text: lf("New Project"), onClick: function () { return _this.newProject(); } }),
-            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "upload", text: lf("Import Project"), onClick: function () { return _this.importProjectDialog(); } }),
-            targetTheme.selectLanguage ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon globe", text: lf("Select Language"), onClick: function () { return _this.showLanguagePicker(); } }) : undefined,
-            targetTheme.highContrast ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: function () { return _this.toggleHighContrast(); } }) : undefined);
+            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "add circle", text: lf("New Project"), onClick: this.newProject }),
+            React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "upload", text: lf("Import Project"), onClick: this.importProjectDialog }),
+            targetTheme.selectLanguage ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", icon: "xicon globe", text: lf("Select Language"), onClick: this.showLanguagePicker }) : undefined,
+            targetTheme.highContrast ? React.createElement(sui.Item, { className: (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: this.toggleHighContrast }) : undefined);
     };
     return HomeAccessibilityMenu;
 }(data.Component));
 exports.HomeAccessibilityMenu = HomeAccessibilityMenu;
 
-},{"./data":15,"./sui":47,"react":155}],2:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],2:[function(require,module,exports){
 "use strict";
 /// <reference path="../../localtypings/pxtpackage.d.ts"/>
 /// <reference path="../../built/pxtlib.d.ts"/>
@@ -133,7 +143,6 @@ var core = require("./core");
 var sui = require("./sui");
 var simulator = require("./simulator");
 var compiler = require("./compiler");
-var tdlegacy = require("./tdlegacy");
 var cmds = require("./cmds");
 var appcache = require("./appcache");
 var screenshot = require("./screenshot");
@@ -145,7 +154,6 @@ var tutorial = require("./tutorial");
 var editortoolbar = require("./editortoolbar");
 var simtoolbar = require("./simtoolbar");
 var dialogs = require("./dialogs");
-var importhelpers = require("./import");
 var debug = require("./debugger");
 var filelist = require("./filelist");
 var container = require("./container");
@@ -154,7 +162,9 @@ var projects = require("./projects");
 var extensions = require("./extensions");
 var sounds = require("./sounds");
 var make = require("./make");
+var blocklyToolbox = require("./blocksSnippets");
 var monacoToolbox = require("./monacoSnippets");
+var greenscreen = require("./greenscreen");
 var monaco = require("./monaco");
 var pxtjson = require("./pxtjson");
 var serial = require("./serial");
@@ -162,9 +172,9 @@ var blocks = require("./blocks");
 var serialindicator = require("./serialindicator");
 var draganddrop = require("./draganddrop");
 var notification = require("./notification");
+var electron = require("./electron");
 var Cloud = pxt.Cloud;
 var Util = pxt.Util;
-var CategoryMode = pxt.toolbox.CategoryMode;
 pxsim.util.injectPolyphils();
 var theEditor;
 var ProjectView = /** @class */ (function (_super) {
@@ -177,14 +187,14 @@ var ProjectView = /** @class */ (function (_super) {
                 return;
             if (!_this.state.active)
                 return;
-            _this.runSimulator({ background: true });
+            _this.runSimulator({ debug: !!_this.state.debugging, background: true });
         }, 1000, true);
         _this.autoRunSimulator = pxtc.Util.debounce(function () {
             if (Util.now() - _this.lastChangeTime < 1000)
                 return;
             if (!_this.state.active)
                 return;
-            _this.runSimulator({ background: true });
+            _this.runSimulator({ debug: !!_this.state.debugging, background: true });
         }, 2000, true);
         _this._slowTypeCheck = 0;
         _this.typecheck = pxtc.Util.debounce(function () {
@@ -207,8 +217,8 @@ var ProjectView = /** @class */ (function (_super) {
                 if (pxt.appTarget.simulator && pxt.appTarget.simulator.autoRun) {
                     var output = pkg.mainEditorPkg().outputPkg.files["output.txt"];
                     if (output && !output.numDiagnosticsOverride
-                        && !simulator.driver.runOptions.debug
                         && (simulator.driver.state == pxsim.SimulatorState.Running
+                            || simulator.driver.state == pxsim.SimulatorState.Paused
                             || simulator.driver.state == pxsim.SimulatorState.Unloaded)) {
                         if (_this.editor == _this.blocksEditor)
                             _this.autoRunBlocksSimulator();
@@ -230,6 +240,9 @@ var ProjectView = /** @class */ (function (_super) {
             _this.markdownChangeHandler();
         }, 500, false);
         _this.updatingEditorFile = false;
+        ///////////////////////////////////////////////////////////
+        ////////////             Import               /////////////
+        ///////////////////////////////////////////////////////////
         _this.hexFileImporters = [{
                 id: "default",
                 canImport: function (data) { return data.meta.cloudId == "ks/" + pxt.appTarget.id || data.meta.cloudId == pxt.CLOUD_ID + pxt.appTarget.id // match on targetid
@@ -238,6 +251,7 @@ var ProjectView = /** @class */ (function (_super) {
                 importAsync: function (project, data) {
                     var h = {
                         target: pxt.appTarget.id,
+                        targetVersion: data.meta.targetVersions ? data.meta.targetVersions.target : undefined,
                         editor: data.meta.editor,
                         name: data.meta.name,
                         meta: {},
@@ -264,16 +278,44 @@ var ProjectView = /** @class */ (function (_super) {
         _this.debouncedSaveProjectName = Util.debounce(function () {
             _this.saveProjectNameAsync().done();
         }, 2000, false);
+        ///////////////////////////////////////////////////////////
+        ////////////             REFS                 /////////////
+        ///////////////////////////////////////////////////////////
+        _this.handleHomeRef = function (c) {
+            _this.home = c;
+        };
+        _this.handleScriptSearchRef = function (c) {
+            _this.scriptSearch = c;
+        };
+        _this.handleExtensionRef = function (c) {
+            _this.extensions = c;
+        };
+        _this.handleImportDialogRef = function (c) {
+            _this.importDialog = c;
+        };
+        _this.handleExitAndSaveDialogRef = function (c) {
+            _this.exitAndSaveDialog = c;
+        };
+        _this.handleShareEditorRef = function (c) {
+            _this.shareEditor = c;
+        };
+        _this.handleLanguagePickerRef = function (c) {
+            _this.languagePicker = c;
+        };
         document.title = pxt.appTarget.title || pxt.appTarget.name;
         _this.reload = false; //set to true in case of reset of the project where we are going to reload the page.
         _this.settings = JSON.parse(pxt.storage.getLocal("editorSettings") || "{}");
         var shouldShowHomeScreen = _this.shouldShowHomeScreen();
         var isSandbox = pxt.shell.isSandboxMode() || pxt.shell.isReadOnly();
+        var isHighContrast = /hc=(\w+)/.test(window.location.href);
+        if (isHighContrast)
+            core.setHighContrast(true);
         _this.state = {
             showFiles: false,
             home: shouldShowHomeScreen,
             active: document.visibilityState == 'visible',
-            collapseEditorTools: pxt.appTarget.simulator.headless || (!isSandbox && pxt.BrowserUtils.isMobile())
+            collapseEditorTools: pxt.appTarget.simulator.headless || (!isSandbox && pxt.BrowserUtils.isMobile()),
+            highContrast: isHighContrast
         };
         if (!_this.settings.editorFontSize)
             _this.settings.editorFontSize = /mobile/i.test(navigator.userAgent) ? 15 : 19;
@@ -281,6 +323,11 @@ var ProjectView = /** @class */ (function (_super) {
             _this.settings.fileHistory = [];
         if (shouldShowHomeScreen)
             _this.homeLoaded();
+        _this.hwDebug = _this.hwDebug.bind(_this);
+        _this.hideLightbox = _this.hideLightbox.bind(_this);
+        _this.openSimSerial = _this.openSimSerial.bind(_this);
+        _this.openDeviceSerial = _this.openDeviceSerial.bind(_this);
+        _this.toggleGreenScreen = _this.toggleGreenScreen.bind(_this);
         return _this;
     }
     ProjectView.prototype.shouldShowHomeScreen = function () {
@@ -430,7 +477,7 @@ var ProjectView = /** @class */ (function (_super) {
                 return compiler.getBlocksAsync();
             })
                 .done(function (bi) {
-                pxt.blocks.initBlocks(bi);
+                pxt.blocks.initializeAndInject(bi);
                 _this.blocksEditor.updateBlocksInfo(bi);
                 _this.setFile(pkg.mainEditorPkg().files["main.blocks"]);
             });
@@ -441,6 +488,12 @@ var ProjectView = /** @class */ (function (_super) {
     };
     ProjectView.prototype.openSettings = function () {
         this.setFile(pkg.mainEditorPkg().lookupFile("this/pxt.json"));
+    };
+    ProjectView.prototype.openSimSerial = function () {
+        this.openSerial(true);
+    };
+    ProjectView.prototype.openDeviceSerial = function () {
+        this.openSerial(false);
     };
     ProjectView.prototype.openSerial = function (isSim) {
         if (!pxt.appTarget.serial || !pxt.appTarget.serial.useEditor)
@@ -520,9 +573,15 @@ var ProjectView = /** @class */ (function (_super) {
         var _this = this;
         this.allEditors.forEach(function (e) { return e.prepare(); });
         simulator.init(document.getElementById("boardview"), {
+            orphanException: function (brk) {
+                // TODO: start debugging session
+                // TODO: user friendly error message
+                core.warningNotification(lf("Program Error: {0}", brk.exceptionMessage));
+            },
             highlightStatement: function (stmt, brk) {
                 if (_this.editor)
-                    _this.editor.highlightStatement(stmt, brk);
+                    return _this.editor.highlightStatement(stmt, brk);
+                return false;
             },
             restartSimulator: function () {
                 core.hideDialog();
@@ -541,6 +600,28 @@ var ProjectView = /** @class */ (function (_super) {
         if (pxt.appTarget.appTheme.allowParentController || pxt.appTarget.appTheme.allowPackageExtensions || pxt.appTarget.appTheme.allowSimulatorTelemetry)
             pxt.editor.bindEditorMessages(this);
         this.forceUpdate(); // we now have editors prepared
+    };
+    // Add an error guard for the entire application
+    ProjectView.prototype.componentDidCatch = function (error, info) {
+        try {
+            core.killLoadingQueue();
+            pxsim.U.remove(document.getElementById('loading'));
+            this.setState({ hasError: true });
+            // Log critical error
+            pxt.tickEvent('pxt.criticalerror', { error: error, info: info });
+            // Reload the page in 2 seconds
+            var lastCriticalError = pxt.storage.getLocal("lastcriticalerror") ?
+                Date.parse(pxt.storage.getLocal("lastcriticalerror")) : Date.now();
+            // don't refresh if we refreshed in the last minute
+            if (!lastCriticalError || (!isNaN(lastCriticalError) && Date.now() - lastCriticalError > 60 * 1000)) {
+                pxt.storage.setLocal("lastcriticalerror", new Date().toISOString());
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            }
+        }
+        catch (e) {
+        }
     };
     ProjectView.prototype.pickEditorFor = function (f) {
         return this.allEditors.filter(function (e) { return e.acceptsFile(f); })[0];
@@ -707,10 +788,8 @@ var ProjectView = /** @class */ (function (_super) {
             var fullscreen = tutorialOptions.tutorialStepInfo[step].fullscreen;
             if (fullscreen)
                 this.showTutorialHint();
-            else {
-                tutorial.TutorialContent.refresh();
+            else
                 this.showLightbox();
-            }
         }
     };
     ProjectView.prototype.handleMessage = function (msg) {
@@ -724,8 +803,15 @@ var ProjectView = /** @class */ (function (_super) {
                 switch (t.subtype) {
                     case 'loaded':
                         var tt = msg;
-                        if (tt.toolboxSubset && Object.keys(tt.toolboxSubset).length > 0)
-                            this.editor.filterToolbox({ blocks: tt.toolboxSubset, defaultState: pxt.editor.FilterState.Hidden }, CategoryMode.Basic);
+                        if (tt.toolboxSubset && Object.keys(tt.toolboxSubset).length > 0) {
+                            this.setState({
+                                editorState: {
+                                    searchBar: false,
+                                    filters: { blocks: tt.toolboxSubset, defaultState: pxt.editor.FilterState.Hidden }
+                                }
+                            });
+                            this.editor.filterToolbox(tt.toolboxSubset, tt.showCategories);
+                        }
                         var tutorialOptions = this.state.tutorialOptions;
                         tutorialOptions.tutorialReady = true;
                         tutorialOptions.tutorialStepInfo = tt.stepInfo;
@@ -734,7 +820,6 @@ var ProjectView = /** @class */ (function (_super) {
                         if (fullscreen)
                             this.showTutorialHint();
                         else {
-                            tutorial.TutorialContent.refresh();
                             this.showLightbox();
                         }
                         core.hideLoading("tutorial");
@@ -770,6 +855,25 @@ var ProjectView = /** @class */ (function (_super) {
             return Promise.resolve();
         this.stopSimulator(true);
         this.clearSerial();
+        // version check, you should not load a script from 1 major version above.
+        if (h.targetVersion && pxt.semver.majorCmp(h.targetVersion, pxt.appTarget.versions.target) > 0) {
+            // the script is a major version ahead, need to redirect
+            pxt.tickEvent('patch.maxversion', { targetVersion: h.targetVersion });
+            var buttons = [];
+            if (pxt.appTarget && pxt.appTarget.appTheme && pxt.appTarget.appTheme.homeUrl)
+                buttons.push({
+                    label: lf("Get latest"),
+                    icon: "external alternate",
+                    url: pxt.appTarget.appTheme.homeUrl
+                });
+            return core.dialogAsync({
+                header: lf("Oops, this project is too new!"),
+                body: lf("This project was created in a newer version of this editor. Please try again in that editor."),
+                disagreeLbl: lf("Ok"),
+                buttons: buttons
+            })
+                .then(function () { return _this.openHome(); });
+        }
         Util.jsonMergeFrom(editorState || {}, this.state.editorState || {});
         return pkg.loadPkgAsync(h.id)
             .then(function () {
@@ -851,21 +955,97 @@ var ProjectView = /** @class */ (function (_super) {
             var curr = pkg.mainEditorPkg().header;
             curr.isDeleted = true;
             return workspace.saveAsync(curr, {})
-                .then(function () {
-                if (workspace.getHeaders().length > 0) {
-                    _this.openHome();
-                }
-                else {
-                    _this.newProject();
-                }
+                .then(function () { return _this.openHome(); });
+        });
+    };
+    ProjectView.prototype.isHexFile = function (filename) {
+        return /\.(hex|uf2)$/i.test(filename);
+    };
+    ProjectView.prototype.isBlocksFile = function (filename) {
+        return /\.blocks$/i.test(filename);
+    };
+    ProjectView.prototype.isTypescriptFile = function (filename) {
+        return /\.ts$/i.test(filename);
+    };
+    ProjectView.prototype.isProjectFile = function (filename) {
+        return /\.(pxt|mkcd)$/i.test(filename);
+    };
+    ProjectView.prototype.isPNGFile = function (filename) {
+        return pxt.appTarget.compile.saveAsPNG && /\.png$/i.test(filename);
+    };
+    ProjectView.prototype.isAssetFile = function (filename) {
+        var exts = pxt.appTarget.runtime ? pxt.appTarget.runtime.assetExtensions : null;
+        if (exts) {
+            var ext = filename.replace(/.*\./, "").toLowerCase();
+            return exts.indexOf(ext) >= 0;
+        }
+        return false;
+    };
+    ProjectView.prototype.importProjectCoreAsync = function (buf) {
+        var _this = this;
+        return pxt.lzmaDecompressAsync(buf)
+            .then(function (contents) {
+            var data = JSON.parse(contents);
+            _this.importHex(data);
+        }).catch(function (e) {
+            core.warningNotification(lf("Sorry, we could not import this project."));
+            _this.openHome();
+        });
+    };
+    ProjectView.prototype.importHexFile = function (file) {
+        var _this = this;
+        if (!file)
+            return;
+        pxt.cpp.unpackSourceFromHexFileAsync(file)
+            .done(function (data) { return _this.importHex(data); });
+    };
+    ProjectView.prototype.importBlocksFiles = function (file) {
+        var _this = this;
+        if (!file)
+            return;
+        ts.pxtc.Util.fileReadAsTextAsync(file)
+            .done(function (contents) {
+            _this.newProject({
+                filesOverride: { "main.blocks": contents, "main.ts": "  " },
+                name: file.name.replace(/\.blocks$/i, '') || lf("Untitled")
             });
         });
     };
-    ///////////////////////////////////////////////////////////
-    ////////////             Import               /////////////
-    ///////////////////////////////////////////////////////////
-    ProjectView.prototype.convertTouchDevelopToTypeScriptAsync = function (td) {
-        return tdlegacy.td2tsAsync(td);
+    ProjectView.prototype.importTypescriptFile = function (file) {
+        var _this = this;
+        if (!file)
+            return;
+        ts.pxtc.Util.fileReadAsTextAsync(file)
+            .done(function (contents) {
+            _this.newProject({
+                filesOverride: { "main.blocks": '', "main.ts": contents || "  " },
+                name: file.name.replace(/\.ts$/i, '') || lf("Untitled")
+            });
+        });
+    };
+    ProjectView.prototype.importProjectFile = function (file) {
+        var _this = this;
+        if (!file)
+            return;
+        ts.pxtc.Util.fileReadAsBufferAsync(file)
+            .then(function (buf) { return _this.importProjectCoreAsync(buf); });
+    };
+    ProjectView.prototype.importPNGFile = function (file) {
+        var _this = this;
+        if (!file)
+            return;
+        ts.pxtc.Util.fileReadAsBufferAsync(file)
+            .then(function (buf) { return screenshot.decodeBlobAsync("data:image/png;base64," +
+            btoa(pxt.Util.uint8ArrayToString(buf))); })
+            .then(function (buf) { return _this.importProjectCoreAsync(buf); });
+    };
+    ProjectView.prototype.importAssetFile = function (file) {
+        ts.pxtc.Util.fileReadAsBufferAsync(file)
+            .then(function (buf) {
+            var basename = file.name.replace(/.*[\/\\]/, "");
+            return pkg.mainEditorPkg().saveAssetAsync(basename, buf);
+        })
+            .done();
     };
     ProjectView.prototype.importHex = function (data, createNewIfFailed) {
         var _this = this;
@@ -903,6 +1083,7 @@ var ProjectView = /** @class */ (function (_super) {
         if (!h) {
             h = {
                 target: pxt.appTarget.id,
+                targetVersion: undefined,
                 editor: pxt.BLOCKS_PROJECT_NAME,
                 name: lf("Untitled"),
                 meta: {},
@@ -915,7 +1096,7 @@ var ProjectView = /** @class */ (function (_super) {
     };
     ProjectView.prototype.initDragAndDrop = function () {
         var _this = this;
-        draganddrop.setupDragAndDrop(document.body, function (file) { return file.size < 1000000 && importhelpers.isHexFile(file.name) || importhelpers.isBlocksFile(file.name); }, function (files) {
+        draganddrop.setupDragAndDrop(document.body, function (file) { return file.size < 1000000 && _this.isHexFile(file.name) || _this.isBlocksFile(file.name); }, function (files) {
             if (files) {
                 pxt.tickEvent("dragandrop.open");
                 _this.importFile(files[0]);
@@ -925,20 +1106,24 @@ var ProjectView = /** @class */ (function (_super) {
     ProjectView.prototype.importFile = function (file) {
         if (!file || pxt.shell.isReadOnly())
             return;
-        if (importhelpers.isHexFile(file.name)) {
-            importhelpers.importHexFile(file);
+        if (this.isHexFile(file.name)) {
+            this.importHexFile(file);
         }
-        else if (importhelpers.isBlocksFile(file.name)) {
-            importhelpers.importBlocksFiles(file);
+        else if (this.isBlocksFile(file.name)) {
+            this.importBlocksFiles(file);
         }
-        else if (importhelpers.isTypescriptFile(file.name)) {
-            importhelpers.importTypescriptFile(file);
+        else if (this.isTypescriptFile(file.name)) {
+            this.importTypescriptFile(file);
         }
-        else if (importhelpers.isProjectFile(file.name)) {
-            importhelpers.importProjectFile(file);
+        else if (this.isProjectFile(file.name)) {
+            this.importProjectFile(file);
         }
-        else if (importhelpers.isPNGFile(file.name)) {
-            importhelpers.importPNGFile(file);
+        else if (this.isAssetFile(file.name)) {
+            // assets need to go before PNG source import below, since target might want PNG assets
+            this.importAssetFile(file);
+        }
+        else if (this.isPNGFile(file.name)) {
+            this.importPNGFile(file);
         }
         else {
             var importer = this.resourceImporters.filter(function (fi) { return fi.canImport(file); })[0];
@@ -991,6 +1176,11 @@ var ProjectView = /** @class */ (function (_super) {
     };
     ProjectView.prototype.saveProjectToFileAsync = function () {
         var mpkg = pkg.mainPkg;
+        if (pxt.commands.saveProjectAsync) {
+            core.infoNotification(lf("Saving..."));
+            return pkg.mainPkg.saveToJsonAsync(this.getPreferredEditor())
+                .then(function (project) { return pxt.commands.saveProjectAsync(project); });
+        }
         if (pxt.appTarget.compile.saveAsPNG)
             return this.saveProjectAsPNG();
         else
@@ -1005,9 +1195,11 @@ var ProjectView = /** @class */ (function (_super) {
     ///////////////////////////////////////////////////////////
     ProjectView.prototype.openHome = function () {
         this.stopSimulator();
+        if (this.editor)
+            this.editor.unloadFileAsync();
         // clear the hash
         pxt.BrowserUtils.changeHash("", true);
-        this.setState({ home: true });
+        this.setState({ home: true, tracing: undefined, fullscreen: undefined, tutorialOptions: undefined, editorState: undefined });
         this.allEditors.forEach(function (e) { return e.setVisible(false); });
         this.homeLoaded();
     };
@@ -1077,6 +1269,7 @@ var ProjectView = /** @class */ (function (_super) {
             pubId: "",
             pubCurrent: false,
             target: pxt.appTarget.id,
+            targetVersion: pxt.appTarget.versions.target,
             temporary: options.temporary
         }, files).then(function (hd) { return _this.loadHeaderAsync(hd, { filters: options.filters }, options.inTutorial); });
     };
@@ -1342,9 +1535,20 @@ var ProjectView = /** @class */ (function (_super) {
         // render in sidedocs
         var docsUrl = pxt.webConfig.docsUrl || '/--docs';
         var mode = "blocks";
-        var path = encodeURIComponent(JSON.stringify(files));
-        var url = docsUrl + "#project:" + path + ":" + mode + ":" + pxt.Util.localeInfo();
-        window.open(url, "_blank");
+        window.localStorage["printjob"] = JSON.stringify(files);
+        var url = docsUrl + "#print:job:" + mode + ":" + pxt.Util.localeInfo();
+        core.dialogAsync({
+            header: lf("Print Code"),
+            disagreeLbl: lf("Close"),
+            size: "large",
+            jsx: 
+            /* tslint:disable:react-iframe-missing-sandbox */
+            React.createElement("div", { className: "ui container" },
+                React.createElement("div", { id: "printcontainer", style: { 'position': 'relative', 'height': 0, 'padding-bottom': '40%', 'overflow': 'hidden' } },
+                    React.createElement("iframe", { frameBorder: "0", sandbox: "allow-popups allow-forms allow-scripts allow-same-origin allow-modals", style: { 'position': 'absolute', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%' }, src: url })))
+            /* tslint:enable:react-iframe-missing-sandbox */
+        }).done(function (r) {
+        });
     };
     ProjectView.prototype.clearSerial = function () {
         this.serialEditor.clear();
@@ -1406,8 +1610,9 @@ var ProjectView = /** @class */ (function (_super) {
         });
     };
     ProjectView.prototype.toggleDebugging = function () {
-        this.setState({ debugging: !this.state.debugging });
-        this.restartSimulator(!this.state.debugging);
+        var state = !this.state.debugging;
+        this.setState({ debugging: state, tracing: false });
+        this.restartSimulator(state);
     };
     ProjectView.prototype.dbgPauseResume = function () {
         simulator.dbgPauseResume();
@@ -1417,6 +1622,9 @@ var ProjectView = /** @class */ (function (_super) {
     };
     ProjectView.prototype.dbgStepInto = function () {
         simulator.dbgStepInto();
+    };
+    ProjectView.prototype.dbgInsertBreakpoint = function () {
+        this.editor.insertBreakpoint();
     };
     ProjectView.prototype.editText = function () {
         var _this = this;
@@ -1434,10 +1642,14 @@ var ProjectView = /** @class */ (function (_super) {
         return compiler.getBlocksAsync()
             .then(function (blocksInfo) { return compiler.decompileSnippetAsync(req.ts, blocksInfo); })
             .then(function (resp) {
-            var svg = pxt.blocks.render(resp, { snippetMode: true });
+            var svg = pxt.blocks.render(resp, { snippetMode: true, layout: pxt.blocks.BlockLayout.Align });
+            // TODO: what if svg is undefined? handle that scenario
             var viewBox = svg.getAttribute("viewBox").split(/\s+/).map(function (d) { return parseInt(d); });
-            return pxt.blocks.layout.blocklyToSvgAsync(svg, viewBox[0], viewBox[1], viewBox[2], viewBox[3]);
-        }).then(function (re) { return re.xml; });
+            return {
+                svg: svg,
+                xml: pxt.blocks.layout.blocklyToSvgAsync(svg, viewBox[0], viewBox[1], viewBox[2], viewBox[3])
+            };
+        });
     };
     ProjectView.prototype.launchFullEditor = function () {
         Util.assert(pxt.shell.isSandboxMode());
@@ -1542,10 +1754,10 @@ var ProjectView = /** @class */ (function (_super) {
     ///////////////////////////////////////////////////////////
     ProjectView.prototype.showReportAbuse = function () {
         var pubId = this.state.header && this.state.header.pubCurrent && this.state.header.pubId;
-        dialogs.showReportAbuse(pubId);
+        dialogs.showReportAbuseAsync(pubId);
     };
     ProjectView.prototype.showAboutDialog = function () {
-        dialogs.showAboutDialog();
+        dialogs.showAboutDialogAsync();
     };
     ProjectView.prototype.showShareDialog = function () {
         var header = this.state.header;
@@ -1555,7 +1767,7 @@ var ProjectView = /** @class */ (function (_super) {
         this.languagePicker.show();
     };
     ProjectView.prototype.showImportUrlDialog = function () {
-        dialogs.showImportUrlDialog().done(function (id) {
+        dialogs.showImportUrlDialogAsync().done(function (id) {
             if (!id) {
                 core.errorNotification(lf("Sorry, the project url looks invalid."));
             }
@@ -1565,10 +1777,27 @@ var ProjectView = /** @class */ (function (_super) {
         });
     };
     ProjectView.prototype.showImportFileDialog = function () {
-        dialogs.showImportFileDialog();
+        var _this = this;
+        dialogs.showImportFileDialogAsync().done(function (res) {
+            if (res) {
+                pxt.tickEvent("app.open.file");
+                _this.importFile(res);
+            }
+        });
     };
     ProjectView.prototype.showResetDialog = function () {
-        dialogs.showResetDialog();
+        var _this = this;
+        dialogs.showResetDialogAsync().done(function (r) {
+            if (!r)
+                return Promise.resolve();
+            return Promise.resolve()
+                .then(function () {
+                return pxt.winrt.releaseAllDevicesAsync();
+            })
+                .then(function () {
+                return _this.resetWorkspace();
+            });
+        });
     };
     ProjectView.prototype.showExitAndSaveDialog = function () {
         if (this.state.projectName !== lf("Untitled")) {
@@ -1620,22 +1849,62 @@ var ProjectView = /** @class */ (function (_super) {
         sounds.initTutorial(); // pre load sounds
         return Promise.resolve()
             .then(function () {
-            var tutorialOptions = {
-                tutorial: tutorialId,
-                tutorialName: title,
-                tutorialStep: 0
-            };
-            _this.setState({ tutorialOptions: tutorialOptions, editorState: { searchBar: false }, tracing: undefined });
-            var tc = _this.refs["tutorialcontent"];
-            tc.setPath(tutorialId);
-        }).then(function () {
             return _this.createProjectAsync({
                 name: title,
                 inTutorial: true
             });
+        })
+            .then(function () {
+            _this.setState({
+                tutorialOptions: {
+                    tutorial: tutorialId,
+                    tutorialName: title
+                },
+                tracing: undefined
+            });
+        })
+            .then(function () { return pxt.Cloud.downloadMarkdownAsync(tutorialId); })
+            .then(function (tutorialmd) {
+            var stepInfo = pxt.tutorial.parseTutorialSteps(tutorialId, tutorialmd);
+            return tutorial.getUsedBlocksAsync(tutorialId, tutorialmd)
+                .then(function (usedBlocks) {
+                var editorState = {
+                    searchBar: false
+                };
+                if (usedBlocks && Object.keys(usedBlocks).length > 0) {
+                    editorState.filters = {
+                        blocks: usedBlocks,
+                        defaultState: pxt.editor.FilterState.Hidden
+                    };
+                }
+                _this.setState({
+                    editorState: editorState,
+                    tutorialOptions: {
+                        tutorial: tutorialId,
+                        tutorialName: title,
+                        tutorialStep: 0,
+                        tutorialReady: true,
+                        tutorialStepInfo: stepInfo
+                    }
+                });
+                _this.editor.filterToolbox(usedBlocks, true);
+                var fullscreen = stepInfo[0].fullscreen;
+                if (fullscreen)
+                    _this.showTutorialHint();
+                else
+                    _this.showLightbox();
+            })
+                .catch(function (e) {
+                // Failed to decompile
+                pxt.tickEvent('tutorial.faileddecompile', { tutorialId: tutorialId });
+                core.errorNotification(lf("Oops, an error occured as we were loading the tutorial."));
+                // Reset state (delete the current project and exit the tutorial)
+                _this.exitTutorial(true);
+            });
         }).catch(function (e) {
-            core.hideLoading("tutorial");
             core.handleNetworkError(e);
+        }).finally(function () {
+            core.hideLoading("tutorial");
         });
     };
     ProjectView.prototype.completeTutorial = function () {
@@ -1650,19 +1919,20 @@ var ProjectView = /** @class */ (function (_super) {
             core.hideLoading("leavingtutorial");
         });
     };
-    ProjectView.prototype.exitTutorial = function () {
+    ProjectView.prototype.exitTutorial = function (removeProject) {
         var _this = this;
         pxt.tickEvent("tutorial.exit");
         core.showLoading("leavingtutorial", lf("leaving tutorial..."));
-        this.exitTutorialAsync()
+        this.exitTutorialAsync(removeProject)
             .done(function () {
             core.hideLoading("leavingtutorial");
             _this.openHome();
         });
     };
-    ProjectView.prototype.exitTutorialAsync = function () {
+    ProjectView.prototype.exitTutorialAsync = function (removeProject) {
         var _this = this;
         var curr = pkg.mainEditorPkg().header;
+        curr.isDeleted = removeProject;
         var files = pkg.mainEditorPkg().getAllFiles();
         return workspace.saveAsync(curr, files)
             .then(function () { return Promise.delay(500); })
@@ -1684,11 +1954,20 @@ var ProjectView = /** @class */ (function (_super) {
         var _this = this;
         var highContrastOn = !this.state.highContrast;
         pxt.tickEvent("app.highcontrast", { on: highContrastOn ? 1 : 0 });
-        this.setState({ highContrast: highContrastOn }, function () { return _this.restartSimulator(); });
+        this.setState({ highContrast: highContrastOn }, function () {
+            if (!!_this.state.header) {
+                _this.restartSimulator();
+            }
+        });
         core.setHighContrast(highContrastOn);
         if (this.editor && this.editor.isReady) {
             this.editor.setHighContrast(highContrastOn);
         }
+    };
+    ProjectView.prototype.toggleGreenScreen = function () {
+        var greenScreenOn = !this.state.greenScreen;
+        pxt.tickEvent("app.greenscreen", { on: greenScreenOn ? 1 : 0 });
+        this.setState({ greenScreen: greenScreenOn });
     };
     ProjectView.prototype.setBannerVisible = function (b) {
         this.setState({ bannerVisible: b });
@@ -1706,10 +1985,8 @@ var ProjectView = /** @class */ (function (_super) {
     ////////////             RENDER               /////////////
     ///////////////////////////////////////////////////////////
     ProjectView.prototype.renderCore = function () {
-        var _this = this;
         theEditor = this;
         //  ${targetTheme.accentColor ? "inverted accent " : ''}
-        var settings = (Cloud.isLoggedIn() ? this.getData("cloud:me/settings?format=nonsensitive") : {}) || {};
         var targetTheme = pxt.appTarget.appTheme;
         var simOpts = pxt.appTarget.simulator;
         var sharingEnabled = pxt.appTarget.cloud && pxt.appTarget.cloud.sharing;
@@ -1720,19 +1997,17 @@ var ProjectView = /** @class */ (function (_super) {
         var inTutorial = !!tutorialOptions && !!tutorialOptions.tutorial;
         var inHome = this.state.home && !sandbox;
         var inEditor = !!this.state.header;
-        var lightbox = this.state.lightbox;
-        var simDebug = (simOpts && simOpts.debugger) || pxt.options.debug;
+        var _a = this.state, lightbox = _a.lightbox, greenScreen = _a.greenScreen;
+        var simDebug = (simOpts && !simOpts.enableTrace) || pxt.options.debug;
         var hideMenuBar = targetTheme.hideMenuBar, hideEditorToolbar = targetTheme.hideEditorToolbar;
         var isHeadless = simOpts && simOpts.headless;
         var selectLanguage = targetTheme.selectLanguage;
-        var showEditorToolbar = !hideEditorToolbar && this.editor.hasEditorToolbar();
+        var showEditorToolbar = inEditor && !hideEditorToolbar && this.editor.hasEditorToolbar();
         var useSerialEditor = pxt.appTarget.serial && !!pxt.appTarget.serial.useEditor;
         var showSideDoc = sideDocs && this.state.sideDocsLoadUrl && !this.state.sideDocsCollapsed;
         var shouldHideEditorFloats = (this.state.hideEditorFloats || this.state.collapseEditorTools) && (!inTutorial || isHeadless);
         var shouldCollapseEditorTools = this.state.collapseEditorTools && (!inTutorial || isHeadless);
-        var isApp = cmds.isNativeHost() || pxt.winrt.isWinRT();
-        // update window title
-        document.title = this.state.header ? this.state.header.name + " - " + pxt.appTarget.name : pxt.appTarget.name;
+        var isApp = cmds.isNativeHost() || pxt.winrt.isWinRT() || electron.isElectron;
         var rootClassList = [
             "ui",
             lightbox ? 'dimmable dimmed' : 'dimmable',
@@ -1752,10 +2027,18 @@ var ProjectView = /** @class */ (function (_super) {
             this.state.debugging ? "debugging" : "",
             sandbox && this.isEmbedSimActive() ? 'simView' : '',
             isApp ? "app" : "",
+            greenScreen ? "greenscreen" : "",
             'full-abs'
         ];
         var rootClasses = sui.cx(rootClassList);
+        if (this.state.hasError) {
+            return React.createElement("div", { id: "root", className: "ui middle aligned center aligned grid", style: { height: '100%', alignItems: 'center' } },
+                React.createElement("div", { className: "ui raised segment inverted purple" },
+                    React.createElement("h2", null, lf("Oops")),
+                    lf("We detected a problem and we will reload the editor in a few seconds..")));
+        }
         return (React.createElement("div", { id: 'root', className: rootClasses },
+            greenScreen ? React.createElement(greenscreen.WebCam, { close: this.toggleGreenScreen }) : undefined,
             hideMenuBar ? undefined :
                 React.createElement("header", { className: "menubar", role: "banner" },
                     inEditor ? React.createElement(accessibility.EditorAccessibilityMenu, { parent: this, highContrast: this.state.highContrast }) : undefined,
@@ -1768,14 +2051,12 @@ var ProjectView = /** @class */ (function (_super) {
                 React.createElement("aside", { id: "filelist", className: "ui items" },
                     React.createElement("label", { htmlFor: "boardview", id: "boardviewLabel", className: "accessible-hidden", "aria-hidden": "true" }, lf("Simulator")),
                     React.createElement("div", { id: "boardview", className: "ui vertical editorFloat", role: "region", "aria-labelledby": "boardviewLabel" }),
-                    React.createElement(simtoolbar.SimulatorToolbar, { debug: simDebug, parent: this }),
-                    React.createElement("div", { className: "ui item portrait hide hidefullscreen" },
-                        simDebug ? React.createElement(sui.Button, { key: 'debugbtn', className: 'teal', icon: "xicon bug", text: "Debug", onClick: function () { return _this.toggleDebugging(); } }) : '',
-                        pxt.options.debug ? React.createElement(sui.Button, { key: 'hwdebugbtn', className: 'teal', icon: "xicon chip", text: "Dev Debug", onClick: function () { return _this.hwDebug(); } }) : ''),
+                    React.createElement(simtoolbar.SimulatorToolbar, { parent: this }),
+                    React.createElement("div", { className: "ui item portrait hide hidefullscreen" }, pxt.options.debug ? React.createElement(sui.Button, { key: 'hwdebugbtn', className: 'teal', icon: "xicon chip", text: "Dev Debug", onClick: this.hwDebug }) : ''),
                     useSerialEditor ?
                         React.createElement("div", { id: "serialPreview", className: "ui editorFloat portrait hide hidefullscreen" },
-                            React.createElement(serialindicator.SerialIndicator, { ref: "simIndicator", isSim: true, onClick: function () { return _this.openSerial(true); } }),
-                            React.createElement(serialindicator.SerialIndicator, { ref: "devIndicator", isSim: false, onClick: function () { return _this.openSerial(false); } })) : undefined,
+                            React.createElement(serialindicator.SerialIndicator, { ref: "simIndicator", isSim: true, onClick: this.openSimSerial }),
+                            React.createElement(serialindicator.SerialIndicator, { ref: "devIndicator", isSim: false, onClick: this.openDeviceSerial })) : undefined,
                     sandbox || isBlocks || this.editor == this.serialEditor ? undefined : React.createElement(filelist.FileList, { parent: this }))),
             React.createElement("div", { id: "maineditor", className: sandbox ? "sandbox" : "", role: "main" }, this.allEditors.map(function (e) { return e.displayOuter(); })),
             inHome ? React.createElement("div", { id: "homescreen", className: "full-abs", role: "main" },
@@ -1784,29 +2065,27 @@ var ProjectView = /** @class */ (function (_super) {
                         React.createElement(accessibility.HomeAccessibilityMenu, { parent: this, highContrast: this.state.highContrast }),
                         " }",
                         React.createElement(projects.ProjectsMenu, { parent: this })),
-                    React.createElement(projects.Projects, { parent: this, ref: function (v) { return _this.home = v; } }))) : undefined,
+                    React.createElement(projects.Projects, { parent: this, ref: this.handleHomeRef }))) : undefined,
             inTutorial ? React.createElement(tutorial.TutorialHint, { ref: "tutorialhint", parent: this }) : undefined,
-            inTutorial ? React.createElement(tutorial.TutorialContent, { ref: "tutorialcontent", parent: this }) : undefined,
             showEditorToolbar ? React.createElement("div", { id: "editortools", role: "complementary", "aria-label": lf("Editor toolbar") },
                 React.createElement(editortoolbar.EditorToolbar, { ref: "editortools", parent: this })) : undefined,
             sideDocs ? React.createElement(container.SideDocs, { ref: "sidedoc", parent: this, sideDocsCollapsed: this.state.sideDocsCollapsed, docsUrl: this.state.sideDocsLoadUrl }) : undefined,
-            sandbox ? undefined : React.createElement(scriptsearch.ScriptSearch, { parent: this, ref: function (v) { return _this.scriptSearch = v; } }),
-            sandbox ? undefined : React.createElement(extensions.Extensions, { parent: this, ref: function (v) { return _this.extensions = v; } }),
-            inHome ? React.createElement(projects.ImportDialog, { parent: this, ref: function (v) { return _this.importDialog = v; } }) : undefined,
-            sandbox ? undefined : React.createElement(projects.ExitAndSaveDialog, { parent: this, ref: function (v) { return _this.exitAndSaveDialog = v; } }),
-            sandbox || !sharingEnabled ? undefined : React.createElement(share.ShareEditor, { parent: this, ref: function (v) { return _this.shareEditor = v; } }),
-            selectLanguage ? React.createElement(lang.LanguagePicker, { parent: this, ref: function (v) { return _this.languagePicker = v; } }) : undefined,
+            sandbox ? undefined : React.createElement(scriptsearch.ScriptSearch, { parent: this, ref: this.handleScriptSearchRef }),
+            sandbox ? undefined : React.createElement(extensions.Extensions, { parent: this, ref: this.handleExtensionRef }),
+            inHome ? React.createElement(projects.ImportDialog, { parent: this, ref: this.handleImportDialogRef }) : undefined,
+            sandbox ? undefined : React.createElement(projects.ExitAndSaveDialog, { parent: this, ref: this.handleExitAndSaveDialogRef }),
+            sandbox || !sharingEnabled ? undefined : React.createElement(share.ShareEditor, { parent: this, ref: this.handleShareEditorRef }),
+            selectLanguage ? React.createElement(lang.LanguagePicker, { parent: this, ref: this.handleLanguagePickerRef }) : undefined,
             sandbox ? React.createElement(container.SandboxFooter, { parent: this }) : undefined,
             hideMenuBar ? React.createElement("div", { id: "editorlogo" },
                 React.createElement("a", { className: "poweredbylogo" })) : undefined,
-            lightbox ? React.createElement(sui.Dimmer, { isOpen: true, active: lightbox, portalClassName: 'tutorial', shouldFocusAfterRender: false, closable: true, onClose: this.hideLightbox.bind(this) }) : undefined));
+            lightbox ? React.createElement(sui.Dimmer, { isOpen: true, active: lightbox, portalClassName: 'tutorial', className: 'ui modal', shouldFocusAfterRender: false, closable: true, onClose: this.hideLightbox }) : undefined));
     };
     return ProjectView;
 }(data.Component));
 exports.ProjectView = ProjectView;
-exports.appElement = document.getElementById('content');
 function render() {
-    ReactDOM.render(React.createElement(ProjectView, null), exports.appElement);
+    ReactDOM.render(React.createElement(ProjectView, null), sui.appElement);
 }
 function getEditor() {
     return theEditor;
@@ -2069,7 +2348,10 @@ function initExtensionsAsync() {
     if (!pxt.appTarget.appTheme || !pxt.appTarget.appTheme.extendEditor)
         return Promise.resolve();
     pxt.debug('loading editor extensions...');
-    var opts = {};
+    var opts = {
+        blocklyToolbox: blocklyToolbox.getToolboxDefinition(),
+        monacoToolbox: monacoToolbox.getToolboxDefinition()
+    };
     return pxt.BrowserUtils.loadScriptAsync("editor.js")
         .then(function () { return pxt.editor.initExtensionsAsync(opts); })
         .then(function (res) {
@@ -2089,6 +2371,14 @@ function initExtensionsAsync() {
             pxt.debug("\tadded custom deploy core async");
             pxt.commands.deployCoreAsync = res.deployCoreAsync;
         }
+        if (res.saveOnlyAsync) {
+            pxt.debug("\tadded custom save only async");
+            pxt.commands.saveOnlyAsync = res.saveOnlyAsync;
+        }
+        if (res.saveProjectAsync) {
+            pxt.debug("\tadded custom save project async");
+            pxt.commands.saveProjectAsync = res.saveProjectAsync;
+        }
         if (res.showUploadInstructionsAsync) {
             pxt.debug("\tadded custom upload instructions async");
             pxt.commands.showUploadInstructionsAsync = res.showUploadInstructionsAsync;
@@ -2097,8 +2387,8 @@ function initExtensionsAsync() {
             theEditor.beforeCompile = res.beforeCompile;
         }
         if (res.toolboxOptions) {
-            if (res.toolboxOptions.blocklyXml) {
-                pxt.blocks.overrideBaseToolbox(res.toolboxOptions.blocklyXml);
+            if (res.toolboxOptions.blocklyToolbox) {
+                blocklyToolbox.overrideToolbox(res.toolboxOptions.blocklyToolbox);
             }
             if (res.toolboxOptions.monacoToolbox) {
                 monacoToolbox.overrideToolbox(res.toolboxOptions.monacoToolbox);
@@ -2172,7 +2462,7 @@ document.addEventListener("DOMContentLoaded", function () {
         workspace.setupWorkspace("mem");
     else if (pxt.winrt.isWinRT())
         workspace.setupWorkspace("uwp");
-    else if (Cloud.isLocalHost())
+    else if (Cloud.isLocalHost() || electron.isPxtElectron)
         workspace.setupWorkspace("fs");
     Promise.resolve()
         .then(function () {
@@ -2217,7 +2507,10 @@ document.addEventListener("DOMContentLoaded", function () {
         initHashchange();
         return initExtensionsAsync();
     })
-        .then(function () { return pxt.winrt.initAsync(importHex); })
+        .then(function () {
+        electron.initElectron(theEditor);
+        return pxt.winrt.initAsync(importHex);
+    })
         .then(function () { return pxt.winrt.hasActivationProjectAsync(); })
         .then(function (hasWinRTProject) {
         var ent = theEditor.settings.fileHistory.filter(function (e) { return !!workspace.getHeader(e.id); })[0];
@@ -2244,9 +2537,18 @@ document.addEventListener("DOMContentLoaded", function () {
             theEditor.newProject();
         return Promise.resolve();
     })
-        .done(function () {
-        document.getElementById('loading').remove();
+        .then(function () {
+        pxsim.U.remove(document.getElementById('loading'));
         return workspace.loadedAsync();
+    })
+        .done(function () {
+        // preload delay loaded resources
+        if (window.requestIdleCallback) {
+            window.requestIdleCallback(function () {
+                if (theEditor)
+                    theEditor.loadBlocklyAsync().done();
+            });
+        }
     });
     document.addEventListener("visibilitychange", function (ev) {
         if (theEditor)
@@ -2293,27 +2595,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 type: "localtoken",
                 localToken: Cloud.localToken
             });
-            tutorial.TutorialContent.notify({
-                type: "localtoken",
-                localToken: Cloud.localToken
-            });
         }
     }, false);
 });
 
-},{"./accessibility":1,"./appcache":3,"./blocks":5,"./cmds":9,"./compiler":11,"./container":12,"./core":13,"./data":15,"./debugger":17,"./dialogs":18,"./draganddrop":19,"./editortoolbar":20,"./extensions":22,"./filelist":23,"./hidbridge":26,"./import":28,"./lang":29,"./make":30,"./monaco":32,"./monacoSnippets":33,"./notification":34,"./package":35,"./projects":36,"./pxtjson":37,"./screenshot":38,"./scriptsearch":39,"./serial":40,"./serialindicator":41,"./share":42,"./simtoolbar":43,"./simulator":44,"./sounds":45,"./sui":47,"./tdlegacy":48,"./tutorial":49,"./workspace":50,"marked":108,"react":155,"react-dom":143}],3:[function(require,module,exports){
+},{"./accessibility":1,"./appcache":3,"./blocks":5,"./blocksSnippets":6,"./cmds":9,"./compiler":11,"./container":12,"./core":13,"./data":15,"./debugger":17,"./dialogs":18,"./draganddrop":19,"./editortoolbar":20,"./electron":21,"./extensions":23,"./filelist":24,"./greenscreen":26,"./hidbridge":27,"./lang":29,"./make":30,"./monaco":33,"./monacoSnippets":34,"./notification":35,"./package":36,"./projects":37,"./pxtjson":38,"./screenshot":39,"./scriptsearch":40,"./serial":41,"./serialindicator":42,"./share":43,"./simtoolbar":44,"./simulator":45,"./sounds":46,"./sui":48,"./tutorial":51,"./workspace":52,"marked":110,"react":157,"react-dom":145}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var core = require("./core");
 function init(updated) {
     var appCache = window.applicationCache;
-    if (!(pxt.appTarget.appTheme && pxt.appTarget.appTheme.noReloadOnUpdate)) {
+    function scheduleUpdate() {
+        console.log("app cache update ready (" + appCache.status + ")");
+        if (appCache.status !== window.applicationCache.UPDATEREADY)
+            return;
+        core.infoNotification(lf("Update download complete. Reloading... "));
+        setTimeout(function () {
+            pxt.tickEvent('appcache.updated');
+            updated();
+        }, 3000);
+    }
+    // disable in options
+    if (pxt.appTarget.appTheme && pxt.appTarget.appTheme.noReloadOnUpdate)
+        return;
+    // already dowloaded
+    if (appCache.status === window.applicationCache.UPDATEREADY) {
+        scheduleUpdate();
+    }
+    else {
+        // waiting for event
         appCache.addEventListener('updateready', function () {
-            core.infoNotification(lf("Update download complete. Reloading... "));
-            setTimeout(function () {
-                pxt.tickEvent('appcache.updated');
-                updated();
-            }, 3000);
+            scheduleUpdate();
         }, false);
     }
 }
@@ -2379,19 +2691,30 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
+var ReactDOM = require("react-dom");
 var pkg = require("./package");
 var core = require("./core");
-var srceditor = require("./srceditor");
+var toolboxeditor = require("./toolboxeditor");
 var compiler = require("./compiler");
 var debug = require("./debugger");
-var CategoryMode = pxt.toolbox.CategoryMode;
+var toolbox = require("./toolbox");
+var snippets = require("./blocksSnippets");
 var Util = pxt.Util;
 var Editor = /** @class */ (function (_super) {
     __extends(Editor, _super);
     function Editor() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isFirstBlocklyLoad = true;
-        _this.showToolboxCategories = CategoryMode.Basic;
+        _this.showCategories = true;
+        _this.markIncomplete = false;
+        _this.handleToolboxRef = function (c) {
+            _this.toolbox = c;
+        };
+        _this.handleDebuggerVariablesRef = function (c) {
+            _this.debugVariables = c;
+        };
+        _this.flyoutBlockXmlCache = {};
+        _this.flyoutXmlList = [];
         return _this;
     }
     Editor.prototype.setVisible = function (v) {
@@ -2399,12 +2722,12 @@ var Editor = /** @class */ (function (_super) {
         this.isVisible = v;
         var classes = '#blocksEditor .blocklyToolboxDiv, #blocksEditor .blocklyWidgetDiv, #blocksEditor .blocklyToolboxDiv';
         if (this.isVisible) {
-            document.querySelectorAll(classes).forEach(function (el) { return el.style.display = ''; });
+            pxt.Util.toArray(document.querySelectorAll(classes)).forEach(function (el) { return el.style.display = ''; });
             // Fire a resize event since the toolbox may have changed width and height.
             this.parent.fireResize();
         }
         else {
-            document.querySelectorAll(classes).forEach(function (el) { return el.style.display = 'none'; });
+            pxt.Util.toArray(document.querySelectorAll(classes)).forEach(function (el) { return el.style.display = 'none'; });
             if (this.editor)
                 Blockly.hideChaff();
         }
@@ -2439,46 +2762,22 @@ var Editor = /** @class */ (function (_super) {
                 return;
             pxt.debug("loading blockly");
             this.loadingXml = true;
-            var loading_1 = document.createElement("div");
-            loading_1.className = "ui inverted loading";
+            var loadingDimmer_1 = document.createElement("div");
+            loadingDimmer_1.className = "ui active dimmer";
+            var loading = document.createElement("div");
+            loading.className = "ui text loader";
+            loading.appendChild(document.createTextNode(lf("Loading blocks...")));
+            loadingDimmer_1.appendChild(loading);
             var editorDiv_1 = document.getElementById("blocksEditor");
-            editorDiv_1.appendChild(loading_1);
+            editorDiv_1.appendChild(loadingDimmer_1);
             this.loadingXmlPromise = this.loadBlocklyAsync()
                 .then(function () { return compiler.getBlocksAsync(); })
                 .then(function (bi) {
                 _this.blockInfo = bi;
-                var showSearch = _this.showSearch;
-                var toolbox = _this.getDefaultToolbox(_this.showToolboxCategories);
-                // Search needs a toolbox with ALL blocks
-                var tbAll;
-                if (_this.showToolboxCategories === CategoryMode.Basic) {
-                    tbAll = pxt.blocks.initBlocks(_this.blockInfo, toolbox, CategoryMode.All, _this.filters, _this.extensions);
-                }
-                var tb = pxt.blocks.initBlocks(_this.blockInfo, toolbox, _this.showToolboxCategories, _this.filters, _this.extensions);
-                _this.updateToolbox(tb, _this.showToolboxCategories);
-                if (_this.showToolboxCategories !== CategoryMode.None && showSearch) {
-                    pxt.blocks.initSearch(_this.editor, tb, tbAll || tb, function (searchFor) { return compiler.apiSearchAsync(searchFor)
-                        .then(function (fns) { return fns; }); }, function (searchTb) { return _this.updateToolbox(searchTb, _this.showToolboxCategories, true); });
-                }
-                else {
-                    pxt.blocks.removeSearch();
-                }
-                pxt.blocks.initFlyouts(_this.editor);
-                // Register extension callbacks
-                pxt.blocks.initExtensions(_this.editor, _this.extensions, function (extensionName) {
-                    var extension = _this.extensions.filter(function (c) { return c.name == extensionName; })[0];
-                    var parsedRepo = pxt.github.parseRepoId(extension.installedVersion);
-                    pxt.packagesConfigAsync()
-                        .then(function (config) {
-                        var repoStatus = pxt.github.repoStatus(parsedRepo, config);
-                        var repoName = parsedRepo.fullName.substr(parsedRepo.fullName.indexOf("/") + 1);
-                        var localDebug = pxt.Cloud.isLocalHost() && /^file:/.test(extension.installedVersion) && extension.extension.localUrl;
-                        var debug = pxt.Cloud.isLocalHost() && /debugExtensions/i.test(window.location.href);
-                        var url = debug ? "http://localhost:3232/extension.html"
-                            : localDebug ? extension.extension.localUrl : "https://" + parsedRepo.owner + ".github.io/" + repoName + "/";
-                        _this.parent.openExtension(extension.name, url, repoStatus == 0); // repoStatus can only be APPROVED or UNKNOWN at this point
-                    });
-                });
+                // Initialize blocks in Blockly and update our toolbox
+                pxt.blocks.initialize(_this.blockInfo);
+                _this.nsMap = _this.partitionBlocks();
+                _this.refreshToolbox();
                 pxt.debug("loading block workspace");
                 var xml = _this.delayLoadXml;
                 _this.delayLoadXml = undefined;
@@ -2488,15 +2787,13 @@ var Editor = /** @class */ (function (_super) {
                 _this.isFirstBlocklyLoad = false;
             }).finally(function () {
                 _this.loadingXml = false;
-                editorDiv_1.removeChild(loading_1);
-                core.hideLoading("loadingblocks");
+                try {
+                    // It's possible Blockly reloads and the loading dimmer is no longer a child of the editorDiv
+                    editorDiv_1.removeChild(loadingDimmer_1);
+                }
+                catch (_a) { }
             });
-            if (this.isFirstBlocklyLoad) {
-                core.showLoadingAsync("loadingblocks", lf("loading..."), this.loadingXmlPromise).done();
-            }
-            else {
-                this.loadingXmlPromise.done();
-            }
+            this.loadingXmlPromise.done();
             this.loadingXmlPromise = null;
         }
     };
@@ -2524,7 +2821,7 @@ var Editor = /** @class */ (function (_super) {
         this.typeScriptSaveable = false;
         this.editor.clear();
         try {
-            var text = pxt.blocks.importXml(s || "<block type=\"" + ts.pxtc.ON_START_TYPE + "\"></block>", this.blockInfo, true);
+            var text = pxt.blocks.importXml(pkg.mainPkg.targetVersion(), s || "<block type=\"" + ts.pxtc.ON_START_TYPE + "\"></block>", this.blockInfo, true);
             var xml = Blockly.Xml.textToDom(text);
             Blockly.Xml.domToWorkspace(xml, this.editor);
             this.initLayout();
@@ -2555,7 +2852,7 @@ var Editor = /** @class */ (function (_super) {
             if (minY === undefined || tp.y < minY) {
                 minY = tp.y;
             }
-            needsLayout = needsLayout || (tp.x == 0 && tp.y == 0);
+            needsLayout = needsLayout || (tp.x == 10 && tp.y == 10);
         });
         this.editor.getTopBlocks(false).forEach(function (b) {
             var tp = b.getBoundingRectangle().topLeft;
@@ -2565,7 +2862,7 @@ var Editor = /** @class */ (function (_super) {
             if (minY === undefined || tp.y < minY) {
                 minY = tp.y;
             }
-            needsLayout = needsLayout || (b.type != ts.pxtc.ON_START_TYPE && tp.x == 0 && tp.y == 0);
+            needsLayout = needsLayout || (b.type != ts.pxtc.ON_START_TYPE && tp.x == 10 && tp.y == 10);
         });
         if (needsLayout && !flyoutOnly) {
             // If the blocks file has no location info (e.g. it's from the decompiler), format the code.
@@ -2615,11 +2912,11 @@ var Editor = /** @class */ (function (_super) {
                 header: lf("Confirm"),
                 body: message,
                 agreeLbl: lf("Yes"),
-                agreeClass: "cancel",
-                agreeIcon: "cancel",
+                agreeClass: "positive",
+                agreeIcon: "checkmark",
                 disagreeLbl: lf("No"),
-                disagreeClass: "positive",
-                disagreeIcon: "checkmark",
+                disagreeClass: "cancel",
+                disagreeIcon: "cancel",
                 size: "tiny"
             }).then(function (b) {
                 callback(b == 1);
@@ -2646,7 +2943,7 @@ var Editor = /** @class */ (function (_super) {
             });
         };
     };
-    Editor.prototype.initToolboxPosition = function () {
+    Editor.prototype.initBlocklyToolbox = function () {
         var editor = this;
         /**
          * Move the toolbox to the edge.
@@ -2655,6 +2952,31 @@ var Editor = /** @class */ (function (_super) {
         Blockly.Toolbox.prototype.position = function () {
             oldToolboxPosition.call(this);
             editor.resizeToolbox();
+        };
+        /**
+         * Override blockly methods to support our custom toolbox.
+         */
+        var that = this;
+        Blockly.WorkspaceSvg.prototype.refreshToolboxSelection = function () {
+            var ws = this.isFlyout ? this.targetWorkspace : this;
+            if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.flyout_) {
+                that.toolbox.refreshSelection();
+            }
+        };
+        var oldHideChaff = Blockly.hideChaff;
+        Blockly.hideChaff = function (opt_allowToolbox) {
+            oldHideChaff(opt_allowToolbox);
+            if (!opt_allowToolbox)
+                that.hideFlyout();
+        };
+    };
+    Editor.prototype.initWorkspaceSounds = function () {
+        var editor = this;
+        var oldAudioPlay = Blockly.WorkspaceAudio.prototype.play;
+        Blockly.WorkspaceAudio.prototype.play = function (name, opt_volume) {
+            if (editor && editor.parent.state.mute)
+                opt_volume = 0;
+            oldAudioPlay.call(this, name, opt_volume);
         };
     };
     Editor.prototype.reportDeprecatedBlocks = function () {
@@ -2684,24 +3006,30 @@ var Editor = /** @class */ (function (_super) {
         return this.editor ? pxt.blocks.blocksMetrics(this.editor) : undefined;
     };
     Editor.prototype.isIncomplete = function () {
-        return this.editor ? this.editor.isDragging() : false;
+        var incomplete = this.editor ? this.editor.isDragging()
+            || Blockly.WidgetDiv.isVisible()
+            || Blockly.DropDownDiv.isVisible() : false;
+        if (incomplete)
+            this.markIncomplete = true;
+        return incomplete;
     };
     Editor.prototype.prepare = function () {
         this.isReady = true;
     };
-    Editor.prototype.prepareBlockly = function (showCategories) {
+    Editor.prototype.prepareBlockly = function (forceHasCategories) {
         var _this = this;
         var blocklyDiv = document.getElementById('blocksEditor');
-        blocklyDiv.innerHTML = '';
-        this.editor = Blockly.inject(blocklyDiv, this.getBlocklyOptions(showCategories));
+        pxsim.U.clear(blocklyDiv);
+        this.editor = Blockly.inject(blocklyDiv, this.getBlocklyOptions(forceHasCategories));
         // set Blockly Colors
         var blocklyColors = Blockly.Colours;
         Util.jsonMergeFrom(blocklyColors, pxt.appTarget.appTheme.blocklyColors || {});
         Blockly.Colours = blocklyColors;
         this.editor.addChangeListener(function (ev) {
             Blockly.Events.disableOrphans(ev);
-            if (ev.type != 'ui') {
+            if (ev.type != 'ui' || _this.markIncomplete) {
                 _this.changeCallback();
+                _this.markIncomplete = false;
             }
             if (ev.type == 'create') {
                 var blockId = ev.xml.getAttribute('type');
@@ -2722,30 +3050,25 @@ var Editor = /** @class */ (function (_super) {
                         pxt.analytics.enableCookies();
                     }
                     _this.parent.setState({ hideEditorFloats: toolboxVisible });
-                    if (ev.newValue == pxt.toolbox.addPackageTitle()) {
-                        _this.showPackageDialog();
-                    }
-                    else if (ev.newValue == pxt.toolbox.advancedTitle()) {
-                        if (_this.showToolboxCategories === CategoryMode.All) {
-                            _this.showToolboxCategories = CategoryMode.Basic;
-                        }
-                        else if (_this.showToolboxCategories === CategoryMode.Basic) {
-                            _this.showToolboxCategories = CategoryMode.All;
-                        }
-                        _this.refreshToolbox();
-                    }
                 }
             }
         });
+        if (this.shouldShowCategories()) {
+            this.renderToolbox();
+        }
+        this.hideFlyout();
         this.initPrompts();
-        this.initToolboxPosition();
+        this.initBlocklyToolbox();
+        this.initWorkspaceSounds();
         this.resize();
     };
     Editor.prototype.resize = function (e) {
-        var blocklyArea = document.getElementById('blocksArea');
-        var blocklyDiv = document.getElementById('blocksEditor');
+        var blocklyArea = this.getBlocksAreaDiv();
+        if (!blocklyArea)
+            return;
+        var blocklyDiv = this.getBlocksEditorDiv();
         // Position blocklyDiv over blocklyArea.
-        if (blocklyArea && blocklyDiv && this.editor) {
+        if (blocklyDiv && this.editor) {
             blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
             blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
             Blockly.svgResize(this.editor);
@@ -2753,17 +3076,17 @@ var Editor = /** @class */ (function (_super) {
         }
     };
     Editor.prototype.resizeToolbox = function () {
-        var blocklyDiv = document.getElementById('blocksEditor');
+        var blocklyDiv = this.getBlocksEditorDiv();
         if (!blocklyDiv)
             return;
-        var blocklyToolbox = blocklyDiv.getElementsByClassName('blocklyToolboxDiv')[0];
-        if (!blocklyToolbox)
+        var blocklyToolboxDiv = this.getBlocklyToolboxDiv();
+        if (!blocklyToolboxDiv)
             return;
-        this.parent.updateEditorLogo(blocklyToolbox.clientWidth);
-        var blocklyOptions = this.getBlocklyOptions(this.showToolboxCategories);
+        this.parent.updateEditorLogo(blocklyToolboxDiv.offsetWidth);
+        var blocklyOptions = this.getBlocklyOptions(this.showCategories);
         var toolboxHeight = blocklyDiv.offsetHeight;
         if (!blocklyOptions.horizontalLayout)
-            blocklyToolbox.style.height = toolboxHeight + "px";
+            blocklyToolboxDiv.style.height = toolboxHeight + "px";
     };
     Editor.prototype.hasUndo = function () {
         return this.editor ? this.editor.undoStack_.length != 0 : false;
@@ -2803,22 +3126,51 @@ var Editor = /** @class */ (function (_super) {
     Editor.prototype.closeFlyout = function () {
         if (!this.editor)
             return;
+        this.hideFlyout();
         Blockly.hideChaff();
     };
     Editor.prototype.getId = function () {
         return "blocksArea";
     };
     Editor.prototype.display = function () {
-        var _this = this;
         return (React.createElement("div", null,
             React.createElement("div", { id: "blocksEditor" }),
+            React.createElement(toolbox.ToolboxTrashIcon, null),
             this.parent.state.debugging ?
-                React.createElement(debug.DebuggerVariables, { ref: function (e) { return _this.debugVariables = e; }, parent: this.parent }) : undefined));
+                React.createElement(debug.DebuggerVariables, { ref: this.handleDebuggerVariablesRef, parent: this.parent }) : undefined));
+    };
+    Editor.prototype.getBlocksAreaDiv = function () {
+        return document.getElementById('blocksArea');
+    };
+    Editor.prototype.getBlocksEditorDiv = function () {
+        var blocksArea = this.getBlocksAreaDiv();
+        return blocksArea ? document.getElementById('blocksEditor') : undefined;
+    };
+    Editor.prototype.getBlocklyToolboxDiv = function () {
+        var blocksArea = this.getBlocksAreaDiv();
+        return blocksArea ? blocksArea.getElementsByClassName('blocklyToolboxDiv')[0] : undefined;
+    };
+    Editor.prototype.renderToolbox = function (immediate) {
+        if (pxt.shell.isReadOnly())
+            return;
+        var blocklyToolboxDiv = this.getBlocklyToolboxDiv();
+        var blocklyToolbox = React.createElement(toolbox.Toolbox, { ref: this.handleToolboxRef, editorname: "blocks", parent: this });
+        Util.assert(!!blocklyToolboxDiv);
+        ReactDOM.render(blocklyToolbox, blocklyToolboxDiv);
+        if (!immediate)
+            this.toolbox.showLoading();
     };
     Editor.prototype.showPackageDialog = function () {
         pxt.tickEvent("blocks.addpackage");
-        this.editor.toolbox_.clearSelection();
+        if (this.editor.toolbox_)
+            this.editor.toolbox_.clearSelection();
         this.parent.showPackageDialog();
+    };
+    Editor.prototype.showVariablesFlyout = function () {
+        this.showFlyoutInternal_(Blockly.Variables.flyoutCategory(this.editor));
+    };
+    Editor.prototype.showFunctionsFlyout = function () {
+        this.showFlyoutInternal_(Blockly.Procedures.flyoutCategory(this.editor));
     };
     Editor.prototype.getViewState = function () {
         // ZOOM etc
@@ -2839,6 +3191,16 @@ var Editor = /** @class */ (function (_super) {
         else {
             this.loadBlockly(content);
         }
+    };
+    Editor.prototype.insertBreakpoint = function () {
+        if (!this.editor)
+            return;
+        var b = this.editor.newBlock(pxtc.TS_DEBUGGER_TYPE);
+        // move block roughly to the center of the screen
+        var m = this.editor.getMetrics();
+        b.moveBy(m.viewWidth / 2, m.viewHeight / 3);
+        b.initSvg();
+        b.render();
     };
     Editor.prototype.loadBlocklyAsync = function () {
         var _this = this;
@@ -2888,6 +3250,8 @@ var Editor = /** @class */ (function (_super) {
         return this.loadBlocklyAsync()
             .then(function () {
             pxt.blocks.cleanBlocks();
+            if (_this.toolbox)
+                _this.toolbox.showLoading();
             _this.blockInfo = undefined;
             _this.currSource = file.content;
             _this.typeScriptSaveable = false;
@@ -2895,6 +3259,7 @@ var Editor = /** @class */ (function (_super) {
             _this.delayLoadXml = file.content;
             _this.editor.clear();
             _this.editor.clearUndo();
+            _this.closeFlyout();
             if (_this.currFile && _this.currFile != file) {
                 _this.filterToolbox(null);
             }
@@ -2911,10 +3276,10 @@ var Editor = /** @class */ (function (_super) {
                 _this.showSearch = true;
             }
             if (_this.parent.state.editorState && _this.parent.state.editorState.hasCategories != undefined) {
-                _this.showToolboxCategories = _this.parent.state.editorState.hasCategories ? CategoryMode.Basic : CategoryMode.None;
+                _this.showCategories = _this.parent.state.editorState.hasCategories;
             }
             else {
-                _this.showToolboxCategories = CategoryMode.Basic;
+                _this.showCategories = true;
             }
             _this.currFile = file;
             // Clear the search field if a value exists
@@ -2927,6 +3292,12 @@ var Editor = /** @class */ (function (_super) {
                 .map(function (ep) { return ep.getKsPkg(); }).map(function (p) { return !!p && p.config; })
                 .filter(function (config) { return !!config && !!config.extension && /^(file:|github:)/.test(config.installedVersion); });
         });
+    };
+    Editor.prototype.unloadFileAsync = function () {
+        this.delayLoadXml = undefined;
+        if (this.toolbox)
+            this.toolbox.clearSearch();
+        return Promise.resolve();
     };
     Editor.prototype.switchToTypeScript = function () {
         pxt.tickEvent("blocks.switchjavascript");
@@ -2963,35 +3334,65 @@ var Editor = /** @class */ (function (_super) {
     };
     Editor.prototype.highlightStatement = function (stmt, brk) {
         if (!this.compilationResult || this.delayLoadXml || this.loadingXml)
-            return;
+            return false;
+        this.updateDebuggerVariables(brk ? brk.globals : undefined);
         if (stmt) {
             var bid = pxt.blocks.findBlockId(this.compilationResult.sourceMap, { start: stmt.line, length: stmt.endLine - stmt.line });
             if (bid) {
                 this.editor.highlightBlock(bid);
-                if (brk)
-                    this.updateDebuggerVariables(brk.globals);
+                if (brk) {
+                    var b = this.editor.getBlockById(bid);
+                    b.setWarningText(brk ? brk.exceptionMessage : undefined);
+                    // ensure highlight is in the screen when a breakpoint info is available
+                    // TODO: make warning mode look good
+                    // b.setHighlightWarning(brk && !!brk.exceptionMessage);
+                    var p = b.getRelativeToSurfaceXY();
+                    var c = b.getHeightWidth();
+                    var s = this.editor.scale;
+                    var m = this.editor.getMetrics();
+                    // don't center if block is still on the screen
+                    var marginx = 4;
+                    var marginy = 4;
+                    if (p.x * s < m.viewLeft + marginx
+                        || (p.x + c.width) * s > m.viewLeft + m.viewWidth - marginx
+                        || p.y * s < m.viewTop + marginy
+                        || (p.y + c.height) * s > m.viewTop + m.viewHeight - marginy) {
+                        // move the block towards the center
+                        this.editor.centerOnBlock(bid);
+                    }
+                }
+                return true;
             }
         }
         else {
             this.editor.highlightBlock(null);
-            this.updateDebuggerVariables(null);
+            return false;
         }
+        return false;
+    };
+    Editor.prototype.clearDebuggerVariables = function () {
+        if (this.debugVariables)
+            this.debugVariables.clear();
     };
     Editor.prototype.updateDebuggerVariables = function (globals) {
         if (!this.parent.state.debugging)
             return;
-        var vars = this.editor.getAllVariables().map(function (variable) {
-            return variable.name;
-        });
-        if (!globals || vars.length == 0) {
+        if (!globals) {
+            // freeze the ui
+            if (this.debugVariables)
+                this.debugVariables.update(true);
+            return;
+        }
+        var vars = this.editor.getAllVariables().map(function (variable) { return variable.name; });
+        if (!vars.length) {
             if (this.debugVariables)
                 this.debugVariables.clear();
             return;
         }
-        for (var k in vars) {
-            var variable = vars[k];
+        for (var _i = 0, vars_1 = vars; _i < vars_1.length; _i++) {
+            var variable = vars_1[_i];
             var value = getValueOfVariable(variable);
-            if (this.debugVariables && value != undefined)
+            if (this.debugVariables)
                 this.debugVariables.set(variable, value);
         }
         if (this.debugVariables)
@@ -3010,6 +3411,7 @@ var Editor = /** @class */ (function (_super) {
     };
     Editor.prototype.clearHighlightedStatements = function () {
         this.editor.highlightBlock(null);
+        this.clearDebuggerVariables();
     };
     Editor.prototype.openTypeScript = function () {
         pxt.tickEvent("blocks.showjavascript");
@@ -3020,12 +3422,16 @@ var Editor = /** @class */ (function (_super) {
         var blocks = this.editor.getTopBlocks(false);
         blocks.filter(function (b) { return b.isShadow_; }).forEach(function (b) { return b.dispose(false); });
     };
-    Editor.prototype.getBlocklyOptions = function (showCategories) {
+    Editor.prototype.getBlocklyOptions = function (forceHasCategories) {
         var blocklyOptions = this.getDefaultOptions();
         Util.jsonMergeFrom(blocklyOptions, pxt.appTarget.appTheme.blocklyOptions || {});
-        var hasCategories = showCategories ? showCategories !== CategoryMode.None :
-            (blocklyOptions.hasCategories != undefined ? blocklyOptions.hasCategories : this.showToolboxCategories);
+        var hasCategories = (forceHasCategories != undefined) ? forceHasCategories :
+            (blocklyOptions.hasCategories != undefined ? blocklyOptions.hasCategories :
+                this.showCategories);
         blocklyOptions.hasCategories = hasCategories;
+        if (!hasCategories)
+            this.showCategories = false;
+        // If we're using categories, show the category toolbox, otherwise show the flyout toolbox
         var toolbox = hasCategories ?
             document.getElementById('blocklyToolboxDefinitionCategory')
             : document.getElementById('blocklyToolboxDefinitionFlyout');
@@ -3034,6 +3440,8 @@ var Editor = /** @class */ (function (_super) {
         return blocklyOptions;
     };
     Editor.prototype.getDefaultOptions = function () {
+        if (this.blocklyOptionsCache)
+            return this.blocklyOptionsCache;
         var readOnly = pxt.shell.isReadOnly();
         var blocklyOptions = {
             scrollbars: true,
@@ -3059,57 +3467,39 @@ var Editor = /** @class */ (function (_super) {
             },
             rtl: Util.isUserLanguageRtl()
         };
+        this.blocklyOptionsCache = blocklyOptions;
         return blocklyOptions;
-    };
-    Editor.prototype.getDefaultToolbox = function (showCategories) {
-        if (showCategories === void 0) { showCategories = this.showToolboxCategories; }
-        return showCategories !== CategoryMode.None ?
-            pxt.blocks.getBaseToolboxDom().documentElement
-            : pxt.blocks.getBaseNoCategoryToolboxDom().documentElement;
-    };
-    Editor.prototype.filterToolbox = function (filters, showCategories) {
-        if (showCategories === void 0) { showCategories = this.showToolboxCategories; }
-        this.filters = filters;
-        this.showToolboxCategories = showCategories;
-        return this.refreshToolbox();
     };
     Editor.prototype.refreshToolbox = function () {
         if (!this.blockInfo)
-            return undefined;
-        var toolbox = this.getDefaultToolbox(this.showToolboxCategories);
-        var tbAll;
-        if (this.showToolboxCategories !== CategoryMode.All) {
-            tbAll = pxt.blocks.createToolbox(this.blockInfo, toolbox, CategoryMode.All, this.filters, this.extensions);
-        }
-        var tb = pxt.blocks.createToolbox(this.blockInfo, toolbox, this.showToolboxCategories, this.filters, this.extensions);
-        this.updateToolbox(tb, this.showToolboxCategories);
-        pxt.blocks.cachedSearchTb = tb;
-        pxt.blocks.cachedSearchTbAll = tbAll || tb;
-        return tb;
-    };
-    Editor.prototype.updateToolbox = function (tb, showCategories, search) {
-        if (showCategories === void 0) { showCategories = this.showToolboxCategories; }
-        if (search === void 0) { search = false; }
+            return;
         // no toolbox when readonly
         if (pxt.shell.isReadOnly())
             return;
-        pxt.debug('updating toolbox');
-        var editor_ = this.editor;
-        if ((editor_.toolbox_ && showCategories !== CategoryMode.None) || (editor_.flyout_ && showCategories === CategoryMode.None)) {
+        // Dont show toolbox if we're in tutorial mode and we're not ready
+        if (this.parent.state.tutorialOptions != undefined &&
+            !this.parent.state.tutorialOptions.tutorialReady) {
+            return;
+        }
+        this.clearCaches();
+        var hasCategories = this.shouldShowCategories();
+        // We might need to switch the toolbox type
+        if ((this.editor.toolbox_ && hasCategories) || (this.editor.flyout_ && !hasCategories)) {
             // Toolbox is consistent with current mode, safe to update
-            var tbString = new XMLSerializer().serializeToString(tb);
-            if (tbString == this.cachedToolbox)
-                return;
-            this.cachedToolbox = tbString;
-            this.editor.updateToolbox(tb);
-            // We need to set the toolbox's selected item to null so that it doesn't
-            // try to send key events to a category that no longer exists (exception)
-            if (!search && editor_.toolbox_ && editor_.toolbox_.tree_) {
-                editor_.toolbox_.tree_.setSelectedItem(null);
+            if (hasCategories) {
+                this.toolbox.setState({ loading: false, categories: this.getAllCategories(), showSearchBox: this.shouldShowSearch() });
+            }
+            else {
+                this.showFlyoutOnlyToolbox();
             }
         }
         else {
             // Toolbox mode is different, need to refresh.
+            if (!hasCategories) {
+                // If we're switching from a toolbox to no toolbox, unmount node
+                ReactDOM.unmountComponentAtNode(this.getBlocklyToolboxDiv());
+            }
+            // Refresh Blockly
             this.delayLoadXml = this.getCurrentSource();
             this.editor = undefined;
             this.loadingXml = false;
@@ -3117,56 +3507,973 @@ var Editor = /** @class */ (function (_super) {
                 this.loadingXmlPromise.cancel();
                 this.loadingXmlPromise = null;
             }
-            this.prepareBlockly(showCategories);
+            this.prepareBlockly(hasCategories);
             this.domUpdate();
             this.editor.scrollCenter();
+            if (hasCategories) {
+                // If we're switching from no toolbox to a toolbox, mount node
+                if (!this.toolbox)
+                    this.renderToolbox(true);
+            }
         }
     };
+    Editor.prototype.filterToolbox = function (filters, showCategories) {
+        this.filters = filters;
+        this.showCategories = showCategories;
+        this.refreshToolbox();
+    };
+    Editor.prototype.openExtension = function (extensionName) {
+        var _this = this;
+        var extension = this.extensions.filter(function (c) { return c.name == extensionName; })[0];
+        var parsedRepo = pxt.github.parseRepoId(extension.installedVersion);
+        pxt.packagesConfigAsync()
+            .then(function (config) {
+            var repoStatus = pxt.github.repoStatus(parsedRepo, config);
+            var repoName = parsedRepo.fullName.substr(parsedRepo.fullName.indexOf("/") + 1);
+            var localDebug = pxt.Cloud.isLocalHost() && /^file:/.test(extension.installedVersion) && extension.extension.localUrl;
+            var debug = pxt.Cloud.isLocalHost() && /debugExtensions/i.test(window.location.href);
+            /* tslint:disable:no-http-string */
+            var url = debug ? "http://localhost:3232/extension.html"
+                : localDebug ? extension.extension.localUrl : "https://" + parsedRepo.owner + ".github.io/" + repoName + "/";
+            /* tslint:enable:no-http-string */
+            _this.parent.openExtension(extension.name, url, repoStatus == 0); // repoStatus can only be APPROVED or UNKNOWN at this point
+        });
+    };
+    Editor.prototype.partitionBlocks = function () {
+        var res = {};
+        var that = this;
+        function setSubcategory(ns, subcat) {
+            if (!that.subcategoryMap[ns])
+                that.subcategoryMap[ns] = {};
+            that.subcategoryMap[ns][subcat] = true;
+        }
+        pxt.blocks.injectBlocks(this.blockInfo).forEach(function (fn) {
+            var ns = (fn.attributes.blockNamespace || fn.namespace).split('.')[0];
+            ns = ns.toLowerCase();
+            if (!res[ns]) {
+                res[ns] = [];
+            }
+            res[ns].push(fn);
+            var subcat = fn.attributes.subcategory;
+            var advanced = fn.attributes.advanced;
+            if (advanced) {
+                // More subcategory
+                setSubcategory(ns, 'more');
+            }
+            else if (subcat) {
+                setSubcategory(ns, subcat);
+            }
+        });
+        return res;
+    };
+    Editor.prototype.hideFlyout = function () {
+        if (this.editor.toolbox_) {
+            this.editor.toolbox_.flyout_.hide();
+        }
+        if (this.toolbox)
+            this.toolbox.clear();
+    };
+    ///////////////////////////////////////////////////////////
+    ////////////         Toolbox methods          /////////////
+    ///////////////////////////////////////////////////////////
+    Editor.prototype.clearCaches = function () {
+        _super.prototype.clearCaches.call(this);
+        this.flyoutBlockXmlCache = {};
+        snippets.clearBuiltinBlockCache();
+    };
+    Editor.prototype.shouldShowSearch = function () {
+        if (this.parent.state.editorState && this.parent.state.editorState.searchBar != undefined) {
+            return this.parent.state.editorState.searchBar;
+        }
+        return true;
+    };
+    Editor.prototype.shouldShowCategories = function () {
+        if (this.parent.state.editorState && this.parent.state.editorState.hasCategories != undefined) {
+            return this.parent.state.editorState.hasCategories;
+        }
+        var blocklyOptions = this.getBlocklyOptions();
+        return blocklyOptions.hasCategories;
+    };
+    Editor.prototype.getBuiltinCategory = function (ns) {
+        return snippets.getBuiltinCategory(ns);
+    };
+    Editor.prototype.isBuiltIn = function (ns) {
+        return snippets.isBuiltin(ns);
+    };
+    Editor.prototype.getNamespaceAttrs = function (ns) {
+        var builtin = snippets.getBuiltinCategory(ns);
+        if (builtin) {
+            builtin.attributes.color = pxt.toolbox.getNamespaceColor(builtin.nameid);
+            return builtin.attributes;
+        }
+        if (!this.blockInfo)
+            return undefined;
+        return _super.prototype.getNamespaceAttrs.call(this, ns);
+    };
+    Editor.prototype.getNamespaces = function () {
+        var _this = this;
+        var namespaces = Object.keys(this.nsMap)
+            .filter(function (ns) { return !snippets.isBuiltin(ns) && !!_this.getNamespaceAttrs(ns); });
+        var config = pxt.appTarget.runtime || {};
+        if (config.loopsBlocks && !snippets.loops.removed)
+            namespaces.push(snippets.loops.nameid);
+        if (config.logicBlocks && !snippets.logic.removed)
+            namespaces.push(snippets.logic.nameid);
+        if (config.variablesBlocks && !snippets.variables.removed)
+            namespaces.push(snippets.variables.nameid);
+        if (config.mathBlocks && !snippets.maths.removed)
+            namespaces.push(snippets.maths.nameid);
+        if (config.functionBlocks && !snippets.functions.removed)
+            namespaces.push(snippets.functions.nameid);
+        if (config.listsBlocks && !snippets.arrays.removed)
+            namespaces.push(snippets.arrays.nameid);
+        if (config.textBlocks && !snippets.text.removed)
+            namespaces.push(snippets.text.nameid);
+        if (pxt.appTarget.cloud && pxt.appTarget.cloud.packages) {
+            namespaces.push(snippets.extensions.nameid);
+        }
+        return namespaces.concat(_super.prototype.getNamespaces.call(this));
+    };
+    ///////////////////////////////////////////////////////////
+    ////////////         Flyout methods           /////////////
+    ///////////////////////////////////////////////////////////
+    Editor.prototype.getBlocksForCategory = function (ns, subns) {
+        if (!snippets.isBuiltin(ns)) {
+            return this.getNonBuiltInBlocks(ns, subns).concat(this.getExtraBlocks(ns, subns));
+        }
+        else {
+            return this.getBuiltInBlocks(ns, subns).concat(this.getExtraBlocks(ns, subns));
+        }
+    };
+    Editor.prototype.filterBlocks = function (subns, blocks) {
+        return blocks.filter((function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated)
+            && ((!subns && !block.attributes.subcategory && !block.attributes.advanced)
+                || (subns && ((block.attributes.advanced && subns == 'more')
+                    || (block.attributes.subcategory && subns == block.attributes.subcategory)))); }));
+    };
+    Editor.prototype.getBuiltInBlocks = function (ns, subns) {
+        var cat = snippets.getBuiltinCategory(ns);
+        var blocks = cat.blocks || [];
+        blocks.forEach(function (b) { b.noNamespace = true; });
+        if (!cat.custom && this.nsMap[ns.toLowerCase()]) {
+            blocks = this.filterBlocks(subns, blocks.concat(this.nsMap[ns.toLowerCase()]));
+        }
+        return blocks;
+    };
+    Editor.prototype.getNonBuiltInBlocks = function (ns, subns) {
+        return this.filterBlocks(subns, this.nsMap[ns]) || [];
+    };
+    Editor.prototype.getExtraBlocks = function (ns, subns) {
+        var _this = this;
+        if (subns)
+            return [];
+        var extraBlocks = [];
+        var onStartNamespace = pxt.appTarget.runtime.onStartNamespace || "loops";
+        if (ns == onStartNamespace) {
+            extraBlocks.push({
+                name: ts.pxtc.ON_START_TYPE,
+                attributes: {
+                    blockId: ts.pxtc.ON_START_TYPE,
+                    weight: pxt.appTarget.runtime.onStartWeight || 10
+                },
+                blockXml: "<block type=\"pxt-on-start\"></block>",
+                noNamespace: true
+            });
+        }
+        // Inject pause until block
+        var pauseUntil = snippets.getPauseUntil();
+        if (pauseUntil && ns == pauseUntil.attributes.blockNamespace) {
+            extraBlocks.push(pauseUntil);
+        }
+        // Add extension buttons
+        if (!subns) {
+            this.extensions.forEach(function (config) {
+                var name = config.name;
+                var namespace = config.extension.namespace || name;
+                if (ns == namespace) {
+                    extraBlocks.push({
+                        name: "EXT" + name + "_BUTTON",
+                        type: "button",
+                        attributes: {
+                            blockId: "EXT" + name + "_BUTTON",
+                            label: config.extension.label ? Util.rlf(config.extension.label) : Util.lf("Editor"),
+                            weight: 101
+                        },
+                        callback: function () {
+                            _this.openExtension(name);
+                        }
+                    });
+                }
+            });
+        }
+        return extraBlocks;
+    };
+    Editor.prototype.showFlyout = function (treeRow) {
+        var ns = treeRow.nameid, subns = treeRow.subns;
+        if (ns == 'search') {
+            this.showSearchFlyout();
+            return;
+        }
+        this.flyoutXmlList = [];
+        if (this.flyoutBlockXmlCache[ns + subns]) {
+            pxt.debug("showing flyout with blocks from flyout blocks xml cache");
+            this.flyoutXmlList = this.flyoutBlockXmlCache[ns + subns];
+            this.showFlyoutInternal_(this.flyoutXmlList);
+            return;
+        }
+        if (this.abstractShowFlyout(treeRow)) {
+            // Cache blocks xml list for later
+            this.flyoutBlockXmlCache[ns + subns] = this.flyoutXmlList;
+            this.showFlyoutInternal_(this.flyoutXmlList);
+        }
+    };
+    Editor.prototype.showFlyoutHeadingLabel = function (ns, subns, icon, color) {
+        var categoryName = name ? name :
+            subns ? Util.capitalize(ns) + " > " + Util.capitalize(subns) : Util.capitalize(ns);
+        var iconClass = ("blocklyTreeIcon" + (icon ? ns.toLowerCase() : 'Default')).replace(/\s/g, '');
+        var headingLabel = pxt.blocks.createFlyoutHeadingLabel(categoryName, color, icon, iconClass);
+        this.flyoutXmlList.push(headingLabel);
+    };
+    Editor.prototype.showFlyoutGroupLabel = function (group, groupicon, labelLineWidth) {
+        var groupLabel = pxt.blocks.createFlyoutGroupLabel(pxt.Util.rlf("{id:group}" + group), groupicon, labelLineWidth);
+        this.flyoutXmlList.push(groupLabel);
+    };
+    Editor.prototype.showFlyoutBlocks = function (ns, color, blocks) {
+        var _this = this;
+        var filters = this.parent.state.editorState ? this.parent.state.editorState.filters : undefined;
+        var categoryState = filters ? (filters.namespaces && filters.namespaces[ns] != undefined ? filters.namespaces[ns] : filters.defaultState) : undefined;
+        blocks.sort(function (f1, f2) {
+            // Sort the blocks
+            return (f2.attributes.weight != undefined ? f2.attributes.weight : 50)
+                - (f1.attributes.weight != undefined ? f1.attributes.weight : 50);
+        }).forEach(function (block) {
+            var blockXmlList;
+            if (block.type == "button") {
+                blockXmlList = _this.getButtonXml(block);
+            }
+            else {
+                blockXmlList = _this.getBlockXml(block);
+            }
+            if (blockXmlList)
+                _this.flyoutXmlList = _this.flyoutXmlList.concat(blockXmlList);
+        });
+    };
+    Editor.prototype.showSearchFlyout = function () {
+        var _this = this;
+        this.flyoutXmlList = [];
+        var searchBlocks = this.toolbox.getSearchBlocks();
+        searchBlocks.forEach(function (block) {
+            var blockXmlList = _this.getBlockXml(block);
+            if (blockXmlList)
+                _this.flyoutXmlList = _this.flyoutXmlList.concat(blockXmlList);
+        });
+        if (this.flyoutXmlList.length == 0) {
+            var label = goog.dom.createDom('label');
+            label.setAttribute('text', lf("No search results..."));
+            this.flyoutXmlList.push(label);
+        }
+        this.showFlyoutInternal_(this.flyoutXmlList);
+    };
+    Editor.prototype.showFlyoutInternal_ = function (xmlList) {
+        // Blockly internal methods to show a toolbox or a flyout
+        if (this.editor.toolbox_) {
+            this.editor.toolbox_.flyout_.show(xmlList);
+            this.editor.toolbox_.flyout_.scrollToStart();
+        }
+        else if (this.editor.flyout_) {
+            this.editor.flyout_.show(xmlList);
+            this.editor.flyout_.scrollToStart();
+        }
+    };
+    // For editors that have no toolb
+    Editor.prototype.showFlyoutOnlyToolbox = function () {
+        var _this = this;
+        // Show a Flyout only with all the blocks
+        var allCategories = this.getAllCategories();
+        var allBlocks = [];
+        allCategories.forEach(function (category) {
+            var blocks = category.blocks;
+            allBlocks = allBlocks.concat(blocks);
+            if (category.subcategories)
+                category.subcategories.forEach(function (subcategory) {
+                    var subblocks = subcategory.blocks;
+                    allBlocks = allBlocks.concat(subblocks);
+                });
+        });
+        var xmlList = [];
+        allBlocks.forEach(function (block) {
+            var blockXmlList = _this.getBlockXml(block);
+            if (blockXmlList)
+                xmlList = xmlList.concat(blockXmlList);
+        });
+        this.showFlyoutInternal_(xmlList);
+    };
+    ///////////////////////////////////////////////////////////
+    ////////////          Block methods           /////////////
+    ///////////////////////////////////////////////////////////
+    Editor.prototype.getBlockXml = function (block, shadow) {
+        var _this = this;
+        var that = this;
+        var blockXml;
+        // Check if the block is built in, ignore it as it's already defined in snippets
+        if (block.attributes.blockBuiltin) {
+            pxt.log("ignoring built in block: " + block.attributes.blockId);
+            return undefined;
+        }
+        if (block.builtinBlock) {
+            // Find the block XML for this built in block.
+            var builtin = snippets.allBuiltinBlocks()[block.attributes.blockId];
+            if (builtin && builtin.blockXml && block.builtinField && block.builtinField.length == 2) {
+                // Likley a built in block with a mutatation, check the fields. 
+                var field_1 = block.builtinField[0];
+                var value_1 = block.builtinField[1];
+                var regExp = new RegExp("<field name=\"" + field_1 + "\">(.*)</field>", 'i');
+                builtin.blockXml = builtin.blockXml.replace(regExp, function () {
+                    return "<field name=\"" + field_1 + "\">" + value_1 + "</field>";
+                });
+            }
+            return builtin ? this.getBlockXml(builtin) : undefined;
+        }
+        if (!block.blockXml) {
+            var fn_1 = pxt.blocks.blockSymbol(block.attributes.blockId);
+            if (fn_1) {
+                if (!shouldShowBlock(fn_1))
+                    return undefined;
+                var comp = pxt.blocks.compileInfo(fn_1);
+                blockXml = pxt.blocks.createToolboxBlock(this.blockInfo, fn_1, comp);
+                if (fn_1.attributes.optionalVariableArgs && fn_1.attributes.toolboxVariableArgs) {
+                    var handlerArgs_1 = comp.handlerArgs;
+                    var mutationValues = fn_1.attributes.toolboxVariableArgs.split(";")
+                        .map(function (v) { return parseInt(v); })
+                        .filter(function (v) { return v <= handlerArgs_1.length && v >= 0; });
+                    mutationValues.forEach(function (v) {
+                        var mutation = document.createElement("mutation");
+                        mutation.setAttribute("numargs", v.toString());
+                        for (var i = 0; i < v; i++) {
+                            mutation.setAttribute("arg" + i, handlerArgs_1[i].name);
+                        }
+                        blockXml.appendChild(mutation);
+                    });
+                }
+                else if (comp.handlerArgs.length && !fn_1.attributes.optionalVariableArgs) {
+                    comp.handlerArgs.forEach(function (arg) {
+                        var getterblock = Blockly.Xml.textToDom("\n    <value name=\"HANDLER_" + arg.name + "\">\n    <shadow type=\"variables_get_reporter\">\n    <field name=\"VAR\" variabletype=\"\">" + arg.name + "</field>\n    </shadow>\n    </value>");
+                        blockXml.appendChild(getterblock);
+                    });
+                }
+                else if (fn_1.attributes.mutateDefaults) {
+                    var mutationValues = fn_1.attributes.mutateDefaults.split(";");
+                    var mutatedBlocks_1 = [];
+                    mutationValues.forEach(function (mutation) {
+                        var mutatedBlock = blockXml.cloneNode(true);
+                        pxt.blocks.mutateToolboxBlock(mutatedBlock, fn_1.attributes.mutate, mutation);
+                        mutatedBlocks_1.push(mutatedBlock);
+                    });
+                    return mutatedBlocks_1;
+                }
+                else if (fn_1.attributes.blockSetVariable != undefined && fn_1.retType) {
+                    // if requested, wrap block into a "set variable block"
+                    var rawName = fn_1.attributes.blockSetVariable;
+                    var varName = void 0;
+                    // By default if the API author does not put any value for blockSetVariable
+                    // then our comment parser will fill in the string "true". This gets caught
+                    // by isReservedWord() so no need to do a separate check.
+                    if (!rawName || pxt.blocks.isReservedWord(rawName)) {
+                        varName = Util.htmlEscape(fn_1.retType.toLowerCase());
+                    }
+                    else {
+                        varName = Util.htmlEscape(rawName);
+                    }
+                    var setblock = Blockly.Xml.textToDom("\n<block type=\"variables_set\" gap=\"" + Util.htmlEscape((fn_1.attributes.blockGap || 8) + "") + "\">\n<field name=\"VAR\" variabletype=\"\">" + varName + "</field>\n</block>");
+                    {
+                        var value = document.createElement('value');
+                        value.setAttribute('name', 'VALUE');
+                        value.appendChild(blockXml);
+                        value.appendChild(pxt.blocks.mkFieldBlock("math_number", "NUM", "0", true));
+                        setblock.appendChild(value);
+                    }
+                    blockXml = setblock;
+                }
+            }
+            else {
+                pxt.log("Couldn't find block for: " + block.attributes.blockId);
+                pxt.log(block);
+            }
+        }
+        else {
+            blockXml = Blockly.Xml.textToDom(block.blockXml);
+        }
+        if (blockXml) {
+            pxt.Util.toArray(blockXml.querySelectorAll('shadow'))
+                .filter(function (shadow) { return !shadow.innerHTML; })
+                .forEach(function (shadow, i) {
+                var type = shadow.getAttribute('type');
+                var builtin = snippets.allBuiltinBlocks()[type];
+                var b = _this.getBlockXml(builtin ? builtin : { name: type, attributes: { blockId: type } }, true);
+                /* tslint:disable:no-inner-html setting one element's contents to the other */
+                if (b && b.length > 0 && b[0])
+                    shadow.innerHTML = b[0].innerHTML;
+                /* tslint:enable:no-inner-html */
+            });
+        }
+        return [blockXml];
+        function shouldShowBlock(fn) {
+            if (fn.attributes.debug && !pxt.options.debug)
+                return false;
+            if (!shadow && (fn.attributes.deprecated || fn.attributes.blockHidden))
+                return false;
+            var ns = (fn.attributes.blockNamespace || fn.namespace).split('.')[0];
+            return that.shouldShowBlock(fn.attributes.blockId, ns);
+        }
+    };
+    Editor.prototype.getButtonXml = function (button) {
+        this.editor.registerButtonCallback(button.attributes.blockId, function (btn) {
+            button.callback();
+        });
+        return [pxt.blocks.createFlyoutButton(button.attributes.blockId, button.attributes.label)];
+    };
     return Editor;
-}(srceditor.Editor));
+}(toolboxeditor.ToolboxEditor));
 exports.Editor = Editor;
 
-},{"./compiler":11,"./core":13,"./debugger":17,"./package":35,"./srceditor":46,"react":155}],6:[function(require,module,exports){
+},{"./blocksSnippets":6,"./compiler":11,"./core":13,"./debugger":17,"./package":36,"./toolbox":49,"./toolboxeditor":50,"react":157,"react-dom":145}],6:[function(require,module,exports){
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var ReactDOM = require("react-dom");
-var data = require("./data");
-var BlocksPreview = /** @class */ (function (_super) {
-    __extends(BlocksPreview, _super);
-    function BlocksPreview() {
-        return _super !== null && _super.apply(this, arguments) || this;
+exports.loops = {
+    name: lf("{id:category}Loops"),
+    nameid: 'loops',
+    blocks: [
+        {
+            name: "controls_repeat_ext",
+            attributes: {
+                blockId: "controls_repeat_ext",
+                weight: 49
+            },
+            blockXml: "<block type=\"controls_repeat_ext\">\n            <value name=\"TIMES\">\n                <shadow type=\"math_whole_number\">\n                    <field name=\"NUM\">4</field>\n                </shadow>\n            </value>\n        </block>"
+        }, {
+            name: "device_while",
+            attributes: {
+                blockId: "device_while",
+                weight: 48
+            },
+            blockXml: "<block type=\"device_while\">\n            <value name=\"COND\">\n                <shadow type=\"logic_boolean\"></shadow>\n            </value>\n        </block>"
+        },
+        {
+            name: "pxt_controls_for",
+            attributes: {
+                blockId: "pxt_controls_for",
+                weight: 47
+            },
+            blockXml: "<block type=\"pxt_controls_for\">\n            <value name=\"VAR\">\n                <shadow type=\"variables_get_reporter\">\n                    <field name=\"VAR\">" + lf("{id:var}index") + "</field>\n                </shadow>\n            </value>\n            <value name=\"TO\">\n                <shadow type=\"math_whole_number\">\n                    <field name=\"NUM\">4</field>\n                </shadow>\n            </value>\n        </block>"
+        },
+        {
+            name: "pxt_controls_for_of",
+            attributes: {
+                blockId: "pxt_controls_for_of",
+                weight: 46
+            },
+            blockXml: "<block type=\"pxt_controls_for_of\">\n            <value name=\"VAR\">\n                <shadow type=\"variables_get_reporter\">\n                    <field name=\"VAR\">" + lf("{id:var}value") + "</field>\n                </shadow>\n            </value>\n            <value name=\"LIST\">\n                <shadow type=\"variables_get\">\n                    <field name=\"VAR\">list</field>\n                </shadow>\n            </value>\n        </block>"
+        }
+    ],
+    attributes: {
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        icon: "loops",
+        weight: 50.09,
+        paramDefl: {}
     }
-    BlocksPreview.prototype.renderSvg = function () {
-        var el = $(ReactDOM.findDOMNode(this));
-        var svg = pxt.blocks.render(this.props.xml);
-        el.children().remove();
-        el.append(svg);
+};
+exports.logic = {
+    name: lf("{id:category}Logic"),
+    nameid: 'logic',
+    groups: [lf("Conditionals"), lf("Comparison"), lf("Boolean"), "other"],
+    blocks: [
+        {
+            name: "controls_if",
+            attributes: {
+                blockId: "controls_if",
+                group: lf("Conditionals"),
+                weight: 49
+            },
+            blockXml: "<block type=\"controls_if\" gap=\"8\">\n            <value name=\"IF0\">\n                <shadow type=\"logic_boolean\">\n                    <field name=\"BOOL\">TRUE</field>\n                </shadow>\n            </value>\n        </block>"
+        }, {
+            name: "controls_if_else",
+            attributes: {
+                blockId: "controls_if",
+                group: lf("Conditionals"),
+                weight: 48
+            },
+            blockXml: "<block type=\"controls_if\" gap=\"8\">\n            <mutation else=\"1\"></mutation>\n            <value name=\"IF0\">\n                <shadow type=\"logic_boolean\">\n                    <field name=\"BOOL\">TRUE</field>\n                </shadow>\n            </value>\n        </block>"
+        }, {
+            name: "logic_compare_gt",
+            attributes: {
+                blockId: "logic_compare",
+                group: lf("Comparison"),
+                weight: 47
+            },
+            blockXml: "<block type=\"logic_compare\" gap=\"8\">\n            <field name=\"OP\">GT</field>\n            <value name=\"A\">\n                <shadow type=\"math_number\">\n                    <field name=\"NUM\">0</field>\n                </shadow>\n            </value>\n            <value name=\"B\">\n                <shadow type=\"math_number\">\n                    <field name=\"NUM\">0</field>\n                </shadow>\n            </value>\n        </block>"
+        }, {
+            name: "logic_compare_lt",
+            attributes: {
+                blockId: "logic_compare",
+                group: lf("Comparison"),
+                weight: 46
+            },
+            blockXml: "<block type=\"logic_compare\">\n            <field name=\"OP\">LT</field>\n            <value name=\"A\">\n                <shadow type=\"math_number\">\n                    <field name=\"NUM\">0</field>\n                </shadow>\n            </value>\n            <value name=\"B\">\n                <shadow type=\"math_number\">\n                    <field name=\"NUM\">0</field>\n                </shadow>\n            </value>\n        </block>"
+        }, {
+            name: "logic_operation_and",
+            attributes: {
+                blockId: "logic_operation",
+                group: lf("Boolean"),
+                weight: 45
+            },
+            blockXml: "<block type=\"logic_operation\" gap=\"8\">\n            <field name=\"OP\">AND</field>\n        </block>"
+        }, {
+            name: "logic_operation_or",
+            attributes: {
+                blockId: "logic_operation",
+                group: lf("Boolean"),
+                weight: 44
+            },
+            blockXml: "<block type=\"logic_operation\" gap=\"8\">\n            <field name=\"OP\">OR</field>\n        </block>"
+        }, {
+            name: "logic_negate",
+            attributes: {
+                blockId: "logic_negate",
+                group: lf("Boolean"),
+                weight: 43
+            },
+            blockXml: "<block type=\"logic_negate\"></block>"
+        }, {
+            name: "logic_boolean_true",
+            attributes: {
+                blockId: "logic_boolean",
+                group: lf("Boolean"),
+                weight: 42
+            },
+            blockXml: "<block type=\"logic_boolean\" gap=\"8\">\n            <field name=\"BOOL\">TRUE</field>\n        </block>"
+        }, {
+            name: "logic_boolean_false",
+            attributes: {
+                blockId: "logic_boolean",
+                group: lf("Boolean"),
+                weight: 41
+            },
+            blockXml: "<block type=\"logic_boolean\">\n            <field name=\"BOOL\">FALSE</field>\n        </block>"
+        }
+    ],
+    attributes: {
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        weight: 50.08,
+        icon: "logic",
+        paramDefl: {}
+    }
+};
+exports.variables = {
+    name: lf("{id:category}Variables"),
+    nameid: 'variables',
+    blocks: undefined,
+    custom: true,
+    customClick: function (theEditor) {
+        theEditor.showVariablesFlyout();
+        return false;
+    },
+    attributes: {
+        weight: 50.07,
+        icon: "variables",
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        paramDefl: {}
+    }
+};
+exports.maths = {
+    name: lf("{id:category}Math"),
+    nameid: 'math',
+    blocks: [
+        {
+            name: "math_arithmetic_ADD",
+            attributes: {
+                blockId: "math_arithmetic",
+                weight: 90
+            },
+            blockXml: "<block type=\"math_arithmetic\" gap=\"8\">\n                <value name=\"A\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"B\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"OP\">ADD</field>\n            </block>"
+        }, {
+            name: "math_arithmetic_MINUS",
+            attributes: {
+                blockId: "math_arithmetic",
+                weight: 89
+            },
+            blockXml: "<block type=\"math_arithmetic\" gap=\"8\">\n                <value name=\"A\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"B\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"OP\">MINUS</field>\n            </block>"
+        }, {
+            name: "math_arithmetic_TIMES",
+            attributes: {
+                blockId: "math_arithmetic",
+                weight: 88
+            },
+            blockXml: "<block type=\"math_arithmetic\" gap=\"8\">\n                <value name=\"A\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"B\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"OP\">MULTIPLY</field>\n            </block>"
+        }, {
+            name: "math_arithmetic_DIVIDE",
+            attributes: {
+                blockId: "math_arithmetic",
+                weight: 87
+            },
+            blockXml: "<block type=\"math_arithmetic\" gap=\"8\">\n                <value name=\"A\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"B\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"OP\">DIVIDE</field>\n            </block>"
+        }, {
+            name: "math_number",
+            attributes: {
+                blockId: "math_number",
+                weight: 86
+            },
+            blockXml: "<block type=\"math_number\" gap=\"8\">\n                <field name=\"NUM\">0</field>\n            </block>"
+        }, {
+            name: "math_modulo",
+            attributes: {
+                blockId: "math_modulo",
+                weight: 85
+            },
+            blockXml: "<block type=\"math_modulo\">\n                <value name=\"DIVIDEND\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"DIVISOR\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">1</field>\n                    </shadow>\n                </value>\n            </block>"
+        }, {
+            name: "math_op2_min",
+            attributes: {
+                blockId: "math_op2",
+                weight: 84
+            },
+            blockXml: "<block type=\"math_op2\" gap=\"8\">\n                <value name=\"x\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"y\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"op\">min</field>\n            </block>"
+        }, {
+            name: "math_op2_max",
+            attributes: {
+                blockId: "math_op2",
+                weight: 83
+            },
+            blockXml: "<block type=\"math_op2\" gap=\"8\">\n                <value name=\"x\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"y\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <field name=\"op\">max</field>\n            </block>"
+        }, {
+            name: "math_op3",
+            attributes: {
+                blockId: "math_op3",
+                weight: 82
+            },
+            blockXml: "<block type=\"math_op3\">\n                <value name=\"x\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n            </block>"
+        }, {
+            name: "math_js_op",
+            attributes: {
+                blockId: "math_js_op",
+                weight: 81
+            },
+            blockXml: "<block type=\"math_js_op\">\n                <field name=\"OP\">sqrt</field>\n                <value name=\"ARG0\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n            </block>"
+        }
+    ],
+    attributes: {
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        weight: 50.06,
+        icon: "math",
+        paramDefl: {}
+    }
+};
+exports.functions = {
+    name: lf("{id:category}Functions"),
+    nameid: 'functions',
+    blocks: [],
+    custom: true,
+    customClick: function (theEditor) {
+        theEditor.showFunctionsFlyout();
+        return false;
+    },
+    attributes: {
+        advanced: true,
+        weight: 50.08,
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        icon: "functions",
+        paramDefl: {}
+    }
+};
+exports.arrays = {
+    name: lf("{id:category}Arrays"),
+    nameid: "arrays",
+    blocks: [
+        {
+            name: "lists_create_with",
+            attributes: {
+                blockId: "lists_create_with",
+                weight: 90
+            },
+            blockXml: "<block type=\"variables_set\" gap=\"8\">\n                <field name=\"VAR\" variabletype=\"\">" + lf("{id:var}list") + "</field>\n                <value name=\"VALUE\">\n                    <block type=\"lists_create_with\">\n                        <mutation items=\"2\"></mutation>\n                        <value name=\"ADD0\">\n                            <shadow type=\"math_number\">\n                                <field name=\"NUM\">1</field>\n                            </shadow>\n                        </value>\n                        <value name=\"ADD1\">\n                            <shadow type=\"math_number\">\n                                <field name=\"NUM\">2</field>\n                            </shadow>\n                        </value>\n                    </block>\n                </value>\n            </block>"
+        }, {
+            name: "lists_create_with",
+            attributes: {
+                blockId: "lists_create_with",
+                weight: 89
+            },
+            blockXml: "<block type=\"variables_set\">\n                <field name=\"VAR\" variabletype=\"\">" + lf("{id:var}text list") + "</field>\n                <value name=\"VALUE\">\n                    <block type=\"lists_create_with\">\n                        <mutation items=\"3\"></mutation>\n                        <value name=\"ADD0\">\n                            <shadow type=\"text\">\n                                <field name=\"TEXT\">" + lf("a") + "</field>\n                            </shadow>\n                        </value>\n                        <value name=\"ADD1\">\n                            <shadow type=\"text\">\n                                <field name=\"TEXT\">" + lf("b") + "</field>\n                            </shadow>\n                        </value>\n                        <value name=\"ADD2\">\n                            <shadow type=\"text\">\n                                <field name=\"TEXT\">" + lf("c") + "</field>\n                            </shadow>\n                        </value>\n                    </block>\n                </value>\n            </block>"
+        }, {
+            name: "lists_index_get",
+            attributes: {
+                blockId: "lists_index_get",
+                weight: 87
+            },
+            blockXml: "<block type=\"lists_index_get\">\n                <value name=\"LIST\">\n                    <block type=\"variables_get\">\n                        <field name=\"VAR\">" + lf("{id:var}list") + "</field>\n                    </block>\n                </value>\n                <value name=\"INDEX\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n            </block>"
+        },
+        {
+            name: "lists_index_set",
+            attributes: {
+                blockId: "lists_index_set",
+                weight: 86
+            },
+            blockXml: "<block type=\"lists_index_set\">\n                <value name=\"INDEX\">\n                    <shadow type=\"math_number\">\n                        <field name=\"NUM\">0</field>\n                    </shadow>\n                </value>\n                <value name=\"LIST\">\n                    <block type=\"variables_get\">\n                        <field name=\"VAR\">" + lf("{id:var}list") + "</field>\n                    </block>\n                </value>\n            </block>"
+        },
+        {
+            name: "lists_length",
+            attributes: {
+                blockId: "lists_length",
+                weight: 88
+            },
+            blockXml: "<block type=\"lists_length\">\n                <value name=\"VALUE\">\n                    <block type=\"variables_get\">\n                        <field name=\"VAR\">" + lf("{id:var}list") + "</field>\n                    </block>\n                </value>\n            </block>"
+        }
+    ],
+    attributes: {
+        advanced: true,
+        weight: 50.07,
+        icon: "arrays",
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        paramDefl: {}
+    }
+};
+exports.text = {
+    name: lf("{id:category}Text"),
+    nameid: 'text',
+    blocks: [
+        {
+            name: "text",
+            attributes: {
+                blockId: "text",
+                weight: 90
+            },
+            blockXml: "<block type=\"text\"></block>"
+        }, {
+            name: "text_length",
+            attributes: {
+                blockId: "text_length",
+                weight: 89
+            },
+            blockXml: "<block type=\"text_length\">\n                <value name=\"VALUE\">\n                    <shadow type=\"text\">\n                        <field name=\"TEXT\">" + lf("Hello") + "</field>\n                    </shadow>\n                </value>\n            </block>"
+        }, {
+            name: "text_join",
+            attributes: {
+                blockId: "text_join",
+                weight: 88
+            },
+            blockXml: "<block type=\"text_join\">\n                <mutation items=\"2\"></mutation>\n                <value name=\"ADD0\">\n                    <shadow type=\"text\">\n                        <field name=\"TEXT\">" + lf("Hello") + "</field>\n                    </shadow>\n                </value>\n                <value name=\"ADD1\">\n                    <shadow type=\"text\">\n                        <field name=\"TEXT\">" + lf("World") + "</field>\n                    </shadow>\n                </value>\n            </block>"
+        }
+    ],
+    attributes: {
+        advanced: true,
+        weight: 50.06,
+        icon: "text",
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        paramDefl: {}
+    }
+};
+exports.extensions = {
+    name: pxt.toolbox.addPackageTitle(),
+    nameid: 'addpackage',
+    blocks: [],
+    custom: true,
+    customClick: function (theEditor) {
+        theEditor.closeFlyout();
+        theEditor.showPackageDialog();
+        return true;
+    },
+    attributes: {
+        advanced: true,
+        weight: -1,
+        icon: 'addpackage',
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        paramDefl: {}
+    }
+};
+var pauseUntil;
+function getPauseUntil() {
+    if (pauseUntil)
+        return pauseUntil;
+    var opts = pxt.appTarget.runtime && pxt.appTarget.runtime.pauseUntilBlock;
+    if (opts) {
+        pauseUntil = {
+            name: pxtc.PAUSE_UNTIL_TYPE,
+            attributes: {
+                blockId: pxtc.PAUSE_UNTIL_TYPE,
+                blockNamespace: opts.category || "loops",
+                weight: opts.weight == null ? 0 : opts.weight
+            },
+            blockXml: Blockly.Xml.domToText(pxt.blocks.mkPredicateBlock(pxtc.PAUSE_UNTIL_TYPE)),
+            noNamespace: true
+        };
+    }
+    return pauseUntil;
+}
+exports.getPauseUntil = getPauseUntil;
+function getBuiltinCategory(ns) {
+    switch (ns) {
+        case exports.loops.nameid: return exports.loops;
+        case exports.logic.nameid: return exports.logic;
+        case exports.variables.nameid: return exports.variables;
+        case exports.maths.nameid: return exports.maths;
+        case exports.text.nameid: return exports.text;
+        case exports.arrays.nameid: return exports.arrays;
+        case exports.functions.nameid: return exports.functions;
+        case exports.extensions.nameid: return exports.extensions;
+    }
+    return undefined;
+}
+exports.getBuiltinCategory = getBuiltinCategory;
+function isBuiltin(ns) {
+    switch (ns) {
+        case exports.loops.nameid:
+        case exports.logic.nameid:
+        case exports.variables.nameid:
+        case exports.maths.nameid:
+        case exports.text.nameid:
+        case exports.arrays.nameid:
+        case exports.functions.nameid:
+        case exports.extensions.nameid:
+            return true;
+    }
+    return false;
+}
+exports.isBuiltin = isBuiltin;
+var builtinBlockCache;
+function allBuiltinBlocks() {
+    if (!builtinBlockCache) {
+        builtinBlockCache = {};
+        [exports.loops, exports.logic, exports.maths, exports.text, exports.arrays].forEach(function (builtin) {
+            builtin.blocks.forEach(function (block) {
+                if (block.attributes.blockId && !builtinBlockCache[block.attributes.blockId]) {
+                    builtinBlockCache[block.attributes.blockId] = block;
+                }
+            });
+        });
+    }
+    // Add on start built in block 
+    builtinBlockCache[ts.pxtc.ON_START_TYPE] = {
+        name: ts.pxtc.ON_START_TYPE,
+        attributes: {
+            blockId: ts.pxtc.ON_START_TYPE,
+            weight: pxt.appTarget.runtime.onStartWeight || 10
+        },
+        blockXml: "<block type=\"pxt-on-start\"></block>",
+        noNamespace: true
     };
-    BlocksPreview.prototype.componentDidMount = function () {
-        this.renderSvg();
+    // Add pause until built in block
+    var pauseUntil = this.getPauseUntil();
+    if (pauseUntil) {
+        builtinBlockCache[pxtc.PAUSE_UNTIL_TYPE] = pauseUntil;
+    }
+    return builtinBlockCache;
+}
+exports.allBuiltinBlocks = allBuiltinBlocks;
+function clearBuiltinBlockCache() {
+    builtinBlockCache = undefined;
+}
+exports.clearBuiltinBlockCache = clearBuiltinBlockCache;
+function overrideCategory(ns, def) {
+    var cat = getBuiltinCategory(ns);
+    if (def && cat) {
+        if (Object.keys(def).length === 0) {
+            cat.removed = true;
+        }
+        if (def.name) {
+            cat.name = def.name;
+        }
+        if (def.icon) {
+            cat.attributes.icon = def.icon;
+        }
+        if (def.weight !== undefined) {
+            cat.attributes.weight = def.weight;
+        }
+        if (def.advanced !== undefined) {
+            cat.attributes.advanced = def.advanced;
+        }
+        if (def.groups != undefined) {
+            cat.groups = def.groups;
+        }
+        if (def.blocks) {
+            var currentWeight_1 = 100;
+            cat.blocks = def.blocks.map(function (b, i) {
+                if (b.weight) {
+                    currentWeight_1 = b.weight;
+                }
+                else {
+                    currentWeight_1--;
+                }
+                return blockFromJson(b, currentWeight_1);
+            });
+        }
+    }
+}
+exports.overrideCategory = overrideCategory;
+function blockFromJson(b, currentWeight) {
+    return {
+        name: b.name,
+        snippet: b.snippet,
+        snippetName: b.snippetName,
+        snippetOnly: b.snippetOnly,
+        attributes: {
+            blockId: b.blockId,
+            weight: currentWeight || b.weight,
+            advanced: b.advanced,
+            jsDoc: b.jsDoc,
+            group: b.group,
+        },
+        noNamespace: true,
+        retType: b.retType,
+        blockXml: b.blockXml
     };
-    BlocksPreview.prototype.componentDidUpdate = function () {
-        this.renderSvg();
+}
+function blockToJson(b) {
+    return {
+        name: b.name,
+        snippet: b.snippet,
+        snippetName: b.snippetName,
+        snippetOnly: b.snippetOnly,
+        retType: b.retType,
+        weight: b.attributes.weight,
+        advanced: b.attributes.advanced,
+        jsDoc: b.attributes.jsDoc,
+        group: b.attributes.group,
+        blockXml: b.blockXml,
+        blockId: b.attributes.blockId
     };
-    BlocksPreview.prototype.renderCore = function () {
-        return (React.createElement("div", { style: { width: "100%", minHeight: "10em", direction: "ltr" } }));
+}
+function categoryToJson(c) {
+    return {
+        name: c.name,
+        icon: c.attributes.icon,
+        color: c.attributes.color,
+        weight: c.attributes.weight,
+        advanced: c.attributes.advanced,
+        blocks: (c.blocks) ? c.blocks.map(function (b) { return blockToJson(b); }) : []
     };
-    return BlocksPreview;
-}(data.Component));
-exports.BlocksPreview = BlocksPreview;
+}
+function overrideToolbox(def) {
+    overrideCategory(exports.loops.nameid, def.loops);
+    overrideCategory(exports.logic.nameid, def.logic);
+    overrideCategory(exports.variables.nameid, def.variables);
+    overrideCategory(exports.maths.nameid, def.maths);
+    overrideCategory(exports.text.nameid, def.text);
+    overrideCategory(exports.arrays.nameid, def.arrays);
+    overrideCategory(exports.functions.nameid, def.functions);
+}
+exports.overrideToolbox = overrideToolbox;
+function getToolboxDefinition() {
+    return {
+        loops: categoryToJson(getBuiltinCategory(exports.loops.nameid)),
+        logic: categoryToJson(getBuiltinCategory(exports.logic.nameid)),
+        variables: categoryToJson(getBuiltinCategory(exports.variables.nameid)),
+        maths: categoryToJson(getBuiltinCategory(exports.maths.nameid)),
+        text: categoryToJson(getBuiltinCategory(exports.text.nameid)),
+        arrays: categoryToJson(getBuiltinCategory(exports.arrays.nameid)),
+        functions: categoryToJson(getBuiltinCategory(exports.functions.nameid))
+    };
+}
+exports.getToolboxDefinition = getToolboxDefinition;
 
-},{"./data":15,"react":155,"react-dom":143}],7:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -3185,14 +4492,32 @@ var data = require("./data");
 var OUT_OF_BOUND_MARGIN = 300;
 var Carousel = /** @class */ (function (_super) {
     __extends(Carousel, _super);
-    function Carousel() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function Carousel(props) {
+        var _this = _super.call(this, props) || this;
         _this.arrows = [];
         _this.isDragging = false;
         _this.definitelyDragging = false;
         _this.currentOffset = 0;
         _this.index = 0;
         _this.childrenElements = [];
+        _this.handleContainerRef = function (c) {
+            _this.container = c;
+        };
+        _this.handleDragSurfaceRef = function (c) {
+            _this.dragSurface = c;
+        };
+        _this.handleArrowRefs = function (c) {
+            _this.arrows.push(c);
+        };
+        _this.handleChildRefs = function (c) {
+            if (c)
+                _this.childrenElements.push(c);
+        };
+        _this.state = {};
+        _this.childrenElements = [];
+        _this.arrows = [];
+        _this.onLeftArrowClick = _this.onLeftArrowClick.bind(_this);
+        _this.onRightArrowClick = _this.onRightArrowClick.bind(_this);
         return _this;
     }
     Carousel.prototype.componentWillReceiveProps = function (nextProps) {
@@ -3202,17 +4527,21 @@ var Carousel = /** @class */ (function (_super) {
     };
     Carousel.prototype.renderCore = function () {
         var _this = this;
-        this.childrenElements = [];
-        this.arrows = [];
-        var _a = this.state || {}, rightDisabled = _a.rightDisabled, leftDisabled = _a.leftDisabled;
+        var _a = this.state, rightDisabled = _a.rightDisabled, leftDisabled = _a.leftDisabled;
         return React.createElement("div", { className: "ui carouselouter" },
-            React.createElement("span", { className: "carouselarrow left aligned" + (leftDisabled ? " arrowdisabled" : ""), tabIndex: leftDisabled ? -1 : 0, onClick: function () { return _this.onArrowClick(true); }, onKeyDown: sui.fireClickOnEnter, ref: function (r) { return _this.arrows.push(r); } },
+            React.createElement("span", { role: "button", className: "carouselarrow left aligned" + (leftDisabled ? " arrowdisabled" : ""), tabIndex: leftDisabled ? -1 : 0, onClick: this.onLeftArrowClick, onKeyDown: sui.fireClickOnEnter, ref: this.handleArrowRefs },
                 React.createElement(sui.Icon, { icon: "circle angle left" })),
-            React.createElement("div", { className: "carouselcontainer", ref: function (r) { return _this.container = r; } },
-                React.createElement("div", { className: "carouselbody", ref: function (r) { return _this.dragSurface = r; } }, React.Children.map(this.props.children, function (child, index) { return child ?
-                    React.createElement("div", { className: "carouselitem " + (_this.props.selectedIndex == index ? 'selected' : ''), ref: function (r) { return r && _this.childrenElements.push(r); } }, React.cloneElement(child, { tabIndex: _this.isVisible(index) ? 0 : -1 })) : undefined; }))),
-            React.createElement("span", { className: "carouselarrow right aligned" + (rightDisabled ? " arrowdisabled" : ""), tabIndex: rightDisabled ? -1 : 0, onClick: function () { return _this.onArrowClick(false); }, onKeyDown: sui.fireClickOnEnter, ref: function (r) { return _this.arrows.push(r); } },
+            React.createElement("div", { className: "carouselcontainer", ref: this.handleContainerRef },
+                React.createElement("div", { className: "carouselbody", ref: this.handleDragSurfaceRef }, React.Children.map(this.props.children, function (child, index) { return child ?
+                    React.createElement("div", { className: "carouselitem " + (_this.props.selectedIndex == index ? 'selected' : ''), ref: _this.handleChildRefs }, React.cloneElement(child, { tabIndex: _this.isVisible(index) ? 0 : -1 })) : undefined; }))),
+            React.createElement("span", { role: "button", className: "carouselarrow right aligned" + (rightDisabled ? " arrowdisabled" : ""), tabIndex: rightDisabled ? -1 : 0, onClick: this.onRightArrowClick, onKeyDown: sui.fireClickOnEnter, ref: this.handleArrowRefs },
                 React.createElement(sui.Icon, { icon: "circle angle right" })));
+    };
+    Carousel.prototype.onLeftArrowClick = function () {
+        this.onArrowClick(true);
+    };
+    Carousel.prototype.onRightArrowClick = function () {
+        this.onArrowClick(false);
     };
     Carousel.prototype.onArrowClick = function (left) {
         var prevIndex = this.index;
@@ -3220,12 +4549,14 @@ var Carousel = /** @class */ (function (_super) {
         if (left) {
             // Focus right most
             var prevElement = this.index + this.actualPageLength < prevIndex ? this.index + this.actualPageLength : prevIndex - 1;
-            this.childrenElements[prevElement].firstChild.focus();
+            if (this.childrenElements[prevElement])
+                this.childrenElements[prevElement].firstChild.focus();
         }
         else {
             // Focus left most
             var nextElement = this.index > prevIndex + this.actualPageLength ? this.index : prevIndex + this.actualPageLength;
-            this.childrenElements[nextElement].firstChild.focus();
+            if (this.childrenElements[nextElement])
+                this.childrenElements[nextElement].firstChild.focus();
         }
     };
     Carousel.prototype.componentDidMount = function () {
@@ -3462,7 +4793,7 @@ function getX(event) {
     }
 }
 
-},{"./data":15,"./sui":47,"react":155}],8:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var db = require("./db");
@@ -3488,7 +4819,7 @@ function getHeader(id) {
         return e.header;
     return null;
 }
-function initAsync(target) {
+function initAsync(target, version) {
     // TODO getAllAsync aware of target?
     return headers.getAllAsync().then(function (h) {
         allScripts = h
@@ -3574,7 +4905,6 @@ function installAsync(h0, text) {
     h.id = ts.pxtc.Util.guidGen();
     h.recentUse = U.nowSeconds();
     h.modificationTime = h.recentUse;
-    h.target = pxt.appTarget.id;
     var e = {
         id: h.id,
         header: h,
@@ -3800,7 +5130,7 @@ exports.provider = {
     loadedAsync: loadedAsync
 };
 
-},{"./core":13,"./data":15,"./db":16,"./package":35,"./workspace":50}],9:[function(require,module,exports){
+},{"./core":13,"./data":15,"./db":16,"./package":36,"./workspace":52}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../../built/pxtlib.d.ts"/>
@@ -4061,7 +5391,7 @@ function initCommandsAsync() {
 }
 exports.initCommandsAsync = initCommandsAsync;
 
-},{"./core":13,"./hidbridge":26,"./package":35}],10:[function(require,module,exports){
+},{"./core":13,"./hidbridge":27,"./package":36}],10:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -4077,7 +5407,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var sui = require("./sui");
 var data = require("./data");
-var blockspreview = require("./blockspreview");
 var repeat = pxt.Util.repeatMap;
 var CodeCardView = /** @class */ (function (_super) {
     __extends(CodeCardView, _super);
@@ -4086,8 +5415,47 @@ var CodeCardView = /** @class */ (function (_super) {
         _this.state = {};
         return _this;
     }
-    CodeCardView.prototype.renderCore = function () {
+    CodeCardView.setupIntersectionObserver = function () {
         var _this = this;
+        if (this.observer)
+            return;
+        // setup intersection observer for the image
+        var preloadImage = function (el) {
+            var lazyImageUrl = el.getAttribute('data-src');
+            el.style.backgroundImage = "url(" + lazyImageUrl + ")";
+        };
+        var config = {
+            // If the image gets within 50px in the Y axis, start the download.
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        };
+        var onIntersection = function (entries) {
+            entries.forEach(function (entry) {
+                // Are we in viewport?
+                if (entry.intersectionRatio > 0) {
+                    // Stop watching and load the image
+                    _this.observer.unobserve(entry.target);
+                    preloadImage(entry.target);
+                }
+            });
+        };
+        this.observer = new IntersectionObserver(onIntersection, config);
+    };
+    CodeCardView.prototype.componentDidMount = function () {
+        var lazyImage = this.refs.lazyimage;
+        if (!lazyImage)
+            return;
+        if (!('IntersectionObserver' in window)) {
+            // No intersection observer support, set the image url immediately
+            var lazyImageUrl = lazyImage.getAttribute('data-src');
+            lazyImage.style.backgroundImage = "url(" + lazyImageUrl + ")";
+        }
+        else {
+            CodeCardView.setupIntersectionObserver();
+            CodeCardView.observer.observe(lazyImage);
+        }
+    };
+    CodeCardView.prototype.renderCore = function () {
         var card = this.props;
         var color = card.color || "";
         if (!color) {
@@ -4107,7 +5475,7 @@ var CodeCardView = /** @class */ (function (_super) {
             card.onClick(e);
         } : undefined;
         var imageUrl = card.imageUrl || (card.youTubeId ? "https://img.youtube.com/vi/" + card.youTubeId + "/0.jpg" : undefined);
-        var cardDiv = React.createElement("div", { ref: function (el) { return _this.element = el; }, className: "ui card " + color + " " + (card.onClick ? "link" : '') + " " + (className ? className : ''), role: card.role, "aria-selected": card.role === "option" ? "true" : undefined, "aria-label": card.ariaLabel || card.title, title: card.title, onClick: clickHandler, tabIndex: card.onClick ? card.tabIndex || 0 : null, onKeyDown: card.onClick ? sui.fireClickOnEnter : null },
+        var cardDiv = React.createElement("div", { className: "ui card " + color + " " + (card.onClick ? "link" : '') + " " + (className ? className : ''), role: card.role, "aria-selected": card.role === "option" ? "true" : undefined, "aria-label": card.ariaLabel || card.title, title: card.title, onClick: clickHandler, tabIndex: card.onClick ? card.tabIndex || 0 : null, onKeyDown: card.onClick ? sui.fireClickOnEnter : null },
             card.header || card.blocks || card.javascript || card.hardware || card.software || card.any ?
                 React.createElement("div", { key: "header", className: "ui content " + (card.responsive ? " tall desktop only" : "") },
                     React.createElement("div", { className: "right floated meta" },
@@ -4121,11 +5489,9 @@ var CodeCardView = /** @class */ (function (_super) {
                     card.header) : null,
             card.label || card.blocksXml || card.typeScript || imageUrl || cardType == "file" ? React.createElement("div", { className: "ui image" },
                 card.label ? React.createElement("label", { className: "ui " + (card.labelClass ? card.labelClass : "orange right ribbon") + " label" }, card.label) : undefined,
-                card.blocksXml ? React.createElement(blockspreview.BlocksPreview, { key: "promoblocks", xml: card.blocksXml }) : undefined,
                 card.typeScript ? React.createElement("pre", { key: "promots" }, card.typeScript) : undefined,
                 imageUrl ? React.createElement("div", { className: "ui imagewrapper" },
-                    React.createElement("div", { className: "ui cardimage", style: { backgroundImage: "url(\"" + imageUrl + "\")" } }),
-                    " ") : undefined,
+                    React.createElement("div", { className: "ui cardimage", "data-src": imageUrl, ref: "lazyimage" })) : undefined,
                 card.cardType == "file" ? React.createElement("div", { className: "ui fileimage" }) : undefined) : undefined,
             card.icon || card.iconContent ?
                 React.createElement("div", { className: "ui imagewrapper" },
@@ -4154,7 +5520,7 @@ var CodeCardView = /** @class */ (function (_super) {
 }(data.Component));
 exports.CodeCardView = CodeCardView;
 
-},{"./blockspreview":6,"./data":15,"./sui":47,"react":155}],11:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var pkg = require("./package");
@@ -4234,7 +5600,7 @@ function compileAsync(options) {
         setDiagnostics(resp.diagnostics);
         return ensureApisInfoAsync()
             .then(function () {
-            if (!resp.usedSymbols)
+            if (!resp.usedSymbols || !cachedApis)
                 return resp;
             for (var _i = 0, _a = Object.keys(resp.usedSymbols); _i < _a.length; _i++) {
                 var k = _a[_i];
@@ -4323,6 +5689,8 @@ function ensureApisInfoAsync() {
     if (refreshApis || !cachedApis)
         return workerOpAsync("apiInfo", {})
             .then(function (apis) {
+            if (Object.keys(apis).length === 0)
+                return undefined;
             refreshApis = false;
             return ts.pxtc.localizeApisAsync(apis, pkg.mainPkg);
         }).then(function (apis) {
@@ -4381,7 +5749,7 @@ function newProject() {
 }
 exports.newProject = newProject;
 
-},{"./core":13,"./package":35}],12:[function(require,module,exports){
+},{"./core":13,"./package":36}],12:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -4394,12 +5762,30 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
 var sui = require("./sui");
 var tutorial = require("./tutorial");
 var container = require("./container");
+var greenscreen = require("./greenscreen");
 // common menu items -- do not remove
 // lf("About")
 // lf("Getting started")
@@ -4423,17 +5809,17 @@ function openDocs(parent, path) {
 function renderDocItems(parent, cls) {
     var targetTheme = pxt.appTarget.appTheme;
     return targetTheme.docMenu.map(function (m) {
-        return m.tutorial ? React.createElement(sui.Item, { key: "docsmenututorial" + m.path, role: "menuitem", ariaLabel: pxt.Util.rlf(m.name), text: pxt.Util.rlf(m.name), className: "ui " + cls, onClick: function () { return openTutorial(parent, m.path); } })
+        return m.tutorial ? React.createElement(DocsMenuItem, { key: "docsmenututorial" + m.path, role: "menuitem", ariaLabel: pxt.Util.rlf(m.name), text: pxt.Util.rlf(m.name), className: "ui " + cls, parent: parent, path: m.path, onItemClick: openTutorial })
             : !/^\//.test(m.path) ? React.createElement("a", { key: "docsmenulink" + m.path, role: "menuitem", "aria-label": m.name, title: m.name, className: "ui item link " + cls, href: m.path, target: "docs" }, pxt.Util.rlf(m.name))
-                : React.createElement(sui.Item, { key: "docsmenu" + m.path, role: "menuitem", ariaLabel: pxt.Util.rlf(m.name), text: pxt.Util.rlf(m.name), className: "ui " + cls, onClick: function () { return openDocs(parent, m.path); } });
+                : React.createElement(DocsMenuItem, { key: "docsmenu" + m.path, role: "menuitem", ariaLabel: pxt.Util.rlf(m.name), text: pxt.Util.rlf(m.name), className: "ui " + cls, parent: parent, path: m.path, onItemClick: openDocs });
     });
 }
-var DocsMenuItem = /** @class */ (function (_super) {
-    __extends(DocsMenuItem, _super);
-    function DocsMenuItem(props) {
+var DocsMenu = /** @class */ (function (_super) {
+    __extends(DocsMenu, _super);
+    function DocsMenu(props) {
         return _super.call(this, props) || this;
     }
-    DocsMenuItem.prototype.lookUpByPath = function (path) {
+    DocsMenu.prototype.lookUpByPath = function (path) {
         var _this = this;
         if (!this.docMenuCache) {
             this.docMenuCache = {};
@@ -4445,7 +5831,7 @@ var DocsMenuItem = /** @class */ (function (_super) {
         }
         return this.docMenuCache[path];
     };
-    DocsMenuItem.prototype.doDocEntryAction = function (parent, m) {
+    DocsMenu.prototype.doDocEntryAction = function (parent, m) {
         if (m.tutorial) {
             return function () { openTutorial(parent, m.path); };
         }
@@ -4456,7 +5842,7 @@ var DocsMenuItem = /** @class */ (function (_super) {
             return function () { openDocs(parent, m.path); };
         }
     };
-    DocsMenuItem.prototype.renderCore = function () {
+    DocsMenu.prototype.renderCore = function () {
         var _this = this;
         var parent = this.props.parent;
         var targetTheme = pxt.appTarget.appTheme;
@@ -4479,99 +5865,146 @@ var DocsMenuItem = /** @class */ (function (_super) {
         };
         return React.createElement(sui.DropdownMenu, { role: "menuitem", icon: "help circle large", className: "item mobile hide help-dropdown-menuitem", textClass: "landscape only", title: lf("Help") }, renderDocItems(this.props.parent, ""));
     };
-    return DocsMenuItem;
+    return DocsMenu;
 }(data.PureComponent));
-exports.DocsMenuItem = DocsMenuItem;
-var SettingsMenuItem = /** @class */ (function (_super) {
-    __extends(SettingsMenuItem, _super);
-    function SettingsMenuItem() {
-        return _super !== null && _super.apply(this, arguments) || this;
+exports.DocsMenu = DocsMenu;
+var DocsMenuItem = /** @class */ (function (_super) {
+    __extends(DocsMenuItem, _super);
+    function DocsMenuItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
     }
-    SettingsMenuItem.prototype.openSettings = function () {
+    DocsMenuItem.prototype.handleClick = function () {
+        var _a = this.props, onItemClick = _a.onItemClick, parent = _a.parent, path = _a.path;
+        onItemClick(parent, path);
+    };
+    DocsMenuItem.prototype.renderCore = function () {
+        var _a = this.props, onClick = _a.onClick, onItemClick = _a.onItemClick, parent = _a.parent, path = _a.path, rest = __rest(_a, ["onClick", "onItemClick", "parent", "path"]);
+        return React.createElement(sui.Item, __assign({}, rest, { onClick: this.handleClick }));
+    };
+    return DocsMenuItem;
+}(sui.StatelessUIElement));
+var SettingsMenu = /** @class */ (function (_super) {
+    __extends(SettingsMenu, _super);
+    function SettingsMenu(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.openSettings = _this.openSettings.bind(_this);
+        _this.showPackageDialog = _this.showPackageDialog.bind(_this);
+        _this.removeProject = _this.removeProject.bind(_this);
+        _this.showReportAbuse = _this.showReportAbuse.bind(_this);
+        _this.showLanguagePicker = _this.showLanguagePicker.bind(_this);
+        _this.toggleHighContrast = _this.toggleHighContrast.bind(_this);
+        _this.toggleGreenScreen = _this.toggleGreenScreen.bind(_this);
+        _this.showResetDialog = _this.showResetDialog.bind(_this);
+        _this.pair = _this.pair.bind(_this);
+        _this.showAboutDialog = _this.showAboutDialog.bind(_this);
+        _this.print = _this.print.bind(_this);
+        return _this;
+    }
+    SettingsMenu.prototype.openSettings = function () {
         pxt.tickEvent("menu.settings", undefined, { interactiveConsent: true });
         this.props.parent.openSettings();
     };
-    SettingsMenuItem.prototype.showPackageDialog = function () {
+    SettingsMenu.prototype.showPackageDialog = function () {
         pxt.tickEvent("menu.addpackage", undefined, { interactiveConsent: true });
         this.props.parent.showPackageDialog();
     };
-    SettingsMenuItem.prototype.removeProject = function () {
+    SettingsMenu.prototype.removeProject = function () {
         pxt.tickEvent("menu.removeproject", undefined, { interactiveConsent: true });
         this.props.parent.removeProject();
     };
-    SettingsMenuItem.prototype.showReportAbuse = function () {
+    SettingsMenu.prototype.showReportAbuse = function () {
         pxt.tickEvent("menu.reportabuse", undefined, { interactiveConsent: true });
         this.props.parent.showReportAbuse();
     };
-    SettingsMenuItem.prototype.showLanguagePicker = function () {
+    SettingsMenu.prototype.showLanguagePicker = function () {
         pxt.tickEvent("menu.langpicker", undefined, { interactiveConsent: true });
         this.props.parent.showLanguagePicker();
     };
-    SettingsMenuItem.prototype.toggleHighContrast = function () {
+    SettingsMenu.prototype.toggleHighContrast = function () {
         pxt.tickEvent("menu.togglecontrast", undefined, { interactiveConsent: true });
         this.props.parent.toggleHighContrast();
     };
-    SettingsMenuItem.prototype.showResetDialog = function () {
+    SettingsMenu.prototype.toggleGreenScreen = function () {
+        pxt.tickEvent("menu.togglegreenscreen", undefined, { interactiveConsent: true });
+        this.props.parent.toggleGreenScreen();
+    };
+    SettingsMenu.prototype.showResetDialog = function () {
         pxt.tickEvent("menu.reset", undefined, { interactiveConsent: true });
         pxt.tickEvent("reset"); // Deprecated, will Feb 2018.
         this.props.parent.showResetDialog();
     };
-    SettingsMenuItem.prototype.pair = function () {
+    SettingsMenu.prototype.pair = function () {
         pxt.tickEvent("menu.pair");
         this.props.parent.pair();
     };
-    SettingsMenuItem.prototype.showAboutDialog = function () {
+    SettingsMenu.prototype.showAboutDialog = function () {
         pxt.tickEvent("menu.about");
         this.props.parent.showAboutDialog();
     };
-    SettingsMenuItem.prototype.print = function () {
+    SettingsMenu.prototype.print = function () {
         this.props.parent.printCode();
     };
-    SettingsMenuItem.prototype.componentWillReceiveProps = function (nextProps) {
+    SettingsMenu.prototype.componentWillReceiveProps = function (nextProps) {
         var newState = {};
         if (nextProps.highContrast != undefined) {
             newState.highContrast = nextProps.highContrast;
         }
+        if (nextProps.greenScreen !== undefined) {
+            newState.greenScreen = nextProps.greenScreen;
+        }
         if (Object.keys(newState).length > 0)
             this.setState(newState);
     };
-    SettingsMenuItem.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
-        return this.state.highContrast != nextState.highContrast;
+    SettingsMenu.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
+        return this.state.highContrast != nextState.highContrast
+            || this.state.greenScreen != nextState.greenScreen;
     };
-    SettingsMenuItem.prototype.renderCore = function () {
-        var _this = this;
-        var highContrast = this.state.highContrast;
+    SettingsMenu.prototype.renderCore = function () {
+        var _a = this.state, highContrast = _a.highContrast, greenScreen = _a.greenScreen;
         var targetTheme = pxt.appTarget.appTheme;
         var packages = pxt.appTarget.cloud && pxt.appTarget.cloud.packages;
-        var reportAbuse = pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.publishing && pxt.appTarget.cloud.importing;
-        return React.createElement(sui.DropdownMenu, { icon: 'setting large', title: lf("More..."), className: "item icon more-dropdown-menuitem" },
-            React.createElement(sui.Item, { role: "menuitem", icon: "options", text: lf("Project Settings"), onClick: function () { return _this.openSettings(); }, tabIndex: -1 }),
-            packages ? React.createElement(sui.Item, { role: "menuitem", icon: "disk outline", text: lf("Extensions"), onClick: function () { return _this.showPackageDialog(); }, tabIndex: -1 }) : undefined,
-            React.createElement(sui.Item, { role: "menuitem", icon: "print", text: lf("Print..."), onClick: function () { return _this.print(); }, tabIndex: -1 }),
-            React.createElement(sui.Item, { role: "menuitem", icon: "trash", text: lf("Delete Project"), onClick: function () { return _this.removeProject(); }, tabIndex: -1 }),
-            reportAbuse ? React.createElement(sui.Item, { role: "menuitem", icon: "warning circle", text: lf("Report Abuse..."), onClick: function () { return _this.showReportAbuse(); }, tabIndex: -1 }) : undefined,
+        var reportAbuse = pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.importing;
+        return React.createElement(sui.DropdownMenu, { role: "menuitem", icon: 'setting large', title: lf("More..."), className: "item icon more-dropdown-menuitem" },
+            React.createElement(sui.Item, { role: "menuitem", icon: "options", text: lf("Project Settings"), onClick: this.openSettings, tabIndex: -1 }),
+            packages ? React.createElement(sui.Item, { role: "menuitem", icon: "disk outline", text: lf("Extensions"), onClick: this.showPackageDialog, tabIndex: -1 }) : undefined,
+            React.createElement(sui.Item, { role: "menuitem", icon: "print", text: lf("Print..."), onClick: this.print, tabIndex: -1 }),
+            React.createElement(sui.Item, { role: "menuitem", icon: "trash", text: lf("Delete Project"), onClick: this.removeProject, tabIndex: -1 }),
+            reportAbuse ? React.createElement(sui.Item, { role: "menuitem", icon: "warning circle", text: lf("Report Abuse..."), onClick: this.showReportAbuse, tabIndex: -1 }) : undefined,
             React.createElement("div", { className: "ui divider" }),
-            targetTheme.selectLanguage ? React.createElement(sui.Item, { icon: 'xicon globe', role: "menuitem", text: lf("Language"), onClick: function () { return _this.showLanguagePicker(); }, tabIndex: -1 }) : undefined,
-            targetTheme.highContrast ? React.createElement(sui.Item, { role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: function () { return _this.toggleHighContrast(); }, tabIndex: -1 }) : undefined,
-            React.createElement(sui.Item, { role: "menuitem", icon: 'sign out', text: lf("Reset"), onClick: function () { return _this.showResetDialog(); }, tabIndex: -1 }),
+            targetTheme.selectLanguage ? React.createElement(sui.Item, { icon: 'xicon globe', role: "menuitem", text: lf("Language"), onClick: this.showLanguagePicker, tabIndex: -1 }) : undefined,
+            targetTheme.highContrast ? React.createElement(sui.Item, { role: "menuitem", text: highContrast ? lf("High Contrast Off") : lf("High Contrast On"), onClick: this.toggleHighContrast, tabIndex: -1 }) : undefined,
+            targetTheme.greenScreen && greenscreen.isSupported() ? React.createElement(sui.Item, { role: "menuitem", text: greenScreen ? lf("Green Screen Off") : lf("Green Screen On"), onClick: this.toggleGreenScreen, tabIndex: -1 }) : undefined,
+            React.createElement(sui.Item, { role: "menuitem", icon: 'sign out', text: lf("Reset"), onClick: this.showResetDialog, tabIndex: -1 }),
             !pxt.usb.isEnabled ? undefined :
-                React.createElement(sui.Item, { role: "menuitem", icon: 'usb', text: lf("Pair device"), onClick: function () { return _this.pair(); }, tabIndex: -1 }),
+                React.createElement(sui.Item, { role: "menuitem", icon: 'usb', text: lf("Pair device"), onClick: this.pair, tabIndex: -1 }),
             React.createElement("div", { className: "ui mobile only divider" }),
             renderDocItems(this.props.parent, "mobile only"),
             React.createElement("div", { className: "ui divider" }),
-            targetTheme.privacyUrl ? React.createElement("a", { className: "ui item", href: targetTheme.privacyUrl, role: "menuitem", title: lf("Privacy & Cookies"), target: "_blank", tabIndex: -1 }, lf("Privacy & Cookies")) : undefined,
-            targetTheme.termsOfUseUrl ? React.createElement("a", { className: "ui item", href: targetTheme.termsOfUseUrl, role: "menuitem", title: lf("Terms Of Use"), target: "_blank", tabIndex: -1 }, lf("Terms Of Use")) : undefined,
-            React.createElement(sui.Item, { role: "menuitem", text: lf("About..."), onClick: function () { return _this.showAboutDialog(); }, tabIndex: -1 }),
+            React.createElement(sui.Item, { role: "menuitem", text: lf("About..."), onClick: this.showAboutDialog, tabIndex: -1 }),
             targetTheme.feedbackUrl ? React.createElement("div", { className: "ui divider" }) : undefined,
-            targetTheme.feedbackUrl ? React.createElement("a", { className: "ui item", href: targetTheme.feedbackUrl, role: "menuitem", title: lf("Give Feedback"), target: "_blank", rel: "noopener", tabIndex: -1 }, lf("Give Feedback")) : undefined);
+            targetTheme.feedbackUrl ? React.createElement("a", { className: "ui item", href: targetTheme.feedbackUrl, role: "menuitem", title: lf("Give Feedback"), target: "_blank", rel: "noopener noreferrer", tabIndex: -1 }, lf("Give Feedback")) : undefined);
     };
-    return SettingsMenuItem;
+    return SettingsMenu;
 }(data.Component));
-exports.SettingsMenuItem = SettingsMenuItem;
+exports.SettingsMenu = SettingsMenu;
 var MainMenu = /** @class */ (function (_super) {
     __extends(MainMenu, _super);
-    function MainMenu() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function MainMenu(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.brandIconClick = _this.brandIconClick.bind(_this);
+        _this.orgIconClick = _this.orgIconClick.bind(_this);
+        _this.goHome = _this.goHome.bind(_this);
+        _this.showShareDialog = _this.showShareDialog.bind(_this);
+        _this.launchFullEditor = _this.launchFullEditor.bind(_this);
+        _this.openSimView = _this.openSimView.bind(_this);
+        _this.openBlocks = _this.openBlocks.bind(_this);
+        _this.openJavaScript = _this.openJavaScript.bind(_this);
+        _this.exitTutorial = _this.exitTutorial.bind(_this);
+        return _this;
     }
     MainMenu.prototype.brandIconClick = function () {
         pxt.tickEvent("menu.brand", undefined, { interactiveConsent: true });
@@ -4600,18 +6033,16 @@ var MainMenu = /** @class */ (function (_super) {
         pxt.tickEvent("menu.blocks", undefined, { interactiveConsent: true });
         this.props.parent.openBlocks();
     };
-    MainMenu.prototype.openJavaScript = function (giveFocusOnLoading) {
-        if (giveFocusOnLoading === void 0) { giveFocusOnLoading = true; }
+    MainMenu.prototype.openJavaScript = function () {
         pxt.tickEvent("menu.javascript", undefined, { interactiveConsent: true });
-        this.props.parent.openJavaScript(giveFocusOnLoading);
+        this.props.parent.openJavaScript();
     };
     MainMenu.prototype.exitTutorial = function () {
         pxt.tickEvent("menu.exitTutorial", undefined, { interactiveConsent: true });
         this.props.parent.exitTutorial();
     };
     MainMenu.prototype.renderCore = function () {
-        var _this = this;
-        var _a = this.props.parent.state, home = _a.home, header = _a.header, highContrast = _a.highContrast;
+        var _a = this.props.parent.state, home = _a.home, header = _a.header, highContrast = _a.highContrast, greenScreen = _a.greenScreen;
         if (home)
             return React.createElement("div", null); // Don't render if we're on the home screen
         var targetTheme = pxt.appTarget.appTheme;
@@ -4629,45 +6060,50 @@ var MainMenu = /** @class */ (function (_super) {
         var blockActive = this.props.parent.isBlocksActive();
         var javascriptActive = this.props.parent.isJavaScriptActive();
         var runTooltip = isRunning ? lf("Stop the simulator") : lf("Start the simulator");
+        /* tslint:disable:react-a11y-anchors */
         return React.createElement("div", { id: "mainmenu", className: "ui borderless fixed " + (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menubar", "aria-label": lf("Main menu") },
             !sandbox ? React.createElement("div", { className: "left menu" },
-                React.createElement("a", { "aria-label": lf("{0} Logo", targetTheme.boardName), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo brand", tabIndex: 0, onClick: function () { return _this.brandIconClick(); }, onKeyDown: sui.fireClickOnEnter },
+                React.createElement("a", { "aria-label": lf("{0} Logo", targetTheme.boardName), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo brand", tabIndex: 0, onClick: this.brandIconClick, onKeyDown: sui.fireClickOnEnter },
                     logo || portraitLogo
                         ? React.createElement("img", { className: "ui logo " + (logo ? " portrait hide" : ''), src: logo || portraitLogo, alt: lf("{0} Logo", targetTheme.boardName) })
                         : React.createElement("span", { className: "name" }, targetTheme.boardName),
                     portraitLogo ? (React.createElement("img", { className: 'ui mini image portrait only', src: portraitLogo, alt: lf("{0} Logo", targetTheme.boardName) })) : null),
                 targetTheme.betaUrl ? React.createElement("a", { href: "" + targetTheme.betaUrl, className: "ui red mini corner top left attached label betalabel", role: "menuitem" }, lf("Beta")) : undefined,
-                !inTutorial ? React.createElement(sui.Item, { className: "icon openproject", role: "menuitem", textClass: "landscape only", icon: "home large", ariaLabel: lf("Home screen"), text: lf("Home"), onClick: function () { return _this.goHome(); } }) : null,
-                !inTutorial && header && sharingEnabled ? React.createElement(sui.Item, { className: "icon shareproject", role: "menuitem", textClass: "widedesktop only", ariaLabel: lf("Share Project"), text: lf("Share"), icon: "share alternate large", onClick: function () { return _this.showShareDialog(); } }) : null,
+                !inTutorial ? React.createElement(sui.Item, { className: "icon openproject", role: "menuitem", textClass: "landscape only", icon: "home large", ariaLabel: lf("Home screen"), text: lf("Home"), onClick: this.goHome }) : null,
+                !inTutorial && header && sharingEnabled ? React.createElement(sui.Item, { className: "icon shareproject", role: "menuitem", textClass: "widedesktop only", ariaLabel: lf("Share Project"), text: lf("Share"), icon: "share alternate large", onClick: this.showShareDialog }) : null,
                 inTutorial ? React.createElement(sui.Item, { className: "tutorialname", tabIndex: -1, textClass: "landscape only", text: tutorialOptions.tutorialName }) : null) : React.createElement("div", { className: "left menu" },
                 React.createElement("span", { id: "logo", className: "ui item logo" },
-                    React.createElement("img", { className: "ui mini image", src: rightLogo, tabIndex: 0, onClick: function () { return _this.launchFullEditor(); }, onKeyDown: sui.fireClickOnEnter, alt: targetTheme.boardName + " Logo" }))),
+                    React.createElement("img", { className: "ui mini image", src: rightLogo, tabIndex: 0, onClick: this.launchFullEditor, onKeyDown: sui.fireClickOnEnter, alt: targetTheme.boardName + " Logo" }))),
             !inTutorial && !targetTheme.blocksOnly ? React.createElement("div", { className: "ui item link editor-menuitem" },
                 React.createElement("div", { className: "ui grid padded" },
-                    sandbox ? React.createElement(sui.Item, { className: "sim-menuitem thin portrait only", role: "menuitem", textClass: "landscape only", text: lf("Simulator"), icon: simActive && isRunning ? "stop" : "play", active: simActive, onClick: function () { return _this.openSimView(); }, title: !simActive ? lf("Show Simulator") : runTooltip }) : undefined,
-                    React.createElement(sui.Item, { className: "blocks-menuitem", role: "menuitem", textClass: "landscape only", text: lf("Blocks"), icon: "xicon blocks", active: blockActive, onClick: function () { return _this.openBlocks(); }, title: lf("Convert code to Blocks") }),
-                    React.createElement(sui.Item, { className: "javascript-menuitem", role: "menuitem", textClass: "landscape only", text: lf("JavaScript"), icon: "xicon js", active: javascriptActive, onClick: function () { return _this.openJavaScript(false); }, title: lf("Convert code to JavaScript") }),
+                    sandbox ? React.createElement(sui.Item, { className: "sim-menuitem thin portrait only", role: "menuitem", textClass: "landscape only", text: lf("Simulator"), icon: simActive && isRunning ? "stop" : "play", active: simActive, onClick: this.openSimView, title: !simActive ? lf("Show Simulator") : runTooltip }) : undefined,
+                    React.createElement(sui.Item, { className: "blocks-menuitem", role: "menuitem", textClass: "landscape only", text: lf("Blocks"), icon: "xicon blocks", active: blockActive, onClick: this.openBlocks, title: lf("Convert code to Blocks") }),
+                    React.createElement(sui.Item, { className: "javascript-menuitem", role: "menuitem", textClass: "landscape only", text: lf("JavaScript"), icon: "xicon js", active: javascriptActive, onClick: this.openJavaScript, title: lf("Convert code to JavaScript") }),
                     React.createElement("div", { className: "ui item toggle" }))) : undefined,
             inTutorial ? React.createElement(tutorial.TutorialMenuItem, { parent: this.props.parent }) : undefined,
             React.createElement("div", { className: "right menu" },
-                docMenu ? React.createElement(container.DocsMenuItem, { parent: this.props.parent }) : undefined,
-                sandbox || inTutorial ? undefined : React.createElement(container.SettingsMenuItem, { parent: this.props.parent, highContrast: highContrast }),
-                sandbox && !targetTheme.hideEmbedEdit ? React.createElement(sui.Item, { role: "menuitem", icon: "external", textClass: "mobile hide", text: lf("Edit"), onClick: function () { return _this.launchFullEditor(); } }) : undefined,
-                inTutorial ? React.createElement(sui.ButtonMenuItem, { className: "exit-tutorial-btn", role: "menuitem", icon: "external", text: lf("Exit tutorial"), textClass: "landscape only", onClick: function () { return _this.exitTutorial(); } }) : undefined,
-                !sandbox ? React.createElement("a", { href: targetTheme.organizationUrl, "aria-label": lf("{0} Logo", targetTheme.organization), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo organization", onClick: function () { return _this.orgIconClick(); } },
+                docMenu ? React.createElement(container.DocsMenu, { parent: this.props.parent }) : undefined,
+                sandbox || inTutorial ? undefined : React.createElement(container.SettingsMenu, { parent: this.props.parent, highContrast: highContrast, greenScreen: greenScreen }),
+                sandbox && !targetTheme.hideEmbedEdit ? React.createElement(sui.Item, { role: "menuitem", icon: "external", textClass: "mobile hide", text: lf("Edit"), onClick: this.launchFullEditor }) : undefined,
+                inTutorial ? React.createElement(sui.ButtonMenuItem, { className: "exit-tutorial-btn", role: "menuitem", icon: "external", text: lf("Exit tutorial"), textClass: "landscape only", onClick: this.exitTutorial }) : undefined,
+                !sandbox ? React.createElement("a", { href: targetTheme.organizationUrl, "aria-label": lf("{0} Logo", targetTheme.organization), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo organization", onClick: this.orgIconClick },
                     targetTheme.organizationWideLogo || targetTheme.organizationLogo
                         ? React.createElement("img", { className: "ui logo " + (targetTheme.organizationWideLogo ? " portrait hide" : ''), src: targetTheme.organizationWideLogo || targetTheme.organizationLogo, alt: lf("{0} Logo", targetTheme.organization) })
                         : React.createElement("span", { className: "name" }, targetTheme.organization),
                     targetTheme.organizationLogo ? (React.createElement("img", { className: 'ui mini image portrait only', src: targetTheme.organizationLogo, alt: lf("{0} Logo", targetTheme.organization) })) : null) : undefined));
+        /* tslint:enable:react-a11y-anchors */
     };
     return MainMenu;
 }(data.Component));
 exports.MainMenu = MainMenu;
 var SideDocs = /** @class */ (function (_super) {
     __extends(SideDocs, _super);
-    function SideDocs() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function SideDocs(props) {
+        var _this = _super.call(this, props) || this;
         _this.openingSideDoc = false;
+        _this.state = {};
+        _this.toggleVisibility = _this.toggleVisibility.bind(_this);
+        _this.popOut = _this.popOut.bind(_this);
         return _this;
     }
     SideDocs.notify = function (message) {
@@ -4732,51 +6168,56 @@ var SideDocs = /** @class */ (function (_super) {
             || this.state.docsUrl != nextState.docsUrl;
     };
     SideDocs.prototype.renderCore = function () {
-        var _this = this;
         var _a = this.state, sideDocsCollapsed = _a.sideDocsCollapsed, docsUrl = _a.docsUrl;
         if (!docsUrl)
             return null;
+        /* tslint:disable:react-iframe-missing-sandbox */
         return React.createElement("div", null,
-            React.createElement("button", { id: "sidedocstoggle", role: "button", "aria-label": sideDocsCollapsed ? lf("Expand the side documentation") : lf("Collapse the side documentation"), className: "ui icon button", onClick: function () { return _this.toggleVisibility(); } },
+            React.createElement("button", { id: "sidedocstoggle", role: "button", "aria-label": sideDocsCollapsed ? lf("Expand the side documentation") : lf("Collapse the side documentation"), className: "ui icon button", onClick: this.toggleVisibility },
                 React.createElement(sui.Icon, { icon: "icon large inverted " + (sideDocsCollapsed ? 'book' : 'chevron right') }),
                 sideDocsCollapsed ? React.createElement(sui.Icon, { icon: "large inverted chevron left hover" }) : undefined),
             React.createElement("div", { id: "sidedocs" },
                 React.createElement("div", { id: "sidedocsframe-wrapper" },
                     React.createElement("iframe", { id: "sidedocsframe", src: docsUrl, title: lf("Documentation"), "aria-atomic": "true", "aria-live": "assertive", sandbox: "allow-scripts allow-same-origin allow-forms allow-popups" })),
                 React.createElement("div", { className: "ui app hide", id: "sidedocsbar" },
-                    React.createElement("a", { className: "ui icon link", role: "link", tabIndex: 0, "data-content": lf("Open documentation in new tab"), "aria-label": lf("Open documentation in new tab"), onClick: function () { return _this.popOut(); }, onKeyDown: sui.fireClickOnEnter },
+                    React.createElement("a", { className: "ui icon link", role: "button", tabIndex: 0, "data-content": lf("Open documentation in new tab"), "aria-label": lf("Open documentation in new tab"), onClick: this.popOut, onKeyDown: sui.fireClickOnEnter },
                         React.createElement(sui.Icon, { icon: "external" })))));
+        /* tslint:enable:react-iframe-missing-sandbox */
     };
     return SideDocs;
 }(data.Component));
 exports.SideDocs = SideDocs;
 var SandboxFooter = /** @class */ (function (_super) {
     __extends(SandboxFooter, _super);
-    function SandboxFooter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function SandboxFooter(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.compile = _this.compile.bind(_this);
+        return _this;
     }
     SandboxFooter.prototype.compile = function () {
         pxt.tickEvent("sandboxfooter.compile", undefined, { interactiveConsent: true });
         this.props.parent.compile();
     };
     SandboxFooter.prototype.renderCore = function () {
-        var _this = this;
         var targetTheme = pxt.appTarget.appTheme;
         var compileTooltip = lf("Download your code to the {0}", targetTheme.boardName);
+        /* tslint:disable:react-a11y-anchors */
         return React.createElement("div", { className: "ui horizontal small divided link list sandboxfooter" },
-            targetTheme.organizationUrl && targetTheme.organization ? React.createElement("a", { className: "item", target: "_blank", rel: "noopener", href: targetTheme.organizationUrl }, targetTheme.organization) : undefined,
-            React.createElement("a", { target: "_blank", className: "item", href: targetTheme.termsOfUseUrl, rel: "noopener" }, lf("Terms of Use")),
-            React.createElement("a", { target: "_blank", className: "item", href: targetTheme.privacyUrl, rel: "noopener" }, lf("Privacy")),
+            targetTheme.organizationUrl && targetTheme.organization ? React.createElement("a", { className: "item", target: "_blank", rel: "noopener noreferrer", href: targetTheme.organizationUrl }, targetTheme.organization) : undefined,
+            React.createElement("a", { target: "_blank", className: "item", href: targetTheme.termsOfUseUrl, rel: "noopener noreferrer" }, lf("Terms of Use")),
+            React.createElement("a", { target: "_blank", className: "item", href: targetTheme.privacyUrl, rel: "noopener noreferrer" }, lf("Privacy")),
             React.createElement("span", { className: "item" },
-                React.createElement("a", { className: "ui thin portrait only", title: compileTooltip, onClick: function () { return _this.compile(); } },
+                React.createElement("a", { role: "button", className: "ui thin portrait only", title: compileTooltip, onClick: this.compile },
                     React.createElement(sui.Icon, { icon: "icon " + (pxt.appTarget.appTheme.downloadIcon || 'download') }),
                     pxt.appTarget.appTheme.useUploadMessage ? lf("Upload") : lf("Download"))));
+        /* tslint:enable:react-a11y-anchors */
     };
     return SandboxFooter;
 }(data.PureComponent));
 exports.SandboxFooter = SandboxFooter;
 
-},{"./container":12,"./data":15,"./sui":47,"./tutorial":49,"react":155}],13:[function(require,module,exports){
+},{"./container":12,"./data":15,"./greenscreen":26,"./sui":48,"./tutorial":51,"react":157}],13:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -4819,6 +6260,17 @@ function hideLoading(id) {
     }
 }
 exports.hideLoading = hideLoading;
+function killLoadingQueue() {
+    // Use this with care, only when you want to kill the loading queue
+    // and force close them all
+    loadingQueue = [];
+    loadingQueueMsg = {};
+    // Hide loading
+    if (dimmerInitialized && loadingDimmer) {
+        loadingDimmer.hide();
+    }
+}
+exports.killLoadingQueue = killLoadingQueue;
 function showLoading(id, msg) {
     pxt.debug("showloading: " + id);
     if (loadingQueueMsg[id])
@@ -4884,6 +6336,8 @@ function infoNotification(msg) {
 }
 exports.infoNotification = infoNotification;
 function dialogAsync(options) {
+    if (!options.type)
+        options.type = 'dialog';
     if (!options.hideCancel) {
         if (!options.buttons)
             options.buttons = [];
@@ -4901,6 +6355,7 @@ function hideDialog() {
 }
 exports.hideDialog = hideDialog;
 function confirmAsync(options) {
+    options.type = 'confirm';
     if (!options.buttons)
         options.buttons = [];
     var result = 0;
@@ -4943,6 +6398,7 @@ function confirmDelete(what, cb) {
 }
 exports.confirmDelete = confirmDelete;
 function promptAsync(options) {
+    options.type = 'prompt';
     if (!options.buttons)
         options.buttons = [];
     var result = "";
@@ -4957,7 +6413,6 @@ function promptAsync(options) {
             }
         });
     }
-    options.htmlBody = "<div class=\"ui fluid icon input\">\n                            <input type=\"text\" id=\"promptDialogInput\" value=\"" + options.defaultValue + "\">\n                        </div>";
     options.onLoaded = function (ref) {
         var dialogInput = document.getElementById('promptDialogInput');
         if (dialogInput) {
@@ -5007,8 +6462,8 @@ exports.navigateInWindow = navigateInWindow;
 function findChild(c, selector) {
     var self = ReactDOM.findDOMNode(c);
     if (!selector)
-        return self;
-    return self.querySelectorAll(selector);
+        return [self];
+    return pxt.Util.toArray(self.querySelectorAll(selector));
 }
 exports.findChild = findChild;
 function parseQueryString(qs) {
@@ -5054,7 +6509,7 @@ function apiAsync(path, data) {
 }
 exports.apiAsync = apiAsync;
 
-},{"./coretsx":14,"react":155,"react-dom":143}],14:[function(require,module,exports){
+},{"./coretsx":14,"react":157,"react-dom":145}],14:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -5070,19 +6525,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var ReactDOM = require("react-dom");
 var sui = require("./sui");
-var ConfirmDialog = /** @class */ (function (_super) {
-    __extends(ConfirmDialog, _super);
-    function ConfirmDialog() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var CoreDialog = /** @class */ (function (_super) {
+    __extends(CoreDialog, _super);
+    function CoreDialog(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.hide = _this.hide.bind(_this);
+        _this.modalDidOpen = _this.modalDidOpen.bind(_this);
+        return _this;
     }
-    ConfirmDialog.prototype.hide = function () {
+    CoreDialog.prototype.hide = function () {
         this.close();
     };
-    ConfirmDialog.prototype.close = function (result) {
+    CoreDialog.prototype.close = function (result) {
         this.setState({ visible: false });
         this.resolve(result);
     };
-    ConfirmDialog.prototype.componentDidMount = function () {
+    CoreDialog.prototype.componentDidMount = function () {
         var _this = this;
         this.promise = new Promise(function (res, rej) {
             _this.resolve = res;
@@ -5104,13 +6563,13 @@ var ConfirmDialog = /** @class */ (function (_super) {
             });
         }
     };
-    ConfirmDialog.prototype.modalDidUpdate = function (ref) {
+    CoreDialog.prototype.modalDidOpen = function (ref) {
         var options = this.props;
         if (options.onLoaded) {
             options.onLoaded(ref);
         }
     };
-    ConfirmDialog.prototype.render = function () {
+    CoreDialog.prototype.render = function () {
         var _this = this;
         var options = this.props;
         var size = options.size || 'small';
@@ -5123,7 +6582,15 @@ var ConfirmDialog = /** @class */ (function (_super) {
             if (!btn.className)
                 btn.className = "approve positive";
         });
-        return (React.createElement(sui.Modal, { isOpen: true, ref: "modal", className: "coredialog", onClose: this.hide.bind(this), size: size, defaultOpen: true, buttons: buttons, dimmer: true, closeIcon: options.hasCloseIcon, header: options.header, closeOnDimmerClick: !options.hideCancel, closeOnDocumentClick: !options.hideCancel, closeOnEscape: !options.hideCancel, modalDidUpdate: this.modalDidUpdate.bind(this) },
+        var classes = sui.cx([
+            'coredialog',
+            options.className
+        ]);
+        /* tslint:disable:react-no-dangerous-html TODO(tslint): This needs to be reviewed with a security expert to allow for exception */
+        return (React.createElement(sui.Modal, { isOpen: true, ref: "modal", className: classes, onClose: this.hide, size: size, defaultOpen: true, buttons: buttons, dimmer: true, closeIcon: options.hasCloseIcon, header: options.header, closeOnDimmerClick: !options.hideCancel, closeOnDocumentClick: !options.hideCancel, closeOnEscape: !options.hideCancel, modalDidOpen: this.modalDidOpen },
+            options.type == 'prompt' ? React.createElement("div", { className: "ui fluid icon input" },
+                React.createElement("input", { autoFocus: true, type: "text", id: "promptDialogInput", placeholder: options.defaultValue })) : undefined,
+            options.jsx,
             options.body ? React.createElement("p", null, options.body) : undefined,
             options.htmlBody ? React.createElement("div", { dangerouslySetInnerHTML: { __html: options.htmlBody } }) : undefined,
             options.input ? React.createElement("div", { className: "ui fluid action input" },
@@ -5131,21 +6598,22 @@ var ConfirmDialog = /** @class */ (function (_super) {
             options.copyable ? React.createElement("div", { className: "ui fluid action input" },
                 React.createElement("input", { ref: "linkinput", className: "linkinput", readOnly: true, spellCheck: false, type: "text", value: "" + options.copyable }),
                 React.createElement(sui.Button, { ref: "copybtn", labelPosition: 'right', color: "teal", className: 'copybtn', "data-content": lf("Copied!") })) : undefined));
+        /* tslint:enable:react-no-dangerous-html */
     };
-    return ConfirmDialog;
+    return CoreDialog;
 }(React.Component));
-exports.ConfirmDialog = ConfirmDialog;
+exports.CoreDialog = CoreDialog;
 var currentDialog;
 function renderConfirmDialogAsync(options) {
     return Promise.resolve()
         .delay(10)
         .then(function () {
         var wrapper = document.body.appendChild(document.createElement('div'));
-        currentDialog = ReactDOM.render(React.createElement(ConfirmDialog, options), wrapper);
+        currentDialog = ReactDOM.render(React.createElement(CoreDialog, options), wrapper);
         function cleanup() {
             ReactDOM.unmountComponentAtNode(wrapper);
             setTimeout(function () {
-                wrapper.remove();
+                wrapper.parentElement.removeChild(wrapper);
             });
         }
         return currentDialog.promise.finally(function () { return cleanup(); });
@@ -5180,7 +6648,7 @@ var LoadingDimmer = /** @class */ (function (_super) {
         if (!visible)
             return React.createElement("div", null);
         return React.createElement(sui.Dimmer, { isOpen: true, active: visible, closable: false },
-            React.createElement(sui.Loader, { className: "large msg no-select", "aria-live": "assertive" }, content));
+            React.createElement(sui.Loader, { className: "large main msg no-select", "aria-live": "assertive" }, content));
     };
     return LoadingDimmer;
 }(React.Component));
@@ -5256,7 +6724,7 @@ function pushNotificationMessage(options) {
 }
 exports.pushNotificationMessage = pushNotificationMessage;
 
-},{"./sui":47,"react":155,"react-dom":143}],15:[function(require,module,exports){
+},{"./sui":48,"react":157,"react-dom":145}],15:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -5271,7 +6739,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var core = require("./core");
-var gallery = require("./gallery");
 var Cloud = pxt.Cloud;
 var Util = pxt.Util;
 var virtualApis = {};
@@ -5290,7 +6757,7 @@ mountVirtualApi("cloud-search", {
     isOffline: function () { return !Cloud.isOnline(); },
 });
 mountVirtualApi("gallery", {
-    getAsync: function (p) { return gallery.loadGalleryAsync(stripProtocol(decodeURIComponent(p))).catch(function (e) {
+    getAsync: function (p) { return pxt.gallery.loadGalleryAsync(stripProtocol(decodeURIComponent(p))).catch(function (e) {
         return Promise.resolve(e);
     }); },
     expirationTime: function (p) { return 3600 * 1000; }
@@ -5316,11 +6783,28 @@ mountVirtualApi("gh-pkgcfg", {
     expirationTime: function (p) { return 60 * 1000; },
     isOffline: function () { return !Cloud.isOnline(); },
 });
+var targetConfigPromise = undefined;
 mountVirtualApi("target-config", {
     getAsync: function (query) {
-        return pxt.targetConfigAsync().catch(core.handleNetworkError);
+        if (!targetConfigPromise)
+            targetConfigPromise = pxt.targetConfigAsync()
+                .then(function (js) {
+                if (js) {
+                    pxt.storage.setLocal("targetconfig", JSON.stringify(js));
+                    invalidate("target-config");
+                    invalidate("gh-search");
+                    invalidate("gh-pkgcfg");
+                }
+                return js;
+            })
+                .catch(core.handleNetworkError);
+        // return cached value or try again
+        var cfg = JSON.parse(pxt.storage.getLocal("targetconfig") || "null");
+        if (cfg)
+            return Promise.resolve(cfg);
+        return targetConfigPromise;
     },
-    expirationTime: function (p) { return 60 * 1000; },
+    expirationTime: function (p) { return 24 * 3600 * 1000; },
     isOffline: function () { return !Cloud.isOnline(); }
 });
 var cachedData = {};
@@ -5552,13 +7036,15 @@ function wrapWorkspace(ws) {
 exports.wrapWorkspace = wrapWorkspace;
 loadCache();
 
-},{"./core":13,"./gallery":25,"react":155}],16:[function(require,module,exports){
+},{"./core":13,"react":157}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
 window.Promise = Promise;
 var PouchDB = require("pouchdb");
+/* tslint:disable:no-submodule-imports TODO(tslint) */
 require('pouchdb/extras/memory');
+/* tslint:enable:no-submodule-imports */
 Promise.config({
     // Enables all warnings except forgotten return statements.
     warnings: {
@@ -5733,7 +7219,7 @@ var GithubDb = /** @class */ (function () {
 }());
 pxt.github.db = new GithubDb();
 
-},{"bluebird":53,"pouchdb":121,"pouchdb/extras/memory":119}],17:[function(require,module,exports){
+},{"bluebird":55,"pouchdb":123,"pouchdb/extras/memory":121}],17:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -5762,77 +7248,118 @@ var DebuggerVariables = /** @class */ (function (_super) {
         return _this;
     }
     DebuggerVariables.prototype.clear = function () {
-        //this.setState({ variables: {} });
+        this.nextVariables = {};
+        this.setState({ variables: {} });
     };
     DebuggerVariables.prototype.set = function (name, value) {
         this.nextVariables[name] = value;
     };
-    DebuggerVariables.prototype.update = function () {
+    DebuggerVariables.renderValue = function (v) {
+        var sv = '';
+        var type = typeof v;
+        switch (type) {
+            case "undefined":
+                sv = "undefined";
+                break;
+            case "number":
+                sv = v + "";
+                break;
+            case "boolean":
+                sv = v + "";
+                break;
+            case "string":
+                sv = JSON.stringify(v);
+                break;
+            case "object":
+                if (v == null)
+                    sv = "null";
+                else if (v.text)
+                    sv = v.text;
+                else if (v.id && v.preview)
+                    return v.preview;
+                else if (v.id !== undefined)
+                    sv = "(object)";
+                else
+                    sv = "(unknown)";
+                break;
+        }
+        return DebuggerVariables.capLength(sv);
+    };
+    DebuggerVariables.capLength = function (varstr) {
+        var remaining = DebuggerVariables.MAX_VARIABLE_CHARS - 3; // acount for ...
+        var hasQuotes = false;
+        if (varstr.indexOf('"') == 0) {
+            remaining -= 2;
+            hasQuotes = true;
+            varstr = varstr.substring(1, varstr.length - 1);
+        }
+        if (varstr.length > remaining)
+            varstr = varstr.substring(0, remaining) + '...';
+        if (hasQuotes) {
+            varstr = '"' + varstr + '"';
+        }
+        return varstr;
+    };
+    DebuggerVariables.prototype.update = function (frozen) {
         var _this = this;
+        if (frozen === void 0) { frozen = false; }
         var variables = this.state.variables;
         Object.keys(this.nextVariables).forEach(function (k) {
             var v = _this.nextVariables[k];
-            var sv = '';
-            var type = typeof (v);
-            switch (type) {
-                case "number":
-                    sv = v + "";
-                    break;
-                case "boolean":
-                    sv = v + "";
-                    break;
-                case "string":
-                    sv = JSON.stringify(v);
-                    break;
-                case "object":
-                    if (v == null)
-                        sv = "null";
-                    else if (v.id !== undefined)
-                        sv = "(object)";
-                    else if (v.text)
-                        sv = v.text;
-                    else
-                        sv = "(unknown)";
-                    break;
-            }
-            sv = capLength(sv);
             variables[k] = {
-                value: sv,
-                type: type,
-                prevValue: variables[k] && sv != variables[k].value ?
+                value: v,
+                prevValue: v && !v.id && variables[k] && v !== variables[k].value ?
                     variables[k].value : undefined
             };
         });
-        this.setState({ variables: variables });
+        this.setState({ variables: variables, frozen: frozen });
         this.nextVariables = {};
-        function capLength(varstr) {
-            var remaining = DebuggerVariables.MAX_VARIABLE_CHARS - 3; // acount for ...
-            var hasQuotes = false;
-            if (varstr.indexOf('"') == 0) {
-                remaining - 2;
-                hasQuotes = true;
-                varstr = varstr.substring(1, varstr.length - 1);
-            }
-            if (varstr.length > remaining)
-                varstr = varstr.substring(0, remaining) + '...';
-            if (hasQuotes) {
-                varstr = '"' + varstr + '"';
-            }
-            return varstr;
+    };
+    DebuggerVariables.prototype.toggle = function (v) {
+        var _this = this;
+        if (v.children) {
+            delete v.children;
+            this.setState({ variables: this.state.variables });
+        }
+        else {
+            if (!v.value.id)
+                return;
+            simulator.driver.variablesAsync(v.value.id)
+                .then(function (msg) {
+                if (msg) {
+                    v.children = pxt.Util.mapMap(msg.variables || {}, function (k, v) {
+                        return {
+                            value: msg.variables[k]
+                        };
+                    });
+                    _this.setState({ variables: _this.state.variables });
+                }
+            });
         }
     };
+    DebuggerVariables.prototype.renderVariables = function (variables, parent) {
+        var _this = this;
+        var varcolor = pxt.toolbox.getNamespaceColor('variables');
+        var r = [];
+        Object.keys(variables).forEach(function (variable) {
+            var v = variables[variable];
+            var onClick = v.value && v.value.id ? function () { return _this.toggle(v); } : undefined;
+            r.push(React.createElement("div", { key: (parent || "") + variable, className: "item" },
+                React.createElement("div", { role: "listitem", className: "ui label image variable " + (v.prevValue !== undefined ? "changed" : ""), style: { backgroundColor: varcolor }, onClick: onClick },
+                    React.createElement("span", { className: "varname" }, variable),
+                    React.createElement("div", { className: "detail" },
+                        React.createElement("span", { className: "varval" }, DebuggerVariables.renderValue(v.value)),
+                        React.createElement("span", { className: "previousval" }, v.prevValue !== undefined ? "" + DebuggerVariables.renderValue(v.prevValue) : '')))));
+            if (v.children)
+                r = r.concat(_this.renderVariables(v.children, variable));
+        });
+        return r;
+    };
     DebuggerVariables.prototype.renderCore = function () {
-        var variables = this.state.variables;
+        var _a = this.state, variables = _a.variables, frozen = _a.frozen;
         return Object.keys(variables).length == 0 ? React.createElement("div", null) :
-            React.createElement("div", { className: "ui segment debugvariables" },
-                React.createElement("div", { className: "ui middle aligned list" }, Object.keys(variables).map(function (variable) {
-                    return React.createElement("div", { key: variable, className: "item" },
-                        React.createElement("div", { className: "ui label image variable", style: { backgroundColor: pxt.toolbox.getNamespaceColor('variables') } },
-                            React.createElement("span", { className: "varname" }, variable),
-                            React.createElement("div", { className: "detail" },
-                                React.createElement("span", { className: "varval" }, variables[variable].value + ' '),
-                                React.createElement("span", { className: "previousval" }, variables[variable].prevValue ? variables[variable].prevValue : ''))));
-                })));
+            React.createElement("div", { className: "ui segment debugvariables " + (frozen ? "frozen" : "") },
+                React.createElement("div", { className: "ui middle aligned list" }, this.renderVariables(variables)));
     };
     DebuggerVariables.MAX_VARIABLE_CHARS = 20;
     return DebuggerVariables;
@@ -5844,11 +7371,18 @@ var DebuggerToolbar = /** @class */ (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.cachedMaxWidth = 0;
         _this.state = {};
+        _this.toolbarHandleDown = _this.toolbarHandleDown.bind(_this);
+        _this.restartSimulator = _this.restartSimulator.bind(_this);
+        _this.dbgPauseResume = _this.dbgPauseResume.bind(_this);
+        _this.dbgInsertBreakpoint = _this.dbgInsertBreakpoint.bind(_this);
+        _this.dbgStepOver = _this.dbgStepOver.bind(_this);
+        _this.dbgStepInto = _this.dbgStepInto.bind(_this);
+        _this.dbgStepOut = _this.dbgStepOut.bind(_this);
         return _this;
     }
-    DebuggerToolbar.prototype.restartSimulator = function (debug) {
+    DebuggerToolbar.prototype.restartSimulator = function () {
         pxt.tickEvent('debugger.restart', undefined, { interactiveConsent: true });
-        this.props.parent.restartSimulator(debug);
+        this.props.parent.restartSimulator(true);
     };
     DebuggerToolbar.prototype.exitDebugging = function () {
         pxt.tickEvent('debugger.exit', undefined, { interactiveConsent: true });
@@ -5857,6 +7391,10 @@ var DebuggerToolbar = /** @class */ (function (_super) {
     DebuggerToolbar.prototype.dbgPauseResume = function () {
         pxt.tickEvent('debugger.pauseresume', undefined, { interactiveConsent: true });
         this.props.parent.dbgPauseResume();
+    };
+    DebuggerToolbar.prototype.dbgInsertBreakpoint = function () {
+        pxt.tickEvent('debugger.breakpoint', undefined, { interactiveConsent: true });
+        this.props.parent.dbgInsertBreakpoint();
     };
     DebuggerToolbar.prototype.dbgStepOver = function () {
         pxt.tickEvent('debugger.stepover', undefined, { interactiveConsent: true });
@@ -5931,7 +7469,6 @@ var DebuggerToolbar = /** @class */ (function (_super) {
         this.setState({ xPos: simWidth + (mainEditor.clientWidth - width) / 2 });
     };
     DebuggerToolbar.prototype.renderCore = function () {
-        var _this = this;
         var xPos = this.state.xPos;
         var parentState = this.props.parent.state;
         var simOpts = pxt.appTarget.simulator;
@@ -5939,7 +7476,6 @@ var DebuggerToolbar = /** @class */ (function (_super) {
         var isDebugging = parentState.debugging;
         if (!isDebugging)
             return React.createElement("div", null);
-        var restart = !simOpts.hideRestart;
         var isDebuggerRunning = simulator.driver && simulator.driver.state == pxsim.SimulatorState.Running;
         var advancedDebugging = this.props.parent.isJavaScriptActive();
         var isValidDebugFile = advancedDebugging || this.props.parent.isBlocksActive();
@@ -5952,40 +7488,63 @@ var DebuggerToolbar = /** @class */ (function (_super) {
         var dbgStepOverTooltip = lf("Step over");
         var dbgStepOutTooltip = lf("Step out");
         return React.createElement("aside", { className: "debugtoolbar", style: { left: xPos }, role: "complementary", "aria-label": lf("Debugger toolbar") }, !isDebugging ? undefined :
-            React.createElement("div", { className: "ui compact borderless menu icon mini" },
-                React.createElement("div", { className: "ui item link dbg-btn dbg-handle", key: 'toolbarhandle', onMouseDown: this.toolbarHandleDown.bind(this) },
-                    React.createElement(sui.Icon, { key: 'iconkey', icon: "icon ellipsis vertical" })),
-                React.createElement(sui.Item, { key: 'dbgpauseresume', className: "dbg-btn dbg-pause-resume " + (isDebuggerRunning ? "pause" : "play"), icon: "" + (isDebuggerRunning ? "pause blue" : "step forward green"), title: dbgPauseResumeTooltip, onClick: function () { return _this.dbgPauseResume(); } }),
-                !advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstep', className: "dbg-btn dbg-step", icon: "arrow right " + (isDebuggerRunning ? "disabled" : "blue"), title: dbgStepIntoTooltip, onClick: function () { return _this.dbgStepInto(); } }) : undefined,
-                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepover', className: "dbg-btn dbg-step-over", icon: "xicon stepover " + (isDebuggerRunning ? "disabled" : "blue"), title: dbgStepOverTooltip, onClick: function () { return _this.dbgStepOver(); } }) : undefined,
-                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepinto', className: "dbg-btn dbg-step-into", icon: "xicon stepinto " + (isDebuggerRunning ? "disabled" : ""), title: dbgStepIntoTooltip, onClick: function () { return _this.dbgStepInto(); } }) : undefined,
-                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepout', className: "dbg-btn dbg-step-out", icon: "xicon stepout " + (isDebuggerRunning ? "disabled" : ""), title: dbgStepOutTooltip, onClick: function () { return _this.dbgStepOut(); } }) : undefined,
-                restart ? React.createElement(sui.Item, { key: 'dbgrestart', className: "dbg-btn dbg-restart right", icon: "refresh green", title: restartTooltip, onClick: function () { return _this.restartSimulator(true); } }) : undefined,
-                React.createElement(sui.Item, { key: 'dbgstop', className: "dbg-btn dbg-stop " + (!restart ? 'right' : ''), icon: "stop red", title: debugTooltip, onClick: function () { return _this.exitDebugging(); } })));
+            React.createElement("div", { className: "ui compact borderless menu icon" },
+                React.createElement("div", { role: "button", className: "ui item link dbg-btn dbg-handle", key: 'toolbarhandle', title: lf("Debugger buttons"), onMouseDown: this.toolbarHandleDown },
+                    React.createElement(sui.Icon, { key: 'iconkey', icon: "icon ellipsis vertical" }),
+                    React.createElement(sui.Icon, { key: 'iconkey2', icon: "xicon bug" })),
+                React.createElement(sui.Item, { key: 'dbgpauseresume', className: "dbg-btn dbg-pause-resume " + (isDebuggerRunning ? "pause" : "play"), icon: "" + (isDebuggerRunning ? "pause blue" : "step forward green"), title: dbgPauseResumeTooltip, onClick: this.dbgPauseResume }),
+                React.createElement(sui.Item, { key: 'dbgbreakpoint', className: "dbg-btn dbg-breakpoint", icon: "circle red", title: lf("Insert debugger breakpoint"), onClick: this.dbgInsertBreakpoint }),
+                !advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstep', className: "dbg-btn dbg-step", icon: "arrow right " + (isDebuggerRunning ? "disabled" : "blue"), title: dbgStepIntoTooltip, onClick: this.dbgStepInto }) : undefined,
+                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepover', className: "dbg-btn dbg-step-over", icon: "xicon stepover " + (isDebuggerRunning ? "disabled" : "blue"), title: dbgStepOverTooltip, onClick: this.dbgStepOver }) : undefined,
+                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepinto', className: "dbg-btn dbg-step-into", icon: "xicon stepinto " + (isDebuggerRunning ? "disabled" : ""), title: dbgStepIntoTooltip, onClick: this.dbgStepInto }) : undefined,
+                advancedDebugging ? React.createElement(sui.Item, { key: 'dbgstepout', className: "dbg-btn dbg-step-out", icon: "xicon stepout " + (isDebuggerRunning ? "disabled" : ""), title: dbgStepOutTooltip, onClick: this.dbgStepOut }) : undefined,
+                React.createElement(sui.Item, { key: 'dbgrestart', className: "dbg-btn dbg-restart right", icon: "refresh green", title: restartTooltip, onClick: this.restartSimulator })));
     };
     return DebuggerToolbar;
 }(data.Component));
 exports.DebuggerToolbar = DebuggerToolbar;
 
-},{"./data":15,"./simulator":44,"./sui":47,"react":155,"react-dom":143}],18:[function(require,module,exports){
+},{"./data":15,"./simulator":45,"./sui":48,"react":157,"react-dom":145}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
 var core = require("./core");
 var Cloud = pxt.Cloud;
-function showAboutDialog() {
+function showAboutDialogAsync() {
     var compileService = pxt.appTarget.compileService;
     var description = pxt.appTarget.description || pxt.appTarget.title;
     var githubUrl = pxt.appTarget.appTheme.githubUrl;
+    var targetTheme = pxt.appTarget.appTheme;
+    var versions = pxt.appTarget.versions;
     core.confirmAsync({
         header: lf("About"),
         hideCancel: true,
         agreeLbl: lf("Ok"),
-        agreeClass: "positive focused",
-        htmlBody: "\n" + (githubUrl ? "<p>" + lf("{0} version:", pxt.Util.htmlEscape(pxt.appTarget.name)) + " <a class=\"focused\" href=\"" + pxt.Util.htmlEscape(githubUrl) + "/releases/tag/v" + pxt.Util.htmlEscape(pxt.appTarget.versions.target) + "\" aria-label=\"" + lf("{0} version : {1}", pxt.Util.htmlEscape(pxt.appTarget.name), pxt.Util.htmlEscape(pxt.appTarget.versions.target)) + "\" target=\"_blank\">" + pxt.Util.htmlEscape(pxt.appTarget.versions.target) + "</a></p>" : "") + "\n<p>" + lf("{0} version:", "Microsoft MakeCode") + " <a href=\"https://github.com/Microsoft/pxt/releases/tag/v" + pxt.Util.htmlEscape(pxt.appTarget.versions.pxt) + "\" aria-label=\"" + lf("{0} version: {1}", "Microsoft MakeCode", pxt.Util.htmlEscape(pxt.appTarget.versions.pxt)) + "\" target=\"_blank\">" + pxt.Util.htmlEscape(pxt.appTarget.versions.pxt) + "</a></p>\n" + (compileService && compileService.githubCorePackage && compileService.gittag ? "<p>" + lf("{0} version:", "C++ runtime") + " <a href=\"" + pxt.Util.htmlEscape("https://github.com/" + compileService.githubCorePackage + '/releases/tag/' + compileService.gittag) + "\" aria-label=\"" + lf("{0} version: {1}", "C++ runtime", pxt.Util.htmlEscape(compileService.gittag)) + "\" target=\"_blank\">" + pxt.Util.htmlEscape(compileService.gittag) + "</a></p>" : "") + "\n"
+        agreeClass: "positive",
+        jsx: React.createElement("div", null,
+            githubUrl && versions ?
+                React.createElement("p", null,
+                    lf("{0} version:", pxt.Util.htmlEscape(pxt.appTarget.name)),
+                    " \u00A0",
+                    React.createElement("a", { href: pxt.Util.htmlEscape(githubUrl) + "/releases/tag/v" + pxt.Util.htmlEscape(versions.target), title: "" + lf("{0} version : {1}", pxt.Util.htmlEscape(pxt.appTarget.name), pxt.Util.htmlEscape(versions.target)), target: "_blank", rel: "noopener noreferrer" }, pxt.Util.htmlEscape(pxt.appTarget.versions.target))) : undefined,
+            versions ?
+                React.createElement("p", null,
+                    lf("{0} version:", "Microsoft MakeCode"),
+                    " \u00A0",
+                    React.createElement("a", { href: "https://github.com/Microsoft/pxt/releases/tag/v" + pxt.Util.htmlEscape(versions.pxt), title: "" + lf("{0} version: {1}", "Microsoft MakeCode", pxt.Util.htmlEscape(versions.pxt)), target: "_blank", rel: "noopener noreferrer" }, pxt.Util.htmlEscape(versions.pxt))) : undefined,
+            compileService && compileService.githubCorePackage && compileService.gittag ?
+                React.createElement("p", null,
+                    lf("{0} version:", "C++ runtime"),
+                    " \u00A0",
+                    React.createElement("a", { href: "" + pxt.Util.htmlEscape("https://github.com/" + compileService.githubCorePackage + '/releases/tag/' + compileService.gittag), title: "" + lf("{0} version: {1}", "C++ runtime", pxt.Util.htmlEscape(compileService.gittag)), target: "_blank", rel: "noopener noreferrer" }, pxt.Util.htmlEscape(compileService.gittag))) : undefined,
+            React.createElement("p", null,
+                targetTheme.termsOfUseUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.termsOfUseUrl, rel: "noopener noreferrer" }, lf("Terms of Use")) : undefined,
+                "\u00A0\u00A0\u00A0 ",
+                targetTheme.privacyUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.privacyUrl, rel: "noopener noreferrer" }, lf("Privacy")) : undefined))
     }).done();
 }
-exports.showAboutDialog = showAboutDialog;
-function showImportUrlDialog() {
+exports.showAboutDialogAsync = showAboutDialogAsync;
+function showImportUrlDialogAsync() {
     var input;
     var shareUrl = pxt.appTarget.appTheme.shareUrl || "https://makecode.com/";
     return core.confirmAsync({
@@ -5993,7 +7552,17 @@ function showImportUrlDialog() {
         onLoaded: function (el) {
             input = el.querySelectorAll('input')[0];
         },
-        htmlBody: "<div class=\"ui form\">\n<div class=\"ui icon violet message\">\n    <i class=\"user icon\"></i>\n    <div class=\"content\">\n        <h3 class=\"header\">\n            " + lf("User-provided content") + "\n        </h3>\n        <p>\n            " + lf("The content below is provided by a user, and is not endorsed by Microsoft.") + "\n            " + lf("If you think it's not appropriate, please report abuse through Settings -> Report Abuse.") + "\n        </p>\n    </div>\n</div>\n  <div class=\"ui field\">\n    <label id=\"selectUrlToOpenLabel\">" + lf("Copy the URL of the project.") + "</label>\n    <input type=\"url\" tabindex=\"0\" autofocus aria-describedby=\"selectUrlToOpenLabel\" placeholder=\"" + shareUrl + "...\" class=\"ui blue fluid\"></input>\n  </div>\n</div>",
+        jsx: React.createElement("div", { className: "ui form" },
+            React.createElement("div", { className: "ui icon violet message" },
+                React.createElement("i", { className: "user icon" }),
+                React.createElement("div", { className: "content" },
+                    React.createElement("h3", { className: "header" }, lf("User-provided content")),
+                    React.createElement("p", null,
+                        lf("The content below is provided by a user, and is not endorsed by Microsoft."),
+                        lf("If you think it's not appropriate, please report abuse through Settings -> Report Abuse.")))),
+            React.createElement("div", { className: "ui field" },
+                React.createElement("label", { id: "selectUrlToOpenLabel" }, lf("Copy the URL of the project.")),
+                React.createElement("input", { type: "url", tabIndex: 0, autoFocus: true, "aria-describedby": "selectUrlToOpenLabel", placeholder: shareUrl + "...", className: "ui blue fluid" }))),
     }).then(function (res) {
         if (res) {
             pxt.tickEvent("app.open.url");
@@ -6002,9 +7571,8 @@ function showImportUrlDialog() {
         return undefined;
     });
 }
-exports.showImportUrlDialog = showImportUrlDialog;
-function showImportFileDialog() {
-    var _this = this;
+exports.showImportUrlDialogAsync = showImportUrlDialogAsync;
+function showImportFileDialogAsync() {
     var input;
     var ext = ".mkcd";
     if (pxt.appTarget.compile.hasHex) {
@@ -6016,21 +7584,24 @@ function showImportFileDialog() {
     if (pxt.appTarget.compile.saveAsPNG) {
         ext = ".png";
     }
-    core.confirmAsync({
+    return core.confirmAsync({
         header: lf("Open {0} file", ext),
         onLoaded: function (el) {
             input = el.querySelectorAll('input')[0];
         },
-        htmlBody: "<div class=\"ui form\">\n<div class=\"ui field\">\n<label id=\"selectFileToOpenLabel\">" + lf("Select a {0} file to open.", ext) + "</label>\n<input type=\"file\" tabindex=\"0\" autofocus aria-describedby=\"selectFileToOpenLabel\" class=\"ui blue fluid\"></input>\n</div>\n</div>",
-    }).done(function (res) {
+        jsx: React.createElement("div", { className: "ui form" },
+            React.createElement("div", { className: "ui field" },
+                React.createElement("label", { id: "selectFileToOpenLabel" }, lf("Select a {0} file to open.", ext)),
+                React.createElement("input", { type: "file", tabIndex: 0, autoFocus: true, "aria-describedby": "selectFileToOpenLabel", className: "ui blue fluid" }))),
+    }).then(function (res) {
         if (res) {
-            pxt.tickEvent("app.open.file");
-            _this.importFile(input.files[0]);
+            return input.files[0];
         }
+        return undefined;
     });
 }
-exports.showImportFileDialog = showImportFileDialog;
-function showReportAbuse(pubId) {
+exports.showImportFileDialogAsync = showImportFileDialogAsync;
+function showReportAbuseAsync(pubId) {
     var urlInput;
     var reasonInput;
     var shareUrl = pxt.appTarget.appTheme.shareUrl || "https://makecode.com/";
@@ -6043,7 +7614,13 @@ function showReportAbuse(pubId) {
                 urlInput.value = (shareUrl + pubId);
         },
         agreeLbl: lf("Submit"),
-        htmlBody: "<div class=\"ui form\">\n<div class=\"ui field\">\n<label>" + lf("What is the URL of the offensive project?") + "</label>\n<input type=\"url\" tabindex=\"0\" autofocus placeholder=\"Enter project URL here...\"></input>\n</div>\n<div class=\"ui field\">\n<label>" + lf("Why do you find it offensive?") + "</label>\n<textarea></textarea>\n</div>\n</div>",
+        jsx: React.createElement("div", { className: "ui form" },
+            React.createElement("div", { className: "ui field" },
+                React.createElement("label", null, lf("What is the URL of the offensive project?")),
+                React.createElement("input", { type: "url", tabIndex: 0, autoFocus: true, placeholder: "Enter project URL here..." })),
+            React.createElement("div", { className: "ui field" },
+                React.createElement("label", null, lf("Why do you find it offensive?")),
+                React.createElement("textarea", null))),
     }).done(function (res) {
         if (res) {
             pxt.tickEvent("app.reportabuse.send");
@@ -6069,32 +7646,20 @@ function showReportAbuse(pubId) {
         }
     });
 }
-exports.showReportAbuse = showReportAbuse;
-function showResetDialog() {
-    var _this = this;
-    core.confirmAsync({
+exports.showReportAbuseAsync = showReportAbuseAsync;
+function showResetDialogAsync() {
+    return core.confirmAsync({
         header: lf("Reset"),
         body: lf("You are about to clear all projects. Are you sure? This operation cannot be undone."),
         agreeLbl: lf("Reset"),
         agreeClass: "red",
         agreeIcon: "sign out",
         disagreeLbl: lf("Cancel")
-    }).then(function (r) {
-        if (!r)
-            return Promise.resolve();
-        return Promise.resolve()
-            .then(function () {
-            return pxt.winrt.releaseAllDevicesAsync();
-        })
-            .then(function () {
-            return _this.resetWorkspace();
-        });
-    })
-        .done();
+    });
 }
-exports.showResetDialog = showResetDialog;
+exports.showResetDialogAsync = showResetDialogAsync;
 
-},{"./core":13}],19:[function(require,module,exports){
+},{"./core":13,"react":157}],19:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function setupDragAndDrop(r, filter, dragged) {
@@ -6160,6 +7725,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
@@ -6167,7 +7749,20 @@ var sui = require("./sui");
 var EditorToolbar = /** @class */ (function (_super) {
     __extends(EditorToolbar, _super);
     function EditorToolbar(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.saveProjectName = _this.saveProjectName.bind(_this);
+        _this.compile = _this.compile.bind(_this);
+        _this.saveFile = _this.saveFile.bind(_this);
+        _this.undo = _this.undo.bind(_this);
+        _this.redo = _this.redo.bind(_this);
+        _this.zoomIn = _this.zoomIn.bind(_this);
+        _this.zoomOut = _this.zoomOut.bind(_this);
+        _this.startStopSimulator = _this.startStopSimulator.bind(_this);
+        _this.restartSimulator = _this.restartSimulator.bind(_this);
+        _this.toggleTrace = _this.toggleTrace.bind(_this);
+        _this.toggleDebugging = _this.toggleDebugging.bind(_this);
+        _this.toggleCollapse = _this.toggleCollapse.bind(_this);
+        return _this;
     }
     EditorToolbar.prototype.saveProjectName = function (name, view) {
         pxt.tickEvent("editortools.projectrename", { view: view }, { interactiveConsent: true });
@@ -6209,6 +7804,10 @@ var EditorToolbar = /** @class */ (function (_super) {
         pxt.tickEvent("editortools.trace", { view: view, collapsed: this.getCollapsedState(), headless: this.getHeadlessState() }, { interactiveConsent: true });
         this.props.parent.toggleTrace();
     };
+    EditorToolbar.prototype.toggleDebugging = function (view) {
+        pxt.tickEvent("editortools.debug", { view: view, collapsed: this.getCollapsedState(), headless: this.getHeadlessState() }, { interactiveConsent: true });
+        this.props.parent.toggleDebugging();
+    };
     EditorToolbar.prototype.toggleCollapse = function (view) {
         pxt.tickEvent("editortools.toggleCollapse", { view: view, collapsedTo: '' + !this.props.parent.state.collapseEditorTools }, { interactiveConsent: true });
         this.props.parent.toggleSimulatorCollapse();
@@ -6220,7 +7819,6 @@ var EditorToolbar = /** @class */ (function (_super) {
         return pxt.appTarget.simulator.headless ? "true" : "false";
     };
     EditorToolbar.prototype.renderCore = function () {
-        var _this = this;
         var _a = this.props.parent.state, home = _a.home, tutorialOptions = _a.tutorialOptions, hideEditorFloats = _a.hideEditorFloats, collapseEditorTools = _a.collapseEditorTools, projectName = _a.projectName, compiling = _a.compiling, isSaving = _a.isSaving, running = _a.running;
         if (home)
             return React.createElement("div", null); // Don't render if we're in the home screen
@@ -6249,9 +7847,12 @@ var EditorToolbar = /** @class */ (function (_super) {
         var showZoomControls = !tutorial;
         var run = true;
         var restart = run && !simOpts.hideRestart;
-        var trace = run && simOpts.enableTrace;
+        var trace = run && !!simOpts.enableTrace;
         var tracing = this.props.parent.state.tracing;
         var traceTooltip = tracing ? lf("Disable Slow-Mo") : lf("Slow-Mo");
+        var debug = !trace && !!simOpts.debugger;
+        var debugging = this.props.parent.state.debugging;
+        var debugTooltip = debugging ? lf("Disable Debugging") : lf("Debugging");
         var downloadIcon = pxt.appTarget.appTheme.downloadIcon || "download";
         var downloadText = pxt.appTarget.appTheme.useUploadMessage ? lf("Upload") : lf("Download");
         var downloadButtonClasses = "";
@@ -6264,33 +7865,35 @@ var EditorToolbar = /** @class */ (function (_super) {
             downloadButtonClasses = "loading disabled";
             saveButtonClasses = "disabled";
         }
+        var isRtl = pxt.Util.isUserLanguageRtl();
         return React.createElement("div", { className: "ui equal width grid right aligned padded" },
             React.createElement("div", { className: "column mobile only" }, collapsed ?
                 React.createElement("div", { className: "ui equal width grid" },
                     React.createElement("div", { className: "left aligned column" },
                         React.createElement("div", { className: "ui icon small buttons" },
-                            React.createElement(sui.Button, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onClick: function () { return _this.toggleCollapse('mobile'); } }),
-                            headless && run ? React.createElement(sui.Button, { className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onClick: function () { return _this.startStopSimulator('mobile'); } }) : undefined,
-                            headless && restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator('mobile'); } }) : undefined,
-                            headless && trace ? React.createElement(sui.Button, { key: 'tracebtn', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace('mobile'); } }) : undefined,
-                            compileBtn ? React.createElement(sui.Button, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, ariaLabel: lf("Download your code"), onClick: function () { return _this.compile('mobile'); } }) : undefined)),
+                            React.createElement(EditorToolbarButton, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onButtonClick: this.toggleCollapse, view: 'mobile' }),
+                            headless && run ? React.createElement(EditorToolbarButton, { className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onButtonClick: this.startStopSimulator, view: 'mobile' }) : undefined,
+                            headless && restart ? React.createElement(EditorToolbarButton, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onButtonClick: this.restartSimulator, view: 'mobile' }) : undefined,
+                            headless && trace ? React.createElement(EditorToolbarButton, { key: 'tracebtn', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onButtonClick: this.toggleTrace, view: 'mobile' }) : undefined,
+                            headless && debug ? React.createElement(EditorToolbarButton, { key: 'debugbtn', className: "debug-button " + (debugging ? 'orange' : ''), icon: "xicon bug", title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'mobile' }) : undefined,
+                            compileBtn ? React.createElement(EditorToolbarButton, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, ariaLabel: lf("Download your code"), onButtonClick: this.compile, view: 'mobile' }) : undefined)),
                     React.createElement("div", { className: "right aligned column" }, !readOnly ?
                         React.createElement("div", { className: "ui icon small buttons" },
-                            React.createElement(sui.Button, { icon: 'save', className: "editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onClick: function () { return _this.saveFile('mobile'); } }),
-                            showUndoRedo ? React.createElement(sui.Button, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn} " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onClick: function () { return _this.undo('mobile'); } }) : undefined) : undefined),
+                            React.createElement(EditorToolbarButton, { icon: 'save', className: "editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onButtonClick: this.saveFile, view: 'mobile' }),
+                            showUndoRedo ? React.createElement(EditorToolbarButton, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn} " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onButtonClick: this.undo, view: 'mobile' }) : undefined) : undefined),
                     React.createElement("div", { className: "right aligned column" }, showZoomControls ?
                         React.createElement("div", { className: "ui icon small buttons" },
-                            React.createElement(sui.Button, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onClick: function () { return _this.zoomIn('mobile'); } }),
-                            React.createElement(sui.Button, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onClick: function () { return _this.zoomOut('mobile'); } })) : undefined)) :
+                            React.createElement(EditorToolbarButton, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onButtonClick: this.zoomIn, view: 'mobile' }),
+                            React.createElement(EditorToolbarButton, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onButtonClick: this.zoomOut, view: 'mobile' })) : undefined)) :
                 React.createElement("div", { className: "ui equal width grid" },
                     React.createElement("div", { className: "left aligned two wide column" },
                         React.createElement("div", { className: "ui vertical icon small buttons" },
-                            run ? React.createElement(sui.Button, { className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onClick: function () { return _this.startStopSimulator('mobile'); } }) : undefined,
-                            restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator('mobile'); } }) : undefined),
+                            run ? React.createElement(EditorToolbarButton, { className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onButtonClick: this.startStopSimulator, view: 'mobile' }) : undefined,
+                            restart ? React.createElement(EditorToolbarButton, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onButtonClick: this.restartSimulator, view: 'mobile' }) : undefined),
                         showCollapsed ?
                             React.createElement("div", { className: "row", style: { paddingTop: "1rem" } },
                                 React.createElement("div", { className: "ui vertical icon small buttons" },
-                                    React.createElement(sui.Button, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, ariaLabel: lf("{0}, {1}", collapseTooltip, collapsed ? lf("Collapsed") : "Expanded"), onClick: function () { return _this.toggleCollapse('mobile'); } }))) : undefined),
+                                    React.createElement(EditorToolbarButton, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, ariaLabel: lf("{0}, {1}", collapseTooltip, collapsed ? lf("Collapsed") : "Expanded"), onButtonClick: this.toggleCollapse, view: 'mobile' }))) : undefined),
                     React.createElement("div", { className: "three wide column" }),
                     React.createElement("div", { className: "column" },
                         React.createElement("div", { className: "ui grid" },
@@ -6298,59 +7901,60 @@ var EditorToolbar = /** @class */ (function (_super) {
                                 React.createElement("div", { className: "row" },
                                     React.createElement("div", { className: "column" },
                                         React.createElement("div", { className: "ui icon large buttons" },
-                                            React.createElement(sui.Button, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onClick: function () { return _this.undo('mobile'); } })))),
+                                            React.createElement(EditorToolbarButton, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onButtonClick: this.undo, view: 'mobile' })))),
                             React.createElement("div", { className: "row", style: readOnly || !showUndoRedo ? undefined : { paddingTop: 0 } },
                                 React.createElement("div", { className: "column" },
                                     React.createElement("div", { className: "ui icon large buttons" },
-                                        trace ? React.createElement(sui.Button, { key: 'tracebtn', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace('mobile'); } }) : undefined,
-                                        compileBtn ? React.createElement(sui.Button, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, onClick: function () { return _this.compile('mobile'); } }) : undefined))))))),
+                                        trace ? React.createElement(EditorToolbarButton, { key: 'tracebtn', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onButtonClick: this.toggleTrace, view: 'mobile' }) : undefined,
+                                        debug ? React.createElement(EditorToolbarButton, { key: 'debugbtn', className: "debug-button " + (debugging ? 'orange' : ''), icon: "xicon bug", title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'mobile' }) : undefined,
+                                        compileBtn ? React.createElement(EditorToolbarButton, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, onButtonClick: this.compile, view: 'mobile' }) : undefined))))))),
             React.createElement("div", { className: "column tablet only" }, collapsed ?
                 React.createElement("div", { className: "ui grid seven column" },
                     headless ?
                         React.createElement("div", { className: "left aligned six wide column" },
                             React.createElement("div", { className: "ui icon buttons" },
-                                React.createElement(sui.Button, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onClick: function () { return _this.toggleCollapse('tablet'); } }),
-                                run ? React.createElement(sui.Button, { role: "menuitem", className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onClick: function () { return _this.startStopSimulator('tablet'); } }) : undefined,
-                                restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator('tablet'); } }) : undefined,
-                                trace ? React.createElement(sui.Button, { key: 'tracebtn', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace('tablet'); } }) : undefined,
-                                compileBtn ? React.createElement(sui.Button, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, onClick: function () { return _this.compile('tablet'); } }) : undefined)) :
+                                React.createElement(EditorToolbarButton, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onButtonClick: this.toggleCollapse, view: 'tablet' }),
+                                run ? React.createElement(EditorToolbarButton, { role: "menuitem", className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onButtonClick: this.startStopSimulator, view: 'tablet' }) : undefined,
+                                restart ? React.createElement(EditorToolbarButton, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onButtonClick: this.restartSimulator, view: 'tablet' }) : undefined,
+                                debug ? React.createElement(EditorToolbarButton, { key: 'debug', className: "debug-button " + (debugging ? 'orange' : ''), icon: "xicon bug", title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'tablet' }) : undefined,
+                                compileBtn ? React.createElement(EditorToolbarButton, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, title: compileTooltip, onButtonClick: this.compile, view: 'tablet' }) : undefined)) :
                         React.createElement("div", { className: "left aligned six wide column" },
                             React.createElement("div", { className: "ui icon buttons" },
-                                React.createElement(sui.Button, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onClick: function () { return _this.toggleCollapse('tablet'); } }),
-                                compileBtn ? React.createElement(sui.Button, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, text: downloadText, title: compileTooltip, onClick: function () { return _this.compile('tablet'); } }) : undefined)),
+                                React.createElement(EditorToolbarButton, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : '') + " " + (hideEditorFloats ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", collapseTooltip, hideEditorFloats ? lf("Disabled") : ""), title: collapseTooltip, onButtonClick: this.toggleCollapse, view: 'tablet' }),
+                                compileBtn ? React.createElement(EditorToolbarButton, { className: "primary download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, text: downloadText, title: compileTooltip, onButtonClick: this.compile, view: 'tablet' }) : undefined)),
                     React.createElement("div", { className: "column four wide" }, readOnly ? undefined :
-                        React.createElement(sui.Button, { icon: 'save', className: "small editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onClick: function () { return _this.saveFile('tablet'); } })),
+                        React.createElement(EditorToolbarButton, { icon: 'save', className: "small editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onButtonClick: this.saveFile, view: 'tablet' })),
                     React.createElement("div", { className: "column six wide right aligned" },
                         showUndoRedo ?
                             React.createElement("div", { className: "ui icon small buttons" },
-                                React.createElement(sui.Button, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onClick: function () { return _this.undo('tablet'); } }),
-                                React.createElement(sui.Button, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn " + (!hasRedo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Red"), !hasRedo ? lf("Disabled") : ""), title: lf("Redo"), onClick: function () { return _this.redo('tablet'); } })) : undefined,
+                                React.createElement(EditorToolbarButton, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onButtonClick: this.undo, view: 'tablet' }),
+                                React.createElement(EditorToolbarButton, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn " + (!hasRedo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Red"), !hasRedo ? lf("Disabled") : ""), title: lf("Redo"), onButtonClick: this.redo, view: 'tablet' })) : undefined,
                         showZoomControls ?
                             React.createElement("div", { className: "ui icon small buttons" },
-                                React.createElement(sui.Button, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onClick: function () { return _this.zoomIn('tablet'); } }),
-                                React.createElement(sui.Button, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onClick: function () { return _this.zoomOut('tablet'); } })) : undefined))
+                                React.createElement(EditorToolbarButton, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onButtonClick: this.zoomIn, view: 'tablet' }),
+                                React.createElement(EditorToolbarButton, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onButtonClick: this.zoomOut, view: 'tablet' })) : undefined))
                 : React.createElement("div", { className: "ui grid" },
                     React.createElement("div", { className: "left aligned two wide column" },
                         React.createElement("div", { className: "ui vertical icon small buttons" },
-                            run ? React.createElement(sui.Button, { role: "menuitem", className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onClick: function () { return _this.startStopSimulator('tablet'); } }) : undefined,
-                            restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator('tablet'); } }) : undefined),
+                            run ? React.createElement(EditorToolbarButton, { role: "menuitem", className: "play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onButtonClick: this.startStopSimulator, view: 'tablet' }) : undefined,
+                            restart ? React.createElement(EditorToolbarButton, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onButtonClick: this.restartSimulator, view: 'tablet' }) : undefined),
                         showCollapsed ?
                             React.createElement("div", { className: "row", style: { paddingTop: "1rem" } },
                                 React.createElement("div", { className: "ui vertical icon small buttons" },
-                                    React.createElement(sui.Button, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, ariaLabel: lf("{0}, {1}", collapseTooltip, collapsed ? lf("Collapsed") : "Expanded"), onClick: function () { return _this.toggleCollapse('tablet'); } }))) : undefined),
+                                    React.createElement(EditorToolbarButton, { icon: "" + (collapsed ? 'toggle up' : 'toggle down'), className: "collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, ariaLabel: lf("{0}, {1}", collapseTooltip, collapsed ? lf("Collapsed") : "Expanded"), onButtonClick: this.toggleCollapse, view: 'tablet' }))) : undefined),
                     React.createElement("div", { className: "three wide column" }),
                     React.createElement("div", { className: "five wide column" },
                         React.createElement("div", { className: "ui grid right aligned" },
                             compileBtn ? React.createElement("div", { className: "row" },
                                 React.createElement("div", { className: "column" },
-                                    React.createElement(sui.Button, { role: "menuitem", className: "primary large fluid download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, text: downloadText, title: compileTooltip, onClick: function () { return _this.compile('tablet'); } }))) : undefined,
+                                    React.createElement(EditorToolbarButton, { role: "menuitem", className: "primary large fluid download-button download-button-full " + downloadButtonClasses, icon: downloadIcon, text: downloadText, title: compileTooltip, onButtonClick: this.compile, view: 'tablet' }))) : undefined,
                             showProjectRename ?
                                 React.createElement("div", { className: "row", style: compileBtn ? { paddingTop: 0 } : {} },
                                     React.createElement("div", { className: "column" },
                                         React.createElement("div", { className: "ui item large right labeled fluid input projectname-input projectname-tablet", title: lf("Pick a name for your project") },
                                             React.createElement("label", { htmlFor: "fileNameInput1", id: "fileNameInputLabel1", className: "accessible-hidden" }, lf("Type a name for your project")),
-                                            React.createElement("input", { id: "fileNameInput1", type: "text", "aria-labelledby": "fileNameInputLabel1", placeholder: lf("Pick a name..."), value: projectName || '', onChange: function (e) { return _this.saveProjectName(e.target.value, 'tablet'); } }),
-                                            React.createElement(sui.Button, { icon: 'save', className: "large right attached editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onClick: function () { return _this.saveFile('tablet'); } })))) : undefined)),
+                                            React.createElement(EditorToolbarSaveInput, { id: "fileNameInput1", type: "text", "aria-labelledby": "fileNameInputLabel1", placeholder: lf("Pick a name..."), value: projectName || '', onChangeValue: this.saveProjectName, view: 'tablet' }),
+                                            React.createElement(EditorToolbarButton, { icon: 'save', className: "large right attached editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onButtonClick: this.saveFile, view: 'tablet' })))) : undefined)),
                     React.createElement("div", { className: "six wide column right aligned" },
                         React.createElement("div", { className: "ui grid right aligned" },
                             showUndoRedo || showZoomControls ?
@@ -6358,50 +7962,180 @@ var EditorToolbar = /** @class */ (function (_super) {
                                     React.createElement("div", { className: "column" },
                                         showUndoRedo ?
                                             React.createElement("div", { className: "ui icon large buttons" },
-                                                React.createElement(sui.Button, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn} " + (!hasUndo ? 'disabled' : ''), title: lf("Undo"), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), onClick: function () { return _this.undo(); } }),
-                                                React.createElement(sui.Button, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn} " + (!hasRedo ? 'disabled' : ''), title: lf("Redo"), ariaLabel: lf("{0}, {1}", lf("Redo"), !hasRedo ? lf("Disabled") : ""), onClick: function () { return _this.redo(); } })) : undefined,
+                                                React.createElement(EditorToolbarButton, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn} " + (!hasUndo ? 'disabled' : ''), title: lf("Undo"), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), onButtonClick: this.undo, view: 'tablet' }),
+                                                React.createElement(EditorToolbarButton, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn} " + (!hasRedo ? 'disabled' : ''), title: lf("Redo"), ariaLabel: lf("{0}, {1}", lf("Redo"), !hasRedo ? lf("Disabled") : ""), onButtonClick: this.redo, view: 'tablet' })) : undefined,
                                         showZoomControls ?
                                             React.createElement("div", { className: "ui icon large buttons" },
-                                                React.createElement(sui.Button, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onClick: function () { return _this.zoomIn(); } }),
-                                                React.createElement(sui.Button, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onClick: function () { return _this.zoomOut(); } })) : undefined)) : undefined,
-                            trace ?
-                                React.createElement("div", { className: "row", style: showUndoRedo || showZoomControls ? { paddingTop: 0 } : {} },
-                                    React.createElement("div", { className: "column" },
-                                        React.createElement(sui.Button, { key: 'tracebtn', className: "large trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace('tablet'); } }))) : undefined)))),
+                                                React.createElement(EditorToolbarButton, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onButtonClick: this.zoomIn, view: 'tablet' }),
+                                                React.createElement(EditorToolbarButton, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onButtonClick: this.zoomOut, view: 'tablet' })) : undefined)) : undefined,
+                            React.createElement("div", { className: "row", style: showUndoRedo || showZoomControls ? { paddingTop: 0 } : {} },
+                                React.createElement("div", { className: "column" },
+                                    trace ? React.createElement(EditorToolbarButton, { key: 'tracebtn', className: "large trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onButtonClick: this.toggleTrace, view: 'tablet' }) : undefined,
+                                    debug ? React.createElement(EditorToolbarButton, { key: 'debugbtn', className: "large debug-button " + (debugging ? 'orange' : ''), icon: "xicon bug", title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'tablet' }) : undefined)))))),
             React.createElement("div", { className: "column computer only" },
                 React.createElement("div", { className: "ui grid equal width" },
                     React.createElement("div", { id: "downloadArea", className: "ui column items" }, headless ?
                         React.createElement("div", { className: "ui item" },
                             React.createElement("div", { className: "ui icon large buttons" },
-                                showCollapsed ? React.createElement(sui.Button, { icon: "" + (collapseEditorTools ? 'toggle right' : 'toggle left'), className: "large collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, onClick: function () { return _this.toggleCollapse('computer'); } }) : undefined,
-                                run ? React.createElement(sui.Button, { role: "menuitem", className: "large play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onClick: function () { return _this.startStopSimulator('computer'); } }) : undefined,
-                                restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "large restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator('computer'); } }) : undefined,
-                                trace ? React.createElement(sui.Button, { key: 'tracebtn', className: "large trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace('computer'); } }) : undefined,
-                                compileBtn ? React.createElement(sui.Button, { icon: downloadIcon, className: "primary large download-button " + downloadButtonClasses, title: compileTooltip, onClick: function () { return _this.compile('computer'); } }) : undefined)) :
+                                showCollapsed ? React.createElement(EditorToolbarButton, { icon: "" + (collapseEditorTools ? 'toggle ' + (isRtl ? 'left' : 'right') : 'toggle ' + (isRtl ? 'right' : 'left')), className: "large collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, onButtonClick: this.toggleCollapse, view: 'computer' }) : undefined,
+                                run ? React.createElement(EditorToolbarButton, { role: "menuitem", className: "large play-button " + (running ? "stop" : "play"), key: 'runmenubtn', icon: running ? "stop" : "play", title: runTooltip, onButtonClick: this.startStopSimulator, view: 'computer' }) : undefined,
+                                restart ? React.createElement(EditorToolbarButton, { key: 'restartbtn', className: "large restart-button", icon: "refresh", title: restartTooltip, onButtonClick: this.restartSimulator, view: 'computer' }) : undefined,
+                                trace ? React.createElement(EditorToolbarButton, { key: 'tracebtn', className: "large trace-button " + (tracing ? 'orange' : ''), icon: "xicon trace", title: traceTooltip, onButtonClick: this.toggleTrace, view: 'computer' }) : undefined,
+                                debug ? React.createElement(EditorToolbarButton, { key: 'debugbtn', className: "large debug-button " + (debugging ? 'orange' : ''), icon: "xicon bug", title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'computer' }) : undefined,
+                                compileBtn ? React.createElement(EditorToolbarButton, { icon: downloadIcon, className: "primary large download-button " + downloadButtonClasses, title: compileTooltip, onButtonClick: this.compile, view: 'computer' }) : undefined)) :
                         React.createElement("div", { className: "ui item" },
-                            showCollapsed ? React.createElement(sui.Button, { icon: "" + (collapseEditorTools ? 'toggle right' : 'toggle left'), className: "large collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, onClick: function () { return _this.toggleCollapse('computer'); } }) : undefined,
-                            compileBtn ? React.createElement(sui.Button, { icon: downloadIcon, className: "primary huge fluid download-button " + downloadButtonClasses, text: downloadText, title: compileTooltip, onClick: function () { return _this.compile('computer'); } }) : undefined)),
+                            showCollapsed ? React.createElement(EditorToolbarButton, { icon: "" + (collapseEditorTools ? 'toggle ' + (isRtl ? 'left' : 'right') : 'toggle ' + (isRtl ? 'right' : 'left')), className: "large collapse-button " + (collapsed ? 'collapsed' : ''), title: collapseTooltip, onButtonClick: this.toggleCollapse, view: 'computer' }) : undefined,
+                            debug ? React.createElement(EditorToolbarButton, { key: 'debugbtn', icon: "xicon bug", className: "large debug-button " + (debugging ? 'orange' : ''), title: debugTooltip, onButtonClick: this.toggleDebugging, view: 'computer' }) : undefined,
+                            compileBtn ? React.createElement(EditorToolbarButton, { icon: downloadIcon, className: "primary huge fluid download-button " + downloadButtonClasses, text: downloadText, title: compileTooltip, onButtonClick: this.compile, view: 'computer' }) : undefined)),
                     showProjectRename ?
                         React.createElement("div", { className: "column left aligned" },
                             React.createElement("div", { className: "ui right labeled input projectname-input projectname-computer", title: lf("Pick a name for your project") },
                                 React.createElement("label", { htmlFor: "fileNameInput2", id: "fileNameInputLabel2", className: "accessible-hidden" }, lf("Type a name for your project")),
-                                React.createElement("input", { id: "fileNameInput2", type: "text", "aria-labelledby": "fileNameInputLabel2", placeholder: lf("Pick a name..."), value: projectName || '', onChange: function (e) { return _this.saveProjectName(e.target.value, 'computer'); } }),
-                                React.createElement(sui.Button, { icon: 'save', className: "small right attached editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onClick: function () { return _this.saveFile('computer'); } }))) : undefined,
+                                React.createElement(EditorToolbarSaveInput, { id: "fileNameInput2", view: 'computer', type: "text", "aria-labelledby": "fileNameInputLabel2", placeholder: lf("Pick a name..."), value: projectName || '', onChangeValue: this.saveProjectName }),
+                                React.createElement(EditorToolbarButton, { icon: 'save', className: "small right attached editortools-btn save-editortools-btn " + saveButtonClasses, title: lf("Save"), ariaLabel: lf("Save the project"), onButtonClick: this.saveFile, view: 'computer' }))) : undefined,
                     React.createElement("div", { className: "column right aligned" },
                         showUndoRedo ?
                             React.createElement("div", { className: "ui icon small buttons" },
-                                React.createElement(sui.Button, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onClick: function () { return _this.undo('computer'); } }),
-                                React.createElement(sui.Button, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn " + (!hasRedo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Redo"), !hasRedo ? lf("Disabled") : ""), title: lf("Redo"), onClick: function () { return _this.redo('computer'); } })) : undefined,
+                                React.createElement(EditorToolbarButton, { icon: 'xicon undo', className: "editortools-btn undo-editortools-btn " + (!hasUndo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Undo"), !hasUndo ? lf("Disabled") : ""), title: lf("Undo"), onButtonClick: this.undo, view: 'computer' }),
+                                React.createElement(EditorToolbarButton, { icon: 'xicon redo', className: "editortools-btn redo-editortools-btn " + (!hasRedo ? 'disabled' : ''), ariaLabel: lf("{0}, {1}", lf("Redo"), !hasRedo ? lf("Disabled") : ""), title: lf("Redo"), onButtonClick: this.redo, view: 'computer' })) : undefined,
                         showZoomControls ?
                             React.createElement("div", { className: "ui icon small buttons" },
-                                React.createElement(sui.Button, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onClick: function () { return _this.zoomIn('computer'); } }),
-                                React.createElement(sui.Button, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onClick: function () { return _this.zoomOut('computer'); } })) : undefined))));
+                                React.createElement(EditorToolbarButton, { icon: 'plus circle', className: "editortools-btn zoomin-editortools-btn", title: lf("Zoom In"), onButtonClick: this.zoomIn, view: 'computer' }),
+                                React.createElement(EditorToolbarButton, { icon: 'minus circle', className: "editortools-btn zoomout-editortools-btn", title: lf("Zoom Out"), onButtonClick: this.zoomOut, view: 'computer' })) : undefined))));
     };
     return EditorToolbar;
 }(data.Component));
 exports.EditorToolbar = EditorToolbar;
+var EditorToolbarButton = /** @class */ (function (_super) {
+    __extends(EditorToolbarButton, _super);
+    function EditorToolbarButton(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    EditorToolbarButton.prototype.handleClick = function () {
+        var _a = this.props, onButtonClick = _a.onButtonClick, view = _a.view;
+        onButtonClick(view);
+    };
+    EditorToolbarButton.prototype.renderCore = function () {
+        var _a = this.props, onClick = _a.onClick, onButtonClick = _a.onButtonClick, rest = __rest(_a, ["onClick", "onButtonClick"]);
+        return React.createElement(sui.Button, __assign({}, rest, { onClick: this.handleClick }));
+    };
+    return EditorToolbarButton;
+}(sui.StatelessUIElement));
+var EditorToolbarSaveInput = /** @class */ (function (_super) {
+    __extends(EditorToolbarSaveInput, _super);
+    function EditorToolbarSaveInput(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleChange = _this.handleChange.bind(_this);
+        return _this;
+    }
+    EditorToolbarSaveInput.prototype.handleChange = function (e) {
+        var _a = this.props, onChangeValue = _a.onChangeValue, view = _a.view;
+        onChangeValue(e.target.value, view);
+    };
+    EditorToolbarSaveInput.prototype.renderCore = function () {
+        var _a = this.props, onChange = _a.onChange, onChangeValue = _a.onChangeValue, view = _a.view, rest = __rest(_a, ["onChange", "onChangeValue", "view"]);
+        return React.createElement("input", __assign({ onChange: this.handleChange }, rest));
+    };
+    return EditorToolbarSaveInput;
+}(sui.StatelessUIElement));
 
-},{"./data":15,"./sui":47,"react":155}],21:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],21:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var core = require("./core");
+var pxtElectron = window.pxtElectron;
+exports.isPxtElectron = !!pxtElectron;
+exports.isIpcRenderer = !!window.ipcRenderer;
+exports.isElectron = exports.isPxtElectron || exports.isIpcRenderer;
+var downloadingUpdateLoadingName = "pxtelectron-downloadingupdate";
+function initElectron(projectView) {
+    if (!exports.isPxtElectron) {
+        return;
+    }
+    pxtElectron.onTelemetry(function (ev) {
+        pxt.tickEvent(ev.event, ev.data);
+    });
+    pxtElectron.onUpdateInstalled(function () {
+        core.infoNotification(lf("An update will take effect after the app restarts"));
+    });
+    var criticalUpdateFailedPromise = new Promise(function (resolve) {
+        pxtElectron.onCriticalUpdateFailed(function () {
+            pxt.tickEvent("electron.criticalupdate.failed");
+            resolve();
+        });
+    });
+    // Asynchronously check what the update status is, which will let us know if the current version is banned
+    pxtElectron.onUpdateStatus(function (status) {
+        pxt.debug("Electron app update status: " + status);
+        pxt.tickEvent("electron.updatestatus." + status);
+        if (status === "updating-critical" /* UpdatingCritical */ || status === "banned-without-update" /* BannedWithoutUpdate */) {
+            projectView.stopSimulator();
+        }
+        switch (status) {
+            case "ok" /* Ok */:
+                // No update available; nothing to do
+                return;
+            case "updating-critical" /* UpdatingCritical */:
+                // App is installing a critical update; show a dialog asking the user to wait
+                core.confirmAsync({
+                    header: lf("Critical update required"),
+                    body: lf("A critical update is installing. Please do not quit the app. It will automatically restart when the update has completed."),
+                    hideAgree: true,
+                    disagreeLbl: lf("Ok"),
+                    disagreeClass: "green",
+                    size: "medium"
+                }).then(function () {
+                    core.showLoading("pxt-electron-update", lf("Installing update..."));
+                });
+                criticalUpdateFailedPromise
+                    .then(function () {
+                    core.hideLoading("pxt-electron-update");
+                    core.hideDialog();
+                    core.confirmAsync({
+                        header: lf("Critical update failed"),
+                        body: lf("There was an error installing the critical update. Please ensure you are connected to the Internet and try again later."),
+                        hideAgree: true,
+                        disagreeLbl: lf("Quit"),
+                        disagreeClass: "red",
+                        size: "medium"
+                    }).then(function (b) {
+                        pxtElectron.sendQuit();
+                    });
+                });
+                // Don't do anything; app will quit and restart once the update is ready
+                break;
+            case "banned-without-update" /* BannedWithoutUpdate */:
+                // Current version is banned and there are no updates available; show a dialog explaining the
+                // situation and quit
+                core.confirmAsync({
+                    header: lf("Critical update required"),
+                    body: lf("We have disabled this app for security reasons. Please ensure you are connected to the Internet and try again later. An update will be automatically installed as soon as it is available."),
+                    hideAgree: true,
+                    disagreeLbl: lf("Quit"),
+                    disagreeClass: "red",
+                    size: "medium"
+                }).then(function (b) {
+                    pxtElectron.sendQuit();
+                });
+            default:
+                // Unknown status; no-op
+                return;
+        }
+    });
+    pxtElectron.sendUpdateStatusCheck();
+}
+exports.initElectron = initElectron;
+function openDevTools() {
+    if (pxtElectron) {
+        pxtElectron.sendOpenDevTools();
+    }
+}
+exports.openDevTools = openDevTools;
+
+},{"./core":13}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var e = pxt.editor;
@@ -6710,7 +8444,7 @@ function statusToResponse(p) {
     }
 }
 
-},{"./package":35}],22:[function(require,module,exports){
+},{"./package":36}],23:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -6726,6 +8460,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
+var core = require("./core");
 var sui = require("./sui");
 var ext = require("./extensionManager");
 var CUSTOM_CONTENT_DIV = 'custom-content';
@@ -6733,12 +8468,19 @@ var Extensions = /** @class */ (function (_super) {
     __extends(Extensions, _super);
     function Extensions(props) {
         var _this = _super.call(this, props) || this;
+        _this.handleExtensionWrapperRef = function (c) {
+            _this.extensionWrapper = c;
+        };
         _this.state = {
             visible: false,
             consent: false
         };
         _this.manager = new ext.ExtensionManager(_this);
         window.addEventListener("message", _this.processMessage.bind(_this), false);
+        _this.hide = _this.hide.bind(_this);
+        _this.updateDimensions = _this.updateDimensions.bind(_this);
+        _this.onApprovedDecision = _this.onApprovedDecision.bind(_this);
+        _this.onDeniedDecision = _this.onDeniedDecision.bind(_this);
         return _this;
     }
     Extensions.prototype.processMessage = function (ev) {
@@ -6771,9 +8513,11 @@ var Extensions = /** @class */ (function (_super) {
         var frame = Extensions.getFrame(this.state.extension, true);
         frame.style.display = 'none';
         // reload project to update changes from the editor
+        core.showLoading("reloadproject", lf("loading..."));
         this.props.parent.reloadHeaderAsync()
             .done(function () {
             _this.send(_this.state.extension, { type: "pxtpkgext", event: "exthidden" });
+            core.hideLoading("reloadproject");
         });
     };
     Extensions.prototype.showExtension = function (extension, url, consentRequired) {
@@ -6825,7 +8569,16 @@ var Extensions = /** @class */ (function (_super) {
         window.removeEventListener("resize", this.updateDimensions);
     };
     Extensions.prototype.componentDidUpdate = function () {
-        this.updateDimensions();
+        var _this = this;
+        setTimeout(function () {
+            _this.updateDimensions();
+        }, 0);
+    };
+    Extensions.prototype.componentWillUpdate = function (nextProps, nextState) {
+        if (nextState.extension && nextState.visible) {
+            // Start rendering the iframe earlier
+            var frame = Extensions.getFrame(nextState.extension, true);
+        }
     };
     Extensions.prototype.handleExtensionRequest = function (request) {
         this.manager.handleExtensionMessage(request);
@@ -6848,6 +8601,12 @@ var Extensions = /** @class */ (function (_super) {
                 permissionExtName: id
             });
         });
+    };
+    Extensions.prototype.onApprovedDecision = function () {
+        this.onPermissionDecision(true);
+    };
+    Extensions.prototype.onDeniedDecision = function () {
+        this.onPermissionDecision(false);
     };
     Extensions.prototype.onPermissionDecision = function (approved) {
         this.permissionCb(approved);
@@ -6880,6 +8639,22 @@ var Extensions = /** @class */ (function (_super) {
         wrapper.appendChild(frame);
         return frame;
     };
+    Extensions.hideAllFrames = function () {
+        var customContent = this.getCustomContent();
+        if (customContent) {
+            pxt.Util.toArray(customContent.getElementsByClassName("extension-frame")).forEach(function (frame) {
+                frame.style.zIndex = '10';
+            });
+        }
+    };
+    Extensions.showAllFrames = function () {
+        var customContent = this.getCustomContent();
+        if (customContent) {
+            pxt.Util.toArray(customContent.getElementsByClassName("extension-frame")).forEach(function (frame) {
+                frame.style.zIndex = '';
+            });
+        }
+    };
     Extensions.prototype.getIconForPermission = function (permission) {
         switch (permission) {
             case ext.Permissions.Console:
@@ -6911,6 +8686,12 @@ var Extensions = /** @class */ (function (_super) {
         var _this = this;
         var _a = this.state, visible = _a.visible, extension = _a.extension, consent = _a.consent, permissionRequest = _a.permissionRequest, permissionExtName = _a.permissionExtName;
         var needsConsent = !consent;
+        if (permissionRequest) {
+            Extensions.hideAllFrames();
+        }
+        else {
+            Extensions.showAllFrames();
+        }
         var action = needsConsent ? lf("Agree") : undefined;
         var actionClick = function () {
             _this.submitConsent();
@@ -6918,22 +8699,22 @@ var Extensions = /** @class */ (function (_super) {
         var actions = action ? [{ label: action, onclick: actionClick }] : undefined;
         if (!needsConsent && visible)
             this.initializeFrame();
-        return (React.createElement(sui.Modal, { isOpen: visible, className: "" + (needsConsent ? 'extensionconsentdialog' : 'extensiondialog'), size: "fullscreen", closeIcon: false, onClose: function () { return _this.hide(); }, dimmer: true, buttons: actions, onPositionChanged: function () { return _this.updateDimensions(); }, closeOnDimmerClick: true }, consent ?
-            React.createElement("div", { id: "extensionWrapper", "data-frame": extension, ref: function (v) { return _this.extensionWrapper = v; } }, permissionRequest ?
+        return (React.createElement(sui.Modal, { isOpen: visible, className: "" + (needsConsent ? 'extensionconsentdialog' : 'extensiondialog'), size: "fullscreen", closeIcon: false, onClose: this.hide, dimmer: true, buttons: actions, modalDidOpen: this.updateDimensions, shouldFocusAfterRender: false, onPositionChanged: this.updateDimensions, closeOnDimmerClick: true }, consent ?
+            React.createElement("div", { id: "extensionWrapper", "data-frame": extension, ref: this.handleExtensionWrapperRef }, permissionRequest ?
                 React.createElement(sui.Modal, { isOpen: true, className: "extensionpermissiondialog basic", size: "fullscreen", closeIcon: false, dimmer: true, dimmerClassName: "permissiondimmer" },
                     React.createElement("div", { className: "permissiondialoginner" },
                         React.createElement("div", { className: "permissiondialogheader" }, lf("Permission Request")),
                         React.createElement("div", { className: "permissiondialogbody" }, lf("Extension {0} is requesting the following permission(s):", permissionExtName)),
                         React.createElement("div", { className: "ui inverted list" }, permissionRequest.map(function (permission) {
-                            return React.createElement("div", { className: "item" },
+                            return React.createElement("div", { key: permission.toString(), className: "item" },
                                 React.createElement(sui.Icon, { icon: _this.getIconForPermission(permission) + " icon" }),
                                 React.createElement("div", { className: "content" },
                                     React.createElement("div", { className: "header" }, _this.getDisplayNameForPermission(permission)),
                                     React.createElement("div", { className: "description" }, _this.getDescriptionForPermission(permission))));
                         }))),
                     React.createElement("div", { className: "actions" },
-                        React.createElement(sui.Button, { text: lf("Deny"), className: "deny inverted", onClick: function () { return _this.onPermissionDecision(false); } }),
-                        React.createElement(sui.Button, { text: lf("Approve"), className: "approve inverted green", onClick: function () { return _this.onPermissionDecision(true); } })))
+                        React.createElement(sui.Button, { text: lf("Deny"), className: "deny inverted", onClick: this.onDeniedDecision }),
+                        React.createElement(sui.Button, { text: lf("Approve"), className: "approve inverted green", onClick: this.onApprovedDecision })))
                 : undefined)
             : React.createElement("div", null,
                 React.createElement("div", { className: "ui form" },
@@ -6950,7 +8731,7 @@ var Extensions = /** @class */ (function (_super) {
 }(data.Component));
 exports.Extensions = Extensions;
 
-},{"./data":15,"./extensionManager":21,"./sui":47,"react":155}],23:[function(require,module,exports){
+},{"./core":13,"./data":15,"./extensionManager":22,"./sui":48,"react":157}],24:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -6963,6 +8744,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
@@ -6974,14 +8772,33 @@ var FileList = /** @class */ (function (_super) {
     __extends(FileList, _super);
     function FileList(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            expands: {}
-        };
+        _this.state = {};
+        _this.toggleVisibility = _this.toggleVisibility.bind(_this);
+        _this.handleCustomBlocksClick = _this.handleCustomBlocksClick.bind(_this);
+        _this.handleButtonKeydown = _this.handleButtonKeydown.bind(_this);
+        _this.setFile = _this.setFile.bind(_this);
+        _this.removeFile = _this.removeFile.bind(_this);
+        _this.removePkg = _this.removePkg.bind(_this);
+        _this.updatePkg = _this.updatePkg.bind(_this);
+        _this.togglePkg = _this.togglePkg.bind(_this);
         return _this;
     }
-    FileList.prototype.removePkg = function (e, p) {
+    FileList.prototype.componentWillReceiveProps = function (nextProps) {
         var _this = this;
-        e.stopPropagation();
+        var currentFile = nextProps.parent.state.currFile;
+        // Set the current package as expanded
+        if (this.state.currentFile != currentFile) {
+            var expandedPkg_1 = undefined;
+            pkg.allEditorPkgs().forEach(function (p) {
+                if (_this.packageContainsFile(p, currentFile)) {
+                    expandedPkg_1 = p.getPkgId();
+                }
+            });
+            this.setState({ expandedPkg: expandedPkg_1, currentFile: currentFile });
+        }
+    };
+    FileList.prototype.removePkg = function (p) {
+        var _this = this;
         core.confirmAsync({
             header: lf("Remove {0} package", p.getPkgId()),
             body: lf("You are about to remove a package from your project. Are you sure?"),
@@ -6996,61 +8813,68 @@ var FileList = /** @class */ (function (_super) {
             }
         });
     };
-    FileList.prototype.removeFile = function (e, f) {
-        e.stopPropagation();
+    FileList.prototype.setFile = function (f) {
+        this.props.parent.setSideFile(f);
+    };
+    FileList.prototype.removeFile = function (f) {
         this.props.parent.removeFile(f);
     };
-    FileList.prototype.updatePkg = function (e, p) {
+    FileList.prototype.updatePkg = function (p) {
         var _this = this;
-        e.stopPropagation();
         pkg.mainEditorPkg().updateDepAsync(p.getPkgId())
             .then(function () { return _this.props.parent.reloadHeaderAsync(); })
             .done();
     };
     FileList.prototype.filesOf = function (pkg) {
         var _this = this;
+        var currentFile = this.state.currentFile;
         var deleteFiles = pkg.getPkgId() == "this";
         var parent = this.props.parent;
         return pkg.sortedFiles().map(function (file) {
             var meta = _this.getData("open-meta:" + file.getName());
-            return (React.createElement("a", { key: file.getName(), onClick: function () { return parent.setSideFile(file); }, tabIndex: 0, role: "treeitem", "aria-label": parent.state.currFile == file ? lf("{0}, it is the current opened file in the JavaScript editor", file.name) : file.name, onKeyDown: sui.fireClickOnEnter, className: (parent.state.currFile == file ? "active " : "") + (pkg.isTopLevel() ? "" : "nested ") + "item" },
+            return (React.createElement(FileTreeItem, { key: file.getName(), file: file, onItemClick: _this.setFile, onItemRemove: _this.removeFile, isActive: currentFile == file, hasDelete: deleteFiles && /\.blocks$/i.test(file.getName()), className: (currentFile == file ? "active " : "") + (pkg.isTopLevel() ? "" : "nested ") + "item" },
                 file.name,
                 " ",
                 meta.isSaved ? "" : "*",
                 /\.ts$/.test(file.name) ? React.createElement(sui.Icon, { icon: "align left" }) : /\.blocks$/.test(file.name) ? React.createElement(sui.Icon, { icon: "puzzle" }) : undefined,
                 meta.isReadonly ? React.createElement(sui.Icon, { icon: "lock" }) : null,
-                !meta.numErrors ? null : React.createElement("span", { className: 'ui label red' }, meta.numErrors),
-                deleteFiles && /\.blocks$/i.test(file.getName()) ? React.createElement(sui.Button, { className: "primary label", icon: "trash", title: lf("Delete file {0}", file.name), onClick: function (e) { return _this.removeFile(e, file); }, onKeyDown: function (e) { return e.stopPropagation(); } }) : ''));
+                !meta.numErrors ? null : React.createElement("span", { className: 'ui label red' }, meta.numErrors)));
         });
     };
     FileList.prototype.packageOf = function (p) {
-        var _this = this;
-        var expands = this.state.expands;
+        var expandedPkg = this.state.expandedPkg;
         var del = p.getPkgId() != pxt.appTarget.id
             && p.getPkgId() != "built"
+            && p.getPkgId() != "assets"
             && p.getPkgId() != pxt.appTarget.corepkg
-            && !p.getKsPkg().config.core
+            && p.getKsPkg().config && !p.getKsPkg().config.core
             && p.getKsPkg().level <= 1;
         var upd = p.getKsPkg() && p.getKsPkg().verProtocol() == "github";
         var meta = this.getData("open-pkg-meta:" + p.getPkgId());
-        return [React.createElement("div", { key: "hd-" + p.getPkgId(), className: "header link item", role: "treeitem", "aria-expanded": expands[p.getPkgId()], "aria-label": lf("{0}, {1}", p.getPkgId(), expands[p.getPkgId()] ? lf("expanded") : lf("collapsed")), onClick: function () { return _this.togglePkg(p); }, tabIndex: 0, onKeyDown: sui.fireClickOnEnter },
-                React.createElement(sui.Icon, { icon: "chevron " + (expands[p.getPkgId()] ? "down" : "right") + " icon" }),
-                upd ? React.createElement(sui.Button, { className: "primary label", icon: "refresh", title: lf("Refresh package {0}", p.getPkgId()), onClick: function (e) { return _this.updatePkg(e, p); }, onKeyDown: function (e) { return e.stopPropagation(); } }) : '',
-                del ? React.createElement(sui.Button, { className: "primary label", icon: "trash", title: lf("Delete package {0}", p.getPkgId()), onClick: function (e) { return _this.removePkg(e, p); }, onKeyDown: function (e) { return e.stopPropagation(); } }) : '',
+        return [React.createElement(PackgeTreeItem, { key: "hd-" + p.getPkgId(), pkg: p, isActive: expandedPkg == p.getPkgId(), onItemClick: this.togglePkg, hasDelete: del, onItemRemove: this.removePkg, hasRefresh: upd, onItemRefresh: this.updatePkg },
                 !meta.numErrors ? null : React.createElement("span", { className: 'ui label red' }, meta.numErrors),
-                p.getPkgId())
-        ].concat(expands[p.getPkgId()] ? this.filesOf(p) : []);
+                p.getPkgId(),
+                expandedPkg == p.getPkgId() ?
+                    React.createElement("div", { role: "group", className: "menu" }, this.filesOf(p)) : undefined)];
+    };
+    FileList.prototype.packageContainsFile = function (pkg, f) {
+        return pkg.sortedFiles().filter(function (file) { return file == f; }).length > 0;
     };
     FileList.prototype.togglePkg = function (p) {
-        var expands = this.state.expands;
-        expands[p.getPkgId()] = !expands[p.getPkgId()];
-        this.forceUpdate();
+        this.setState({ expandedPkg: this.state.expandedPkg == p.getPkgId() ? undefined : p.getPkgId() });
     };
     FileList.prototype.filesWithHeader = function (p) {
         return p.isTopLevel() ? this.filesOf(p) : this.packageOf(p);
     };
     FileList.prototype.toggleVisibility = function () {
         this.props.parent.setState({ showFiles: !this.props.parent.state.showFiles });
+    };
+    FileList.prototype.handleCustomBlocksClick = function (e) {
+        this.addCustomBlocksFile();
+        e.stopPropagation();
+    };
+    FileList.prototype.handleButtonKeydown = function (e) {
+        e.stopPropagation();
     };
     FileList.prototype.addCustomBlocksFile = function () {
         var _this = this;
@@ -7070,18 +8894,80 @@ var FileList = /** @class */ (function (_super) {
         var plus = show && !pkg.mainEditorPkg().files[customFile];
         var meta = this.getData("open-pkg-meta:" + pkg.mainEditorPkg().getPkgId());
         return React.createElement("div", { role: "tree", className: "ui tiny vertical " + (targetTheme.invertedMenu ? "inverted" : '') + " menu filemenu landscape only hidefullscreen" },
-            React.createElement("div", { role: "treeitem", "aria-expanded": show, "aria-label": lf("File explorer toolbar"), key: "projectheader", className: "link item", onClick: function () { return _this.toggleVisibility(); }, tabIndex: 0, onKeyDown: sui.fireClickOnEnter },
+            React.createElement("div", { role: "treeitem", "aria-selected": show, "aria-expanded": show, "aria-label": lf("File explorer toolbar"), key: "projectheader", className: "link item", onClick: this.toggleVisibility, tabIndex: 0, onKeyDown: sui.fireClickOnEnter },
                 lf("Explorer"),
                 React.createElement(sui.Icon, { icon: "chevron " + (show ? "down" : "right") + " icon" }),
-                plus ? React.createElement(sui.Button, { className: "primary label", icon: "plus", title: lf("Add custom blocks?"), onClick: function (e) { _this.addCustomBlocksFile(); e.stopPropagation(); }, onKeyDown: function (e) { return e.stopPropagation(); } }) : undefined,
+                plus ? React.createElement(sui.Button, { className: "primary label", icon: "plus", title: lf("Add custom blocks?"), onClick: this.handleCustomBlocksClick, onKeyDown: this.handleButtonKeydown }) : undefined,
                 !meta.numErrors ? null : React.createElement("span", { className: 'ui label red' }, meta.numErrors)),
             show ? pxt.Util.concat(pkg.allEditorPkgs().map(function (p) { return _this.filesWithHeader(p); })) : undefined);
     };
     return FileList;
 }(data.Component));
 exports.FileList = FileList;
+var FileTreeItem = /** @class */ (function (_super) {
+    __extends(FileTreeItem, _super);
+    function FileTreeItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleRemove = _this.handleRemove.bind(_this);
+        _this.handleButtonKeydown = _this.handleButtonKeydown.bind(_this);
+        return _this;
+    }
+    FileTreeItem.prototype.handleClick = function (e) {
+        this.props.onItemClick(this.props.file);
+        e.stopPropagation();
+    };
+    FileTreeItem.prototype.handleRemove = function (e) {
+        this.props.onItemRemove(this.props.file);
+        e.stopPropagation();
+    };
+    FileTreeItem.prototype.handleButtonKeydown = function (e) {
+        e.stopPropagation();
+    };
+    FileTreeItem.prototype.renderCore = function () {
+        var _a = this.props, onClick = _a.onClick, onItemClick = _a.onItemClick, onItemRemove = _a.onItemRemove, isActive = _a.isActive, hasDelete = _a.hasDelete, file = _a.file, rest = __rest(_a, ["onClick", "onItemClick", "onItemRemove", "isActive", "hasDelete", "file"]);
+        return React.createElement("a", __assign({ onClick: this.handleClick, tabIndex: 0, role: "treeitem", "aria-selected": isActive, "aria-label": isActive ? lf("{0}, it is the current opened file in the JavaScript editor", file.name) : file.name, onKeyDown: sui.fireClickOnEnter }, rest),
+            this.props.children,
+            hasDelete ? React.createElement(sui.Button, { className: "primary label", icon: "trash", title: lf("Delete file {0}", file.name), onClick: this.handleRemove, onKeyDown: this.handleButtonKeydown }) : '');
+    };
+    return FileTreeItem;
+}(sui.StatelessUIElement));
+var PackgeTreeItem = /** @class */ (function (_super) {
+    __extends(PackgeTreeItem, _super);
+    function PackgeTreeItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleRemove = _this.handleRemove.bind(_this);
+        _this.handleRefresh = _this.handleRefresh.bind(_this);
+        _this.handleButtonKeydown = _this.handleButtonKeydown.bind(_this);
+        return _this;
+    }
+    PackgeTreeItem.prototype.handleClick = function () {
+        this.props.onItemClick(this.props.pkg);
+    };
+    PackgeTreeItem.prototype.handleRefresh = function (e) {
+        this.props.onItemRefresh(this.props.pkg);
+        e.stopPropagation();
+    };
+    PackgeTreeItem.prototype.handleRemove = function (e) {
+        this.props.onItemRemove(this.props.pkg);
+        e.stopPropagation();
+    };
+    PackgeTreeItem.prototype.handleButtonKeydown = function (e) {
+        e.stopPropagation();
+    };
+    PackgeTreeItem.prototype.renderCore = function () {
+        var _a = this.props, onItemClick = _a.onItemClick, onItemRemove = _a.onItemRemove, onItemRefresh = _a.onItemRefresh, isActive = _a.isActive, hasRefresh = _a.hasRefresh, hasDelete = _a.hasDelete, p = _a.pkg, rest = __rest(_a, ["onItemClick", "onItemRemove", "onItemRefresh", "isActive", "hasRefresh", "hasDelete", "pkg"]);
+        return React.createElement("div", __assign({ className: "header link item", role: "treeitem", "aria-selected": isActive, "aria-expanded": isActive, "aria-label": lf("{0}, {1}", p.getPkgId(), isActive ? lf("expanded") : lf("collapsed")), onClick: this.handleClick, tabIndex: 0, onKeyDown: sui.fireClickOnEnter }, rest),
+            React.createElement(sui.Icon, { icon: "chevron " + (isActive ? "down" : "right") + " icon" }),
+            hasRefresh ? React.createElement(sui.Button, { className: "primary label", icon: "refresh", title: lf("Refresh package {0}", p.getPkgId()), onClick: this.handleRefresh, onKeyDown: this.handleButtonKeydown }) : '',
+            hasDelete ? React.createElement(sui.Button, { className: "primary label", icon: "trash", title: lf("Delete package {0}", p.getPkgId()), onClick: this.handleRemove, onKeyDown: this.handleButtonKeydown }) : '',
+            this.props.children);
+    };
+    return PackgeTreeItem;
+}(sui.StatelessUIElement));
 
-},{"./core":13,"./data":15,"./package":35,"./sui":47,"react":155}],24:[function(require,module,exports){
+},{"./core":13,"./data":15,"./package":36,"./sui":48,"react":157}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var db = require("./db");
@@ -7091,6 +8977,7 @@ var U = pxt.Util;
 var Cloud = pxt.Cloud;
 var allScripts = [];
 var currentTarget;
+var currentTargetVersion;
 function lookup(id) {
     return allScripts.filter(function (x) { return x.id == id; })[0];
 }
@@ -7127,6 +9014,7 @@ function mergeFsPkg(pkg) {
     var modTime = Math.round(time[0] / 1000) || U.nowSeconds();
     var hd = {
         target: currentTarget,
+        targetVersion: e.header ? e.header.targetVersion : currentTargetVersion,
         name: pkg.config.name,
         meta: {},
         editor: pxt.JAVASCRIPT_PROJECT_NAME,
@@ -7153,10 +9041,10 @@ function mergeFsPkg(pkg) {
         eh.icon = hd.icon;
     }
 }
-function initAsync(target) {
+function initAsync(target, version) {
     allScripts = [];
     currentTarget = target;
-    // TODO check that target is correct.
+    currentTargetVersion = version;
     return syncAsync().then(function () { });
 }
 function fetchTextAsync(e) {
@@ -7245,7 +9133,6 @@ function installAsync(h0, text) {
     h.id = path;
     h.recentUse = U.nowSeconds();
     h.modificationTime = h.recentUse;
-    h.target = currentTarget;
     var e = {
         id: h.id,
         header: h,
@@ -7281,6 +9168,17 @@ function resetAsync() {
 function loadedAsync() {
     return Promise.resolve();
 }
+function saveAssetAsync(id, filename, data) {
+    return apiAsync("pkgasset/" + id, {
+        encoding: "base64",
+        name: filename,
+        data: btoa(ts.pxtc.Util.uint8ArrayToString(data))
+    }).then(function (resp) {
+    });
+}
+function listAssetsAsync(id) {
+    return apiAsync("pkgasset/" + id).then(function (r) { return r.files; });
+}
 exports.provider = {
     getHeaders: getHeaders,
     getHeader: getHeader,
@@ -7292,85 +9190,152 @@ exports.provider = {
     syncAsync: syncAsync,
     resetAsync: resetAsync,
     loadedAsync: loadedAsync,
-    saveScreenshotAsync: saveScreenshotAsync
+    saveScreenshotAsync: saveScreenshotAsync,
+    saveAssetAsync: saveAssetAsync,
+    listAssetsAsync: listAssetsAsync
 };
 
-},{"./core":13,"./data":15,"./db":16}],25:[function(require,module,exports){
+},{"./core":13,"./data":15,"./db":16}],26:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function parseExampleMarkdown(name, md) {
-    if (!md)
-        return undefined;
-    var m = /```(blocks?|typescript)\s+((.|\s)+?)\s*```/i.exec(md);
-    if (!m)
-        return undefined;
-    var pm = /```package\s+((.|\s)+?)\s*```/i.exec(md);
-    var dependencies = undefined;
-    if (pm) {
-        dependencies = {};
-        pm[1].split('\n').map(function (s) { return s.replace(/\s*/g, ''); }).filter(function (s) { return !!s; })
-            .map(function (l) { return l.split('='); })
-            .forEach(function (kv) { return dependencies[kv[0]] = kv[1] || "*"; });
-    }
-    return {
-        name: name,
-        filesOverride: {
-            "main.blocks": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"></xml>",
-            "main.ts": m[2]
-        },
-        dependencies: dependencies
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
+var data = require("./data");
+var sui = require("./sui");
+function isSupported() {
+    return typeof navigator !== undefined
+        && !!navigator.mediaDevices
+        && !!navigator.mediaDevices.enumerateDevices
+        && !!navigator.mediaDevices.getUserMedia;
 }
-function parseGalleryMardown(md) {
-    if (!md)
-        return [];
-    // second level titles are categories
-    // ## foo bar
-    // fenced code ```cards are sections of cards
-    var galleries = [];
-    var incard = false;
-    var name = undefined;
-    var cards = "";
-    md.split(/\r?\n/).forEach(function (line) {
-        // new category
-        if (/^##/.test(line)) {
-            name = line.substr(2).trim();
-        }
-        else if (/^```codecard$/.test(line)) {
-            incard = true;
-        }
-        else if (/^```$/.test(line)) {
-            incard = false;
-            if (name && cards) {
+exports.isSupported = isSupported;
+var WebCam = /** @class */ (function (_super) {
+    __extends(WebCam, _super);
+    function WebCam(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleVideoRef = function (ref) {
+            _this.v = ref;
+        };
+        _this.state = {
+            hasPrompt: true
+        };
+        _this.handleDeviceClick = _this.handleDeviceClick.bind(_this);
+        _this.handleClose = _this.handleClose.bind(_this);
+        return _this;
+    }
+    WebCam.prototype.handleDeviceClick = function (deviceId) {
+        var _this = this;
+        this.setState({ hasPrompt: false });
+        this.deviceId = deviceId;
+        // deviceId is "" if green screen selected
+        if (this.deviceId) {
+            navigator.mediaDevices.getUserMedia({
+                video: { deviceId: { exact: deviceId } },
+                audio: false
+            }).then(function (stream) {
                 try {
-                    var cardsJSON = JSON.parse(cards);
-                    if (cardsJSON && cardsJSON.length > 0)
-                        galleries.push({ name: name, cards: cardsJSON });
+                    _this.stream = stream;
+                    _this.v.srcObject = _this.stream;
+                    _this.v.play();
                 }
                 catch (e) {
-                    pxt.log('invalid card format in gallery');
+                    pxt.debug("greenscreen: play failed, " + e);
+                    _this.stop();
                 }
-            }
-            cards = "";
-            name = undefined;
+            }, function (err) {
+                _this.stop();
+            });
         }
-        else if (incard)
-            cards += line + '\n';
-    });
-    return galleries;
-}
-function loadGalleryAsync(name) {
-    return pxt.Cloud.downloadMarkdownAsync(name, pxt.Util.userLanguage(), pxt.Util.localizeLive)
-        .then(function (md) { return parseGalleryMardown(md); });
-}
-exports.loadGalleryAsync = loadGalleryAsync;
-function loadExampleAsync(name, path) {
-    return pxt.Cloud.downloadMarkdownAsync(path, pxt.Util.userLanguage(), pxt.Util.localizeLive)
-        .then(function (md) { return parseExampleMarkdown(name, md); });
-}
-exports.loadExampleAsync = loadExampleAsync;
+    };
+    WebCam.prototype.handleClose = function () {
+        if (!this.deviceId) {
+            this.props.close();
+        }
+    };
+    WebCam.prototype.componentDidMount = function () {
+        var _this = this;
+        navigator.mediaDevices.enumerateDevices()
+            .then(function (devices) {
+            _this.setState({ devices: devices.filter(function (device) { return device.kind == "videoinput"; }) });
+        });
+    };
+    WebCam.prototype.componentWillUnmount = function () {
+        this.stop();
+    };
+    WebCam.prototype.stop = function () {
+        this.deviceId = undefined;
+        if (this.stream) {
+            try {
+                if (this.stream.stop)
+                    this.stream.stop();
+            }
+            catch (e) { }
+            try {
+                var tracks = this.stream.getTracks();
+                if (tracks)
+                    tracks.forEach(function (track) { return track.stop(); });
+            }
+            catch (e) { }
+            this.stream = undefined;
+        }
+        if (this.v) {
+            try {
+                this.v.srcObject = undefined;
+            }
+            catch (e) { }
+        }
+    };
+    WebCam.prototype.render = function () {
+        var _this = this;
+        var _a = this.state, hasPrompt = _a.hasPrompt, devices = _a.devices;
+        return React.createElement("div", { className: "videoContainer" },
+            React.createElement("video", { ref: this.handleVideoRef }),
+            hasPrompt ?
+                React.createElement(sui.Modal, { isOpen: hasPrompt, onClose: this.handleClose, closeIcon: true, dimmer: true, header: lf("Choose a camera") },
+                    React.createElement("div", { className: "ui cards " + (!devices ? 'loading' : '') },
+                        React.createElement(WebCamCard, { key: "devicegreenscreen", icon: 'green tint', onClick: this.handleDeviceClick, deviceId: "", header: lf("Green background") }),
+                        devices && devices
+                            .map(function (device, di) {
+                            return React.createElement(WebCamCard, { key: "device" + di, icon: 'video camera', onClick: _this.handleDeviceClick, deviceId: device.deviceId, header: device.label || lf("camera {0}", di) });
+                        })))
+                : undefined);
+    };
+    return WebCam;
+}(data.Component));
+exports.WebCam = WebCam;
+var WebCamCard = /** @class */ (function (_super) {
+    __extends(WebCamCard, _super);
+    function WebCamCard(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    WebCamCard.prototype.handleClick = function () {
+        var _a = this.props, deviceId = _a.deviceId, onClick = _a.onClick;
+        onClick(deviceId);
+    };
+    WebCamCard.prototype.renderCore = function () {
+        var _a = this.props, header = _a.header, icon = _a.icon;
+        return React.createElement("div", { role: "button", className: "ui card link", onClick: this.handleClick },
+            React.createElement("div", { className: "imageicon" },
+                React.createElement(sui.Icon, { icon: icon + " massive" })),
+            React.createElement("div", { className: "content" },
+                React.createElement("span", { className: "header" }, header)));
+    };
+    return WebCamCard;
+}(data.Component));
 
-},{}],26:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],27:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -7445,7 +9410,7 @@ var BridgeIO = /** @class */ (function () {
         if (v.op == "serial") {
             this.onSerial(U.fromHex(v.result.data), v.result.isError);
         }
-        else if (v.op = "event") {
+        else if (v.op == "event") {
             this.onEvent(U.fromHex(v.result.data));
         }
     };
@@ -7559,7 +9524,7 @@ function initAsync(force) {
 }
 exports.initAsync = initAsync;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var data = require("./data");
@@ -7573,8 +9538,8 @@ function getHeader(id) {
 function getTextAsync(id) {
     return mem.provider.getTextAsync(id);
 }
-function initAsync(trg) {
-    return mem.provider.initAsync(trg);
+function initAsync(trg, ver) {
+    return mem.provider.initAsync(trg, ver);
 }
 function saveAsync(header, text) {
     return mem.provider.saveAsync(header, text)
@@ -7632,97 +9597,7 @@ exports.provider = {
     loadedAsync: loadedAsync
 };
 
-},{"./data":15,"./memoryworkspace":31}],28:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core = require("./core");
-var screenshot = require("./screenshot");
-function isHexFile(filename) {
-    return /\.(hex|uf2)$/i.test(filename);
-}
-exports.isHexFile = isHexFile;
-function isBlocksFile(filename) {
-    return /\.blocks$/i.test(filename);
-}
-exports.isBlocksFile = isBlocksFile;
-function isTypescriptFile(filename) {
-    return /\.ts$/i.test(filename);
-}
-exports.isTypescriptFile = isTypescriptFile;
-function isProjectFile(filename) {
-    return /\.(pxt|mkcd)$/i.test(filename);
-}
-exports.isProjectFile = isProjectFile;
-function isPNGFile(filename) {
-    return pxt.appTarget.compile.saveAsPNG && /\.png$/i.test(filename);
-}
-exports.isPNGFile = isPNGFile;
-function importProjectCoreAsync(buf) {
-    var _this = this;
-    return pxt.lzmaDecompressAsync(buf)
-        .then(function (contents) {
-        var data = JSON.parse(contents);
-        _this.importHex(data);
-    }).catch(function (e) {
-        core.warningNotification(lf("Sorry, we could not import this project."));
-        _this.openHome();
-    });
-}
-exports.importProjectCoreAsync = importProjectCoreAsync;
-function importHexFile(file) {
-    var _this = this;
-    if (!file)
-        return;
-    pxt.cpp.unpackSourceFromHexFileAsync(file)
-        .done(function (data) { return _this.importHex(data); });
-}
-exports.importHexFile = importHexFile;
-function importBlocksFiles(file) {
-    var _this = this;
-    if (!file)
-        return;
-    ts.pxtc.Util.fileReadAsTextAsync(file)
-        .done(function (contents) {
-        _this.newProject({
-            filesOverride: { "main.blocks": contents, "main.ts": "  " },
-            name: file.name.replace(/\.blocks$/i, '') || lf("Untitled")
-        });
-    });
-}
-exports.importBlocksFiles = importBlocksFiles;
-function importTypescriptFile(file) {
-    var _this = this;
-    if (!file)
-        return;
-    ts.pxtc.Util.fileReadAsTextAsync(file)
-        .done(function (contents) {
-        _this.newProject({
-            filesOverride: { "main.blocks": '', "main.ts": contents || "  " },
-            name: file.name.replace(/\.ts$/i, '') || lf("Untitled")
-        });
-    });
-}
-exports.importTypescriptFile = importTypescriptFile;
-function importProjectFile(file) {
-    var _this = this;
-    if (!file)
-        return;
-    ts.pxtc.Util.fileReadAsBufferAsync(file)
-        .then(function (buf) { return _this.importProjectCoreAsync(buf); });
-}
-exports.importProjectFile = importProjectFile;
-function importPNGFile(file) {
-    var _this = this;
-    if (!file)
-        return;
-    ts.pxtc.Util.fileReadAsBufferAsync(file)
-        .then(function (buf) { return screenshot.decodeBlobAsync("data:image/png;base64," +
-        btoa(pxt.Util.uint8ArrayToString(buf))); })
-        .then(function (buf) { return _this.importProjectCoreAsync(buf); });
-}
-exports.importPNGFile = importPNGFile;
-
-},{"./core":13,"./screenshot":38}],29:[function(require,module,exports){
+},{"./data":15,"./memoryworkspace":32}],29:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -7815,6 +9690,8 @@ var LanguagePicker = /** @class */ (function (_super) {
         _this.state = {
             visible: false
         };
+        _this.hide = _this.hide.bind(_this);
+        _this.changeLanguage = _this.changeLanguage.bind(_this);
         return _this;
     }
     LanguagePicker.prototype.languageList = function () {
@@ -7855,21 +9732,38 @@ var LanguagePicker = /** @class */ (function (_super) {
         var targetTheme = pxt.appTarget.appTheme;
         var languageList = this.languageList();
         var modalSize = languageList.length > 4 ? "large" : "small";
-        return (React.createElement(sui.Modal, { isOpen: this.state.visible, size: modalSize, onClose: function () { return _this.hide(); }, dimmer: true, header: lf("Select Language"), closeIcon: true, allowResetFocus: true, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
+        return (React.createElement(sui.Modal, { isOpen: this.state.visible, size: modalSize, onClose: this.hide, dimmer: true, header: lf("Select Language"), closeIcon: true, allowResetFocus: true, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
             React.createElement("div", { className: "group" },
                 React.createElement("div", { className: "ui cards centered", role: "listbox" }, languageList.map(function (langId) {
-                    return React.createElement(codecard.CodeCardView, { className: "card-selected", key: langId, name: allLanguages[langId].localizedName, ariaLabel: allLanguages[langId].englishName, role: "option", description: allLanguages[langId].englishName, onClick: function () { return _this.changeLanguage(langId); } });
+                    return React.createElement(LanguageCard, { key: langId, langId: langId, name: allLanguages[langId].localizedName, ariaLabel: allLanguages[langId].englishName, description: allLanguages[langId].englishName, onClick: _this.changeLanguage });
                 }))),
-            React.createElement("p", null,
-                React.createElement("br", null),
-                React.createElement("br", null),
-                React.createElement("a", { href: "https://crowdin.com/project/" + targetTheme.crowdinProject, target: "_blank", "aria-label": lf("Help us translate") }, lf("Help us translate")))));
+            targetTheme.crowdinProject ?
+                React.createElement("p", null,
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("a", { href: "https://crowdin.com/project/" + targetTheme.crowdinProject, target: "_blank", rel: "noopener noreferrer", "aria-label": lf("Help us translate") }, lf("Help us translate"))) : undefined));
     };
     return LanguagePicker;
 }(data.Component));
 exports.LanguagePicker = LanguagePicker;
+var LanguageCard = /** @class */ (function (_super) {
+    __extends(LanguageCard, _super);
+    function LanguageCard(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    LanguageCard.prototype.handleClick = function () {
+        this.props.onClick(this.props.langId);
+    };
+    LanguageCard.prototype.renderCore = function () {
+        var _a = this.props, name = _a.name, ariaLabel = _a.ariaLabel, description = _a.description;
+        return React.createElement(codecard.CodeCardView, { className: "card-selected", name: name, ariaLabel: ariaLabel, role: "link", description: description, onClick: this.handleClick });
+    };
+    return LanguageCard;
+}(sui.StatelessUIElement));
 
-},{"./codecard":10,"./data":15,"./sui":47,"react":155}],30:[function(require,module,exports){
+},{"./codecard":10,"./data":15,"./sui":48,"react":157}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var pkg = require("./package");
@@ -7960,12 +9854,150 @@ function makeAsync() {
 }
 exports.makeAsync = makeAsync;
 
-},{"./compiler":11,"./core":13,"./package":35}],31:[function(require,module,exports){
+},{"./compiler":11,"./core":13,"./package":36}],31:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
+var data = require("./data");
+var marked = require("marked");
+var MarkedContent = /** @class */ (function (_super) {
+    __extends(MarkedContent, _super);
+    function MarkedContent() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MarkedContent.clearBlockSnippetCache = function () {
+        this.blockSnippetCache = {};
+    };
+    MarkedContent.prototype.getBuiltinMacros = function () {
+        var params = {};
+        var theme = pxt.appTarget.appTheme;
+        if (theme.boardName)
+            params["boardname"] = pxt.Util.htmlEscape(theme.boardName);
+        if (theme.boardNickname)
+            params["boardnickname"] = pxt.Util.htmlEscape(theme.boardNickname);
+        if (theme.driveDisplayName)
+            params["drivename"] = pxt.Util.htmlEscape(theme.driveDisplayName);
+        if (theme.homeUrl)
+            params["homeurl"] = pxt.Util.htmlEscape(theme.homeUrl);
+        params["targetid"] = theme.id || "???";
+        params["targetname"] = theme.name || "Microsoft MakeCode";
+        params["targetlogo"] = theme.docsLogo ? "<img aria-hidden=\"true\" role=\"presentation\" class=\"ui mini image\" src=\"" + theme.docsLogo + "\" />" : "";
+        return params;
+    };
+    MarkedContent.prototype.renderSnippets = function (content) {
+        var parent = this.props.parent;
+        pxt.Util.toArray(content.querySelectorAll(".lang-blocks"))
+            .forEach(function (langBlock) {
+            var code = langBlock.innerHTML;
+            var wrapperDiv = document.createElement('div');
+            pxsim.U.clear(langBlock);
+            langBlock.appendChild(wrapperDiv);
+            wrapperDiv.className = 'ui segment raised loading';
+            if (MarkedContent.blockSnippetCache[code]) {
+                // Use cache
+                var svg = Blockly.Xml.textToDom(MarkedContent.blockSnippetCache[code]);
+                wrapperDiv.appendChild(svg);
+                pxsim.U.removeClass(wrapperDiv, 'loading');
+            }
+            else {
+                parent.renderBlocksAsync({
+                    action: "renderblocks", ts: code
+                })
+                    .done(function (resp) {
+                    var svg = resp.svg;
+                    if (svg) {
+                        svg.setAttribute('height', svg.getAttribute('viewBox').split(' ')[3] + "px");
+                        // SVG serialization is broken on IE (SVG namespace issue), don't cache on IE
+                        if (!pxt.BrowserUtils.isIE())
+                            MarkedContent.blockSnippetCache[code] = Blockly.Xml.domToText(svg);
+                        wrapperDiv.appendChild(svg);
+                        pxsim.U.removeClass(wrapperDiv, 'loading');
+                    }
+                    else {
+                        // An error occured, show alternate message
+                        var textDiv = document.createElement('span');
+                        textDiv.textContent = lf("Oops, something went wrong trying to render this block snippet.");
+                        wrapperDiv.appendChild(textDiv);
+                        pxsim.U.removeClass(wrapperDiv, 'loading');
+                    }
+                });
+            }
+        });
+    };
+    MarkedContent.prototype.renderInlineBlocks = function (content) {
+        pxt.Util.toArray(content.querySelectorAll(":not(pre) > code"))
+            .forEach(function (inlineBlock) {
+            var text = inlineBlock.innerText;
+            var mbtn = /^(\|+)([^\|]+)\|+$/.exec(text);
+            if (mbtn) {
+                var mtxt = /^(([^\:\.]*?)[\:\.])?(.*)$/.exec(mbtn[2]);
+                var ns = mtxt[2] ? mtxt[2].trim().toLowerCase() : '';
+                var txt = mtxt[3].trim();
+                var lev = mbtn[1].length == 1 ?
+                    "docs inlinebutton ui button " + pxt.Util.htmlEscape(txt.toLowerCase()) + "-button"
+                    : "docs inlineblock " + pxt.Util.htmlEscape(ns);
+                var inlineBlockDiv = document.createElement('span');
+                pxsim.U.clear(inlineBlock);
+                inlineBlock.appendChild(inlineBlockDiv);
+                inlineBlockDiv.className = lev;
+                inlineBlockDiv.textContent = pxt.U.rlf(txt);
+            }
+        });
+    };
+    MarkedContent.prototype.renderMarkdown = function (markdown) {
+        var content = this.refs["marked-content"];
+        var pubinfo = this.getBuiltinMacros();
+        // replace pre-template in markdown
+        markdown = markdown.replace(/@([a-z]+)@/ig, function (m, param) { return pubinfo[param] || 'unknown macro'; });
+        // Set markdown options
+        marked.setOptions({
+            sanitize: true
+        });
+        // Render the markdown and add it to the content div
+        /* tslint:disable:no-inner-html (marked content is already sanitized) */
+        content.innerHTML = marked(markdown);
+        /* tslint:enable:no-inner-html */
+        // We'll go through a series of adjustments here, rendering inline blocks, blocks and snippets as needed
+        this.renderInlineBlocks(content);
+        this.renderSnippets(content);
+    };
+    MarkedContent.prototype.componentDidMount = function () {
+        var markdown = this.props.markdown;
+        this.renderMarkdown(markdown);
+    };
+    MarkedContent.prototype.componentWillReceiveProps = function (newProps) {
+        var markdown = newProps.markdown;
+        if (this.props.markdown != newProps.markdown) {
+            this.renderMarkdown(markdown);
+        }
+    };
+    MarkedContent.prototype.renderCore = function () {
+        return React.createElement("div", { ref: "marked-content" });
+    };
+    // Local cache for images, cleared when we create a new project.
+    // Stores code => data-uri image of decompiled result
+    MarkedContent.blockSnippetCache = {};
+    return MarkedContent;
+}(data.Component));
+exports.MarkedContent = MarkedContent;
+
+},{"./data":15,"marked":110,"react":157}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var U = pxt.Util;
 exports.projects = {};
 var target = "";
+var targetVersion = "";
 function merge(prj) {
     var h = prj.header;
     if (!h) {
@@ -7974,6 +10006,7 @@ function merge(prj) {
             recentUse: U.nowSeconds(),
             modificationTime: U.nowSeconds(),
             target: target,
+            targetVersion: targetVersion,
             _rev: undefined,
             blobId: undefined,
             blobCurrent: undefined,
@@ -7999,8 +10032,9 @@ function getTextAsync(id) {
     var p = exports.projects[id];
     return Promise.resolve(p ? p.text : undefined);
 }
-function initAsync(trg) {
+function initAsync(trg, version) {
     target = trg;
+    targetVersion = trg;
     return Promise.resolve();
 }
 function saveAsync(h, text) {
@@ -8015,7 +10049,6 @@ function installAsync(h0, text) {
     h.id = ts.pxtc.Util.guidGen();
     h.recentUse = U.nowSeconds();
     h.modificationTime = h.recentUse;
-    h.target = pxt.appTarget.id;
     return saveAsync(h, text).then(function () { return h; });
 }
 function saveToCloudAsync(h) {
@@ -8045,7 +10078,7 @@ exports.provider = {
     loadedAsync: loadedAsync
 };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 /// <reference path="../../localtypings/monaco.d.ts" />
 /// <reference path="../../built/pxteditor.d.ts" />
@@ -8059,23 +10092,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var pkg = require("./package");
 var core = require("./core");
-var srceditor = require("./srceditor");
+var toolboxeditor = require("./toolboxeditor");
 var compiler = require("./compiler");
 var sui = require("./sui");
-var data = require("./data");
 var snippets = require("./monacoSnippets");
+var toolbox = require("./toolbox");
 var Util = pxt.Util;
 var MIN_EDITOR_FONT_SIZE = 10;
 var MAX_EDITOR_FONT_SIZE = 40;
@@ -8091,6 +10116,9 @@ var Editor = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.fileType = FileType.Unknown;
         _this.giveFocusOnLoading = false;
+        _this.handleToolboxRef = function (c) {
+            _this.toolbox = c;
+        };
         _this.dragCurrentPos = { x: 0, y: 0 };
         _this.onDragBlockThrottled = Util.throttle(function () {
             var _a = _this.dragCurrentPos, x = _a.x, y = _a.y;
@@ -8099,8 +10127,11 @@ var Editor = /** @class */ (function (_super) {
                 _this.editor.setPosition(mouseTarget.position);
             _this.editor.focus();
         }, 200);
-        _this.uniqueBlockId = 0; // Used for hex blocks
         _this.highlightDecorations = [];
+        ///////////////////////////////////////////////////////////
+        ////////////          Block methods           /////////////
+        ///////////////////////////////////////////////////////////
+        _this.uniqueBlockId = 0; // Used for hex blocks
         return _this;
     }
     Editor.prototype.hasBlocks = function () {
@@ -8153,7 +10184,7 @@ var Editor = /** @class */ (function (_super) {
                 .then(function () { return compiler.getBlocksAsync(); })
                 .then(function (bi) {
                 blocksInfo = bi;
-                pxt.blocks.initBlocks(blocksInfo);
+                pxt.blocks.initializeAndInject(blocksInfo);
                 var oldWorkspace = pxt.blocks.loadWorkspaceXml(mainPkg.files[blockFile].content);
                 if (oldWorkspace) {
                     return pxt.blocks.compileAsync(oldWorkspace, blocksInfo).then(function (compilationResult) {
@@ -8237,10 +10268,10 @@ var Editor = /** @class */ (function (_super) {
         return compiler.decompileAsync(blockFile);
     };
     Editor.prototype.display = function () {
-        var _this = this;
-        return (React.createElement("div", { id: "monacoEditorArea", className: "full-abs" },
-            React.createElement(MonacoToolbox, { ref: function (e) { return _this.monacoToolbox = e; }, parent: this }),
-            React.createElement("div", { id: 'monacoEditorInner' })));
+        return (React.createElement("div", { id: "monacoEditorArea", className: "full-abs", style: { direction: 'ltr' } },
+            React.createElement("div", { className: "monacoToolboxDiv " + (this.toolbox && !this.toolbox.state.visible ? 'invisible' : '') },
+                React.createElement(toolbox.Toolbox, { ref: this.handleToolboxRef, editorname: "monaco", parent: this })),
+            React.createElement("div", { id: 'monacoEditorInner', style: { float: 'right' } })));
     };
     Editor.prototype.showPackageDialog = function () {
         pxt.tickEvent("monaco.addpackage", undefined, { interactiveConsent: true });
@@ -8294,7 +10325,8 @@ var Editor = /** @class */ (function (_super) {
         }
     };
     Editor.prototype.setHighContrast = function (hc) {
-        this.defineEditorTheme(hc);
+        if (this.loadedMonaco)
+            this.defineEditorTheme(hc, true);
     };
     Editor.prototype.beforeCompile = function () {
         if (this.editor)
@@ -8307,15 +10339,18 @@ var Editor = /** @class */ (function (_super) {
     };
     Editor.prototype.resize = function (e) {
         var monacoArea = document.getElementById('monacoEditorArea');
-        var monacoToolbox = this.monacoToolbox && this.monacoToolbox.getElement();
+        if (!monacoArea)
+            return;
+        var monacoToolboxDiv = monacoArea.getElementsByClassName('monacoToolboxDiv')[0];
         if (monacoArea && this.editor) {
-            var toolboxWidth = monacoToolbox && monacoToolbox.offsetWidth || 0;
+            var toolboxWidth = monacoToolboxDiv && monacoToolboxDiv.offsetWidth || 0;
             this.editor.layout({ width: monacoArea.offsetWidth - toolboxWidth, height: monacoArea.offsetHeight });
             var rgba = this.editor._themeService._theme.colors['editor.background'].rgba;
             this.parent.updateEditorLogo(toolboxWidth, "rgba(" + rgba.r + "," + rgba.g + "," + rgba.b + "," + rgba.a + ")");
             var toolboxHeight = this.editor ? this.editor.getLayoutInfo().contentHeight : 0;
-            if (this.monacoToolbox)
-                this.monacoToolbox.setToolboxHeight(toolboxHeight);
+            if (monacoToolboxDiv) {
+                monacoToolboxDiv.style.height = toolboxHeight + "px";
+            }
         }
     };
     Editor.prototype.prepare = function () {
@@ -8332,6 +10367,7 @@ var Editor = /** @class */ (function (_super) {
         return pxt.vs.initMonacoAsync(editorElement).then(function (editor) {
             _this.editor = editor;
             _this.loadingMonaco = false;
+            _this.loadedMonaco = true;
             _this.editor.updateOptions({ fontSize: _this.parent.settings.editorFontSize });
             _this.editor.addAction({
                 id: "save",
@@ -8416,7 +10452,7 @@ var Editor = /** @class */ (function (_super) {
                     _this.forceDiagnosticsUpdate();
                 }
                 // Update widgets
-                var toolbox = document.getElementById('monacoEditorToolbox');
+                var toolbox = document.getElementById('monacoToolboxDiv');
                 if (toolbox)
                     toolbox.style.height = _this.editor.getLayoutInfo().contentHeight + "px";
                 var flyout = document.getElementById('monacoFlyoutWidget');
@@ -8561,400 +10597,24 @@ var Editor = /** @class */ (function (_super) {
     Editor.prototype.hideFlyout = function () {
         // Hide the flyout
         var flyout = document.getElementById('monacoFlyoutWidget');
-        flyout.innerHTML = '';
+        pxsim.U.clear(flyout);
         flyout.style.display = 'none';
         // Hide the current toolbox category
-        this.monacoToolbox.clearSelection();
+        this.toolbox.clearSelection();
         // Clear editor floats
         this.parent.setState({ hideEditorFloats: false });
     };
-    Editor.prototype.showFlyout = function (ns, color, icon, category, groups, labelLineWidth) {
-        if (!this.editor)
-            return;
-        var monacoFlyout = document.getElementById('monacoFlyoutWidget');
-        var fontSize = this.parent.settings.editorFontSize;
-        monacoFlyout.style.left = this.editor.getLayoutInfo().lineNumbersLeft + "px";
-        monacoFlyout.style.height = this.editor.getLayoutInfo().contentHeight + "px";
-        monacoFlyout.style.display = 'block';
-        monacoFlyout.className = 'monacoFlyout';
-        monacoFlyout.style.transform = 'none';
-        monacoFlyout.innerHTML = '';
-        var fns;
-        if (!snippets.isBuiltin(ns)) {
-            fns = this.nsMap[ns].filter(function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated); });
-        }
-        else {
-            var cat = snippets.getBuiltinCategory(ns);
-            var blocks = cat.blocks || [];
-            blocks.forEach(function (b) { b.noNamespace = true; });
-            if (!cat.custom && this.nsMap[ns.toLowerCase()])
-                blocks = blocks.concat(this.nsMap[ns.toLowerCase()].filter(function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated); }));
-            if (!blocks || !blocks.length)
-                return;
-            fns = blocks;
-        }
-        // Create a flyout and add the category methods in there
-        // Add the heading label
-        if (!pxt.appTarget.appTheme.hideFlyoutHeadings) {
-            var monacoHeadingLabel = document.createElement('div');
-            monacoHeadingLabel.className = 'monacoFlyoutLabel monacoFlyoutHeading';
-            var monacoHeadingIcon = document.createElement('span');
-            var iconClass = ("blocklyTreeIcon" + (icon ? (ns || icon).toLowerCase() : 'Default')).replace(/\s/g, '');
-            monacoHeadingIcon.className = "monacoFlyoutHeadingIcon blocklyTreeIcon " + iconClass;
-            monacoHeadingIcon.setAttribute('role', 'presentation');
-            monacoHeadingIcon.style.display = 'inline-block';
-            monacoHeadingIcon.style.color = "" + color;
-            var monacoHeadingText = document.createElement('div');
-            monacoHeadingText.className = "monacoFlyoutHeadingText";
-            monacoHeadingText.style.display = 'inline-block';
-            monacoHeadingText.style.fontSize = fontSize + 5 + "px";
-            monacoHeadingText.style.lineHeight = fontSize + 5 + "px";
-            monacoHeadingText.textContent = category ? category : "" + Util.capitalize(ns);
-            monacoHeadingLabel.appendChild(monacoHeadingIcon);
-            monacoHeadingLabel.appendChild(monacoHeadingText);
-            monacoFlyout.appendChild(monacoHeadingLabel);
-        }
-        // Organize and rearrange methods into groups
-        var blockGroups = {};
-        var sortedGroups = [];
-        if (groups)
-            sortedGroups = groups;
-        // Organize the blocks into the different groups
-        for (var bi = 0; bi < fns.length; ++bi) {
-            var blk = fns[bi];
-            var group = blk.attributes.group || 'other';
-            if (!blockGroups[group])
-                blockGroups[group] = [];
-            blockGroups[group].push(blk);
-        }
-        // Add any missing groups to the sorted groups list
-        Object.keys(blockGroups).sort().forEach(function (group) {
-            if (sortedGroups.indexOf(group) == -1) {
-                sortedGroups.push(group);
-            }
-        });
-        // Add labels and insert the blocks into the flyout
-        for (var bg = 0; bg < sortedGroups.length; ++bg) {
-            var group = sortedGroups[bg];
-            // Add the group label
-            if (group != 'other') {
-                var groupLabel = document.createElement('div');
-                groupLabel.className = 'monacoFlyoutLabel blocklyFlyoutGroup';
-                var groupLabelText = document.createElement('div');
-                groupLabelText.className = 'monacoFlyoutLabelText';
-                groupLabelText.style.display = 'inline-block';
-                groupLabelText.style.fontSize = fontSize + "px";
-                groupLabelText.style.lineHeight = fontSize + 5 + "px";
-                groupLabelText.textContent = pxt.Util.rlf("{id:group}" + group);
-                groupLabel.appendChild(groupLabelText);
-                monacoFlyout.appendChild(groupLabel);
-                var groupLabelLine = document.createElement('hr');
-                groupLabelLine.className = 'monacoFlyoutLabelLine';
-                groupLabelLine.align = 'left';
-                groupLabelLine.style.width = Math.min(labelLineWidth ? parseInt(labelLineWidth) : groupLabelText.offsetWidth, 350) + "px";
-                groupLabel.appendChild(groupLabelLine);
-            }
-            // Add the blocks in that group
-            if (blockGroups[group]) {
-                var filters = this.parent.state.editorState ? this.parent.state.editorState.filters : undefined;
-                var categoryState = filters ? (filters.namespaces && filters.namespaces[ns] != undefined ? filters.namespaces[ns] : filters.defaultState) : undefined;
-                this.createMonacoBlocks(this, monacoFlyout, ns, blockGroups[group], color, filters, categoryState);
-            }
-        }
-        // Hide editor floats
-        this.parent.setState({ hideEditorFloats: true });
-    };
-    Editor.prototype.moveFocusToToolbox = function () {
-        // Set focus in toolbox
-        if (this.monacoToolbox)
-            this.monacoToolbox.focus();
-    };
-    Editor.prototype.moveFocusToFlyout = function () {
-        // Set focus in the flyout
-        var monacoFlyout = document.getElementById('monacoFlyoutWidget');
-        var topBlock = monacoFlyout.getElementsByClassName("monacoDraggableBlock")[0];
-        if (topBlock)
-            topBlock.focus();
-    };
     Editor.prototype.updateToolbox = function () {
-        var _this = this;
         var appTheme = pxt.appTarget.appTheme;
         if (!appTheme.monacoToolbox || pxt.shell.isReadOnly())
             return;
         // Move the monaco editor to make room for the toolbox div
-        this.editor.getLayoutInfo().glyphMarginLeft = 200;
+        //this.editor.getLayoutInfo().glyphMarginLeft = 200;
         this.editor.layout();
-        var namespaces = this.getNamespaces().map(function (ns) { return [ns, _this.getNamespaceAttrs(ns)]; });
-        this.monacoToolbox.setState({
-            namespaces: namespaces,
-            showAdvanced: this.showAdvanced
-        });
-    };
-    Editor.prototype.getNamespaceAttrs = function (ns) {
-        var builtin = snippets.getBuiltinCategory(ns);
-        if (builtin) {
-            builtin.attributes.color = pxt.toolbox.getNamespaceColor(builtin.nameid);
-            return builtin.attributes;
-        }
-        var info = this.blockInfo.apis.byQName[ns];
-        if (info && info.attributes.color) {
-            return info.attributes;
-        }
-        return undefined;
-    };
-    Editor.prototype.getNamespaces = function () {
-        var _this = this;
-        var namespaces = Object.keys(this.nsMap).filter(function (ns) { return !snippets.isBuiltin(ns) && !!_this.getNamespaceAttrs(ns); });
-        var config = pxt.appTarget.runtime || {};
-        if (config.loopsBlocks && !snippets.loops.removed)
-            namespaces.push(snippets.loops.nameid);
-        if (config.logicBlocks && !snippets.logic.removed)
-            namespaces.push(snippets.logic.nameid);
-        if (config.variablesBlocks && !snippets.variables.removed)
-            namespaces.push(snippets.variables.nameid);
-        if (config.mathBlocks && !snippets.maths.removed)
-            namespaces.push(snippets.maths.nameid);
-        if (config.functionBlocks && !snippets.functions.removed)
-            namespaces.push(snippets.functions.nameid);
-        if (config.listsBlocks && !snippets.arrays.removed)
-            namespaces.push(snippets.arrays.nameid);
-        if (config.textBlocks && !snippets.text.removed)
-            namespaces.push(snippets.text.nameid);
-        return namespaces;
-    };
-    Editor.prototype.createMonacoBlocks = function (monacoEditor, monacoFlyout, ns, fns, color, filters, categoryState) {
-        var _this = this;
-        // Render the method blocks
-        var monacoBlocks = fns.sort(function (f1, f2) {
-            // sort by fn weight
-            var w2 = (f2.attributes.weight || 50) + (f2.attributes.advanced ? 0 : 1000);
-            var w1 = (f1.attributes.weight || 50) + (f1.attributes.advanced ? 0 : 1000);
-            return w2 >= w1 ? 1 : -1;
-        }).map(function (fn) {
-            var monacoBlockDisabled = false;
-            var fnState = filters ? (filters.fns && filters.fns[fn.name] != undefined ? filters.fns[fn.name] : (categoryState != undefined ? categoryState : filters.defaultState)) : undefined;
-            monacoBlockDisabled = fnState == pxt.editor.FilterState.Disabled;
-            if (fnState == pxt.editor.FilterState.Hidden)
-                return undefined;
-            var monacoBlockArea = document.createElement('div');
-            monacoBlockArea.className = "monacoBlock " + (monacoBlockDisabled ? 'monacoDisabledBlock' : '');
-            monacoFlyout.appendChild(monacoBlockArea);
-            var monacoBlock = document.createElement('div');
-            monacoBlock.className = 'monacoDraggableBlock';
-            monacoBlock.tabIndex = 0;
-            monacoBlockArea.appendChild(monacoBlock);
-            var snippet = fn.snippet;
-            var comment = fn.attributes.jsDoc;
-            var snippetPrefix = fn.noNamespace ? "" : ns;
-            var isInstance = false;
-            var addNamespace = false;
-            var namespaceToUse = "";
-            var element = fn;
-            if (element.attributes.block) {
-                if (element.attributes.defaultInstance) {
-                    snippetPrefix = element.attributes.defaultInstance;
-                }
-                else if (element.namespace) {
-                    var nsInfo_1 = _this.blockInfo.apis.byQName[element.namespace];
-                    if (nsInfo_1.attributes.fixedInstances) {
-                        var instances_1 = Util.values(_this.blockInfo.apis.byQName);
-                        var getExtendsTypesFor_1 = function (name) {
-                            return instances_1
-                                .filter(function (v) { return v.extendsTypes; })
-                                .filter(function (v) { return v.extendsTypes.reduce(function (x, y) { return x || y.indexOf(name) != -1; }, false); })
-                                .reduce(function (x, y) { return x.concat(y.extendsTypes); }, []);
-                        };
-                        // if blockNamespace exists, e.g., "pins", use it for snippet
-                        // else use nsInfo.namespace, e.g., "motors"
-                        namespaceToUse = element.attributes.blockNamespace || nsInfo_1.namespace || "";
-                        // all fixed instances for this namespace
-                        var fixedInstances = instances_1.filter(function (value) {
-                            return value.kind === pxtc.SymbolKind.Variable &&
-                                value.attributes.fixedInstance;
-                        });
-                        // first try to get fixed instances whose retType matches nsInfo.name
-                        // e.g., DigitalPin
-                        var exactInstances = fixedInstances.filter(function (value) {
-                            return value.retType == nsInfo_1.name;
-                        })
-                            .sort(function (v1, v2) { return v1.name.localeCompare(v2.name); });
-                        // second choice: use fixed instances whose retType extends type of nsInfo.name
-                        // e.g., nsInfo.name == AnalogPin and instance retType == PwmPin
-                        var extendedInstances = fixedInstances.filter(function (value) {
-                            return getExtendsTypesFor_1(nsInfo_1.name).indexOf(value.retType) !== -1;
-                        })
-                            .sort(function (v1, v2) { return v1.name.localeCompare(v2.name); });
-                        if (exactInstances.length) {
-                            snippetPrefix = "" + exactInstances[0].name;
-                        }
-                        else if (extendedInstances.length) {
-                            snippetPrefix = "" + extendedInstances[0].name;
-                        }
-                        isInstance = true;
-                        addNamespace = true;
-                    }
-                    else if (element.kind == pxtc.SymbolKind.Method || element.kind == pxtc.SymbolKind.Property) {
-                        var params = pxt.blocks.compileInfo(element);
-                        snippetPrefix = params.thisParameter.definitionName;
-                        isInstance = true;
-                    }
-                    else if (nsInfo_1.kind === pxtc.SymbolKind.Class) {
-                        return undefined;
-                    }
-                }
-            }
-            var sigToken = document.createElement('span');
-            if (!fn.snippetOnly) {
-                sigToken.className = 'sig';
-            }
-            // completion is a bit busted but looks better
-            sigToken.textContent = snippet
-                .replace(/^[^(]*\(/, '(')
-                .replace(/^\s*\{\{\}\}\n/gm, '')
-                .replace(/\{\n\}/g, '{}')
-                .replace(/(?:\{\{)|(?:\}\})/g, '');
-            monacoBlock.title = comment;
-            if (!monacoBlockDisabled) {
-                monacoBlock.draggable = true;
-                monacoBlock.onclick = function (e) {
-                    pxt.tickEvent("monaco.toolbox.itemclick", undefined, { interactiveConsent: true });
-                    monacoEditor.hideFlyout();
-                    var model = monacoEditor.editor.getModel();
-                    var currPos = monacoEditor.editor.getPosition();
-                    var cursor = model.getOffsetAt(currPos);
-                    var insertText = snippetPrefix ? snippetPrefix + "." + snippet : snippet;
-                    insertText = addNamespace ? firstWord(namespaceToUse) + "." + insertText : insertText;
-                    insertText = (currPos.column > 1) ? '\n' + insertText :
-                        model.getWordUntilPosition(currPos) != undefined && model.getWordUntilPosition(currPos).word != '' ?
-                            insertText + '\n' : insertText;
-                    if (insertText.indexOf('{{}}') > -1) {
-                        cursor += (insertText.indexOf('{{}}'));
-                        insertText = insertText.replace('{{}}', '');
-                    }
-                    else
-                        cursor += (insertText.length);
-                    insertText = insertText.replace(/(?:\{\{)|(?:\}\})/g, '');
-                    monacoEditor.editor.pushUndoStop();
-                    monacoEditor.editor.executeEdits("", [
-                        {
-                            identifier: { major: 0, minor: 0 },
-                            range: new monaco.Range(currPos.lineNumber, currPos.column, currPos.lineNumber, currPos.column),
-                            text: insertText,
-                            forceMoveMarkers: false
-                        }
-                    ]);
-                    monacoEditor.beforeCompile();
-                    monacoEditor.editor.pushUndoStop();
-                    var endPos = model.getPositionAt(cursor);
-                    monacoEditor.editor.setPosition(endPos);
-                    monacoEditor.editor.focus();
-                    //monacoEditor.editor.setSelection(new monaco.Range(currPos.lineNumber, currPos.column, endPos.lineNumber, endPos.column));
-                };
-                monacoBlock.ondragstart = function (e) {
-                    pxt.tickEvent("monaco.toolbox.itemdrag", undefined, { interactiveConsent: true });
-                    setTimeout(function () {
-                        monacoFlyout.style.transform = "translateX(-9999px)";
-                    });
-                    var insertText = snippetPrefix ? snippetPrefix + "." + snippet : snippet;
-                    insertText = addNamespace ? firstWord(namespaceToUse) + "." + insertText : insertText;
-                    e.dataTransfer.setData('text', insertText); // IE11 only supports text
-                };
-                monacoBlock.ondragend = function (e) {
-                    monacoFlyout.style.transform = "none";
-                    monacoEditor.hideFlyout();
-                };
-                // Highlight on hover
-                var highlightBlock_1 = function () {
-                    monacoBlock.style.backgroundColor = monacoBlockDisabled ?
-                        "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
-                        "" + pxt.toolbox.fadeColor(color || '#ddd', 0.1, false);
-                };
-                var unhighlightBlock_1 = function () {
-                    monacoBlock.style.backgroundColor = monacoBlockDisabled ?
-                        "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
-                        "" + color;
-                };
-                monacoBlock.onmouseenter = function (e) {
-                    highlightBlock_1();
-                };
-                monacoBlock.onmouseleave = function (e) {
-                    unhighlightBlock_1();
-                };
-                monacoBlock.onfocus = function (e) {
-                    highlightBlock_1();
-                };
-                monacoBlock.onblur = function (e) {
-                    unhighlightBlock_1();
-                };
-            }
-            if (!fn.snippetOnly) {
-                if (isInstance) {
-                    var instanceToken = document.createElement('span');
-                    instanceToken.textContent = snippetPrefix + '.';
-                    instanceToken.className = 'sigPrefix';
-                    monacoBlock.appendChild(instanceToken);
-                }
-                var methodToken = document.createElement('span');
-                methodToken.textContent = fn.name;
-                monacoBlock.appendChild(methodToken);
-            }
-            monacoBlock.appendChild(sigToken);
-            // Draw the shape of the block
-            monacoBlock.style.fontSize = monacoEditor.parent.settings.editorFontSize + "px";
-            monacoBlock.style.lineHeight = monacoEditor.parent.settings.editorFontSize + 1 + "px";
-            monacoBlock.style.backgroundColor = monacoBlockDisabled ?
-                "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
-                "" + color;
-            monacoBlock.style.borderColor = "" + pxt.toolbox.fadeColor(color || '#ddd', 0.2, false);
-            if (fn.retType && fn.retType == "boolean") {
-                // Show a hexagonal shape
-                monacoBlock.style.borderRadius = "0px";
-                var monacoBlockHeight = monacoBlock.offsetHeight - 2; /* Take 2 off to account for the missing border */
-                var monacoHexBlockId = monacoEditor.uniqueBlockId++;
-                monacoBlock.id = "monacoHexBlock" + monacoHexBlockId;
-                monacoBlock.className += ' monacoHexBlock';
-                var styleBlock = document.createElement('style');
-                styleBlock.innerHTML = "\n                        #monacoHexBlock" + monacoHexBlockId + ":before,\n                        #monacoHexBlock" + monacoHexBlockId + ":after {\n                            border-top: " + monacoBlockHeight / 2 + "px solid transparent;\n                            border-bottom: " + monacoBlockHeight / 2 + "px solid transparent;\n                        }\n                        #monacoHexBlock" + monacoHexBlockId + ":before {\n                            border-right: 17px solid " + color + ";\n                        }\n                        #monacoHexBlock" + monacoHexBlockId + ":after {\n                            border-left: 17px solid " + color + ";\n                        }\n                    ";
-                monacoBlockArea.insertBefore(styleBlock, monacoBlock);
-            }
-            else if (fn.retType && fn.retType != "void") {
-                // Show a round shape
-                monacoBlock.style.borderRadius = "40px";
-            }
-            else {
-                // Show a normal shape
-                monacoBlock.style.borderRadius = "3px";
-            }
-            return monacoBlock;
-        });
-        monacoBlocks.forEach(function (monacoBlock, index) {
-            // Accessibility
-            var isRtl = Util.isUserLanguageRtl();
-            monacoBlock.onkeydown = function (e) {
-                var charCode = core.keyCodeFromEvent(e);
-                if (charCode == 40) {
-                    // Next item
-                    if (index < monacoBlocks.length - 1)
-                        monacoBlocks[index + 1].focus();
-                }
-                else if (charCode == 38) {
-                    // Previous item
-                    if (index > 0)
-                        monacoBlocks[index - 1].focus();
-                }
-                else if ((charCode == 37 && !isRtl) || (charCode == 38 && isRtl)) {
-                    // Focus back to toolbox
-                    monacoEditor.moveFocusToToolbox();
-                }
-                else if (charCode == 27) {
-                    // Focus back to toolbox and close Flyout
-                    monacoEditor.hideFlyout();
-                    monacoEditor.moveFocusToToolbox();
-                }
-                else {
-                    sui.fireClickOnEnter.call(_this, e);
-                }
-            };
+        this.toolbox.setState({
+            loading: false,
+            categories: this.getAllCategories(),
+            showSearchBox: this.shouldShowSearch()
         });
     };
     Editor.prototype.getId = function () {
@@ -9012,8 +10672,12 @@ var Editor = /** @class */ (function (_super) {
             if (model)
                 _this.editor.setModel(model);
             _this.defineEditorTheme(hc);
-            if (mode == "typescript") {
+            var shouldShowToolbox = (mode == "typescript" && pxt.appTarget.appTheme.monacoToolbox && !readOnly);
+            if (shouldShowToolbox) {
                 _this.beginLoadToolbox(file, hc);
+            }
+            else {
+                _this.toolbox.hide();
             }
             // Set the current file
             _this.currFile = file;
@@ -9047,14 +10711,12 @@ var Editor = /** @class */ (function (_super) {
                     _this.changeCallback();
                 });
             }
-            if (mode == "typescript" && !file.isReadonly()) {
-                _this.monacoToolbox.show();
-            }
-            else {
-                _this.monacoToolbox.hide();
-            }
             _this.resize();
             _this.hideFlyout();
+            // Get extension packages
+            _this.extensions = pkg.allEditorPkgs()
+                .map(function (ep) { return ep.getKsPkg(); }).map(function (p) { return !!p && p.config; })
+                .filter(function (config) { return !!config && !!config.extension && /^(file:|github:)/.test(config.installedVersion); });
             if (_this.giveFocusOnLoading) {
                 _this.editor.focus();
             }
@@ -9062,23 +10724,24 @@ var Editor = /** @class */ (function (_super) {
             editorArea.removeChild(loading);
         });
     };
-    Editor.prototype.beginLoadToolbox = function (file, hc) {
-        var _this = this;
-        compiler.getBlocksAsync().then(function (bi) {
-            _this.blockInfo = bi;
-            _this.nsMap = _this.partitionBlocks();
-            _this.updateToolbox();
-            _this.resize();
-            pxt.vs.syncModels(pkg.mainPkg, _this.extraLibs, file.getName(), file.isReadonly());
-            _this.defineEditorTheme(hc, true);
-        });
-    };
     Editor.prototype.unloadFileAsync = function () {
+        this.toolbox.clearSearch();
         if (this.currFile && this.currFile.getName() == "this/" + pxt.CONFIG_NAME) {
             // Reload the header if a change was made to the config file: pxt.json
             return this.parent.reloadHeaderAsync();
         }
         return Promise.resolve();
+    };
+    Editor.prototype.beginLoadToolbox = function (file, hc) {
+        var _this = this;
+        this.toolbox.showLoading();
+        compiler.getBlocksAsync().then(function (bi) {
+            _this.blockInfo = bi;
+            _this.nsMap = _this.partitionBlocks();
+            _this.updateToolbox();
+            pxt.vs.syncModels(pkg.mainPkg, _this.extraLibs, file.getName(), file.isReadonly());
+            _this.defineEditorTheme(hc, true);
+        });
     };
     Editor.prototype.snapshotState = function () {
         return this.editor && this.editor.getModel() ? this.editor.getModel().getLinesContent() : null;
@@ -9149,21 +10812,26 @@ var Editor = /** @class */ (function (_super) {
             monaco.editor.setModelMarkers(model, 'typescript', monacoErrors);
         }
     };
-    Editor.prototype.highlightStatement = function (stmt) {
+    Editor.prototype.highlightStatement = function (stmt, brk) {
         if (!stmt)
             this.clearHighlightedStatements();
         if (!stmt || !this.currFile || this.currFile.name != stmt.fileName || !this.editor)
-            return;
+            return false;
         var position = this.editor.getModel().getPositionAt(stmt.start);
         var end = this.editor.getModel().getPositionAt(stmt.start + stmt.length);
         if (!position || !end)
-            return;
+            return false;
         this.highlightDecorations = this.editor.deltaDecorations(this.highlightDecorations, [
             {
                 range: new monaco.Range(position.lineNumber, position.column, end.lineNumber, end.column),
                 options: { inlineClassName: 'highlight-statement' }
             },
         ]);
+        if (brk) {
+            // center on statement
+            this.editor.revealPositionInCenter(position);
+        }
+        return true;
     };
     Editor.prototype.clearHighlightedStatements = function () {
         if (this.editor && this.highlightDecorations)
@@ -9171,12 +10839,32 @@ var Editor = /** @class */ (function (_super) {
     };
     Editor.prototype.partitionBlocks = function () {
         var res = {};
+        var builtInBlocks = snippets.allBuiltinBlocksByName();
+        var that = this;
+        function setSubcategory(ns, subcat) {
+            if (!that.subcategoryMap[ns])
+                that.subcategoryMap[ns] = {};
+            that.subcategoryMap[ns][subcat] = true;
+        }
         this.blockInfo.blocks.forEach(function (fn) {
             var ns = (fn.attributes.blockNamespace || fn.namespace).split('.')[0];
+            ns = ns.toLowerCase();
+            // Don't add the block if there exists a block with the same definition
+            if (builtInBlocks[fn.qName])
+                return;
             if (!res[ns]) {
                 res[ns] = [];
             }
             res[ns].push(fn);
+            var subcat = fn.attributes.subcategory;
+            var advanced = fn.attributes.advanced;
+            if (advanced) {
+                // More subcategory
+                setSubcategory(ns, 'more');
+            }
+            else if (subcat) {
+                setSubcategory(ns, subcat);
+            }
         });
         if (snippets.getPauseUntil()) {
             var cat = pxt.appTarget.runtime.pauseUntilBlock.category;
@@ -9186,381 +10874,492 @@ var Editor = /** @class */ (function (_super) {
         }
         return res;
     };
-    return Editor;
-}(srceditor.Editor));
-exports.Editor = Editor;
-var MonacoToolbox = /** @class */ (function (_super) {
-    __extends(MonacoToolbox, _super);
-    function MonacoToolbox(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {
-            showAdvanced: false
-        };
-        return _this;
-    }
-    MonacoToolbox.prototype.getElement = function () {
-        return this.rootElement;
+    ///////////////////////////////////////////////////////////
+    ////////////         Toolbox methods          /////////////
+    ///////////////////////////////////////////////////////////
+    Editor.prototype.clearCaches = function () {
+        _super.prototype.clearCaches.call(this);
+        snippets.clearBuiltinBlockCache();
     };
-    MonacoToolbox.prototype.hide = function () {
-        this.setState({ visible: false });
-    };
-    MonacoToolbox.prototype.show = function () {
-        this.setState({ visible: true });
-    };
-    MonacoToolbox.prototype.setToolboxHeight = function (height) {
-        if (this.rootElement)
-            this.rootElement.style.height = height + "px";
-    };
-    MonacoToolbox.prototype.clearSelection = function () {
-        this.setState({ selectedNs: undefined });
-        this.selectedIndex = 0;
-    };
-    MonacoToolbox.prototype.setSelectedItem = function (item) {
-        this.selectedItem = item;
-    };
-    MonacoToolbox.prototype.setPreviousItem = function () {
-        if (this.selectedIndex > 0) {
-            var newIndex = --this.selectedIndex;
-            this.setSelection(this.items[newIndex], newIndex);
+    Editor.prototype.shouldShowSearch = function () {
+        if (this.parent.state.editorState && this.parent.state.editorState.searchBar != undefined) {
+            return this.parent.state.editorState.searchBar;
         }
+        return true;
     };
-    MonacoToolbox.prototype.setNextItem = function () {
-        if (this.items.length - 1 > this.selectedIndex) {
-            var newIndex = ++this.selectedIndex;
-            this.setSelection(this.items[newIndex], newIndex);
+    Editor.prototype.getBuiltinCategory = function (ns) {
+        return snippets.getBuiltinCategory(ns);
+    };
+    Editor.prototype.isBuiltIn = function (ns) {
+        return snippets.isBuiltin(ns);
+    };
+    Editor.prototype.getNamespaceAttrs = function (ns) {
+        var builtin = snippets.getBuiltinCategory(ns);
+        if (builtin) {
+            builtin.attributes.color = pxt.toolbox.getNamespaceColor(builtin.nameid);
+            return builtin.attributes;
         }
+        if (!this.blockInfo)
+            return undefined;
+        return _super.prototype.getNamespaceAttrs.call(this, ns);
     };
-    MonacoToolbox.prototype.setSelection = function (treeRow, index) {
-        var parent = this.props.parent;
-        var ns = treeRow.ns, icon = treeRow.icon, color = treeRow.color, category = treeRow.category, groups = treeRow.groups, labelLineWidth = treeRow.labelLineWidth;
-        pxt.tickEvent("monaco.toolbox.click");
-        if (this.state.selectedNs == ns) {
-            this.clearSelection();
-            // Hide flyout
-            parent.closeFlyout();
-        }
-        else {
-            this.setState({ selectedNs: ns });
-            this.selectedIndex = index;
-            if (treeRow.advanced && !this.state.showAdvanced)
-                this.showAdvanced();
-            // Show flyout
-            parent.showFlyout(ns, color, icon, category, groups, labelLineWidth);
-        }
-    };
-    MonacoToolbox.prototype.focus = function () {
-        if (!this.rootElement)
-            return;
-        if (this.selectedItem && this.selectedItem.getTreeRow()) {
-            // Focus the selected item
-            this.selectedItem.getTreeRow().focus();
-        }
-        else {
-            // Focus first item in the toolbox
-            var topCategory = this.rootElement.getElementsByClassName('blocklyTreeRow')[0];
-            if (topCategory)
-                topCategory.focus();
-        }
-    };
-    MonacoToolbox.prototype.moveFocusToFlyout = function () {
-        var parent = this.props.parent;
-        parent.moveFocusToFlyout();
-    };
-    MonacoToolbox.prototype.closeFlyout = function () {
-        var parent = this.props.parent;
-        parent.closeFlyout();
-    };
-    MonacoToolbox.prototype.showPackageDialog = function () {
-        var parent = this.props.parent;
-        parent.showPackageDialog();
-    };
-    MonacoToolbox.prototype.componentDidUpdate = function (prevProps, prevState) {
-        // Inject toolbox icon css
-        pxt.toolbox.injectToolboxIconCss();
-    };
-    MonacoToolbox.prototype.advancedClicked = function () {
-        pxt.tickEvent("monaco.advanced");
-        this.showAdvanced();
-    };
-    MonacoToolbox.prototype.showAdvanced = function () {
-        var parent = this.props.parent;
-        this.setState({ showAdvanced: !this.state.showAdvanced });
-        parent.resize();
-    };
-    MonacoToolbox.prototype.renderCore = function () {
+    Editor.prototype.getNamespaces = function () {
         var _this = this;
-        var parent = this.props.parent;
-        var _a = this.state, namespaces = _a.namespaces, showAdvanced = _a.showAdvanced, visible = _a.visible, selectedNs = _a.selectedNs;
-        if (!namespaces || !visible)
-            return React.createElement("div", { style: { display: 'none' } });
-        // Filter toolbox categories
-        var filters = parent.parent.state.editorState && parent.parent.state.editorState.filters;
-        function filterCategory(ns, fns) {
-            if (!fns || !fns.length)
-                return false;
-            var categoryState = filters ? (filters.namespaces && filters.namespaces[ns] != undefined ? filters.namespaces[ns] : filters.defaultState) : undefined;
-            var hasChild = false;
-            if (filters && categoryState !== undefined && fns) {
-                Object.keys(fns).forEach(function (fn) {
-                    var fnState = filters.fns && filters.fns[fn] != undefined ? filters.fns[fn] : (categoryState != undefined ? categoryState : filters.defaultState);
-                    if (fnState == pxt.editor.FilterState.Disabled || fnState == pxt.editor.FilterState.Visible)
-                        hasChild = true;
-                });
-            }
-            else {
-                hasChild = true;
-            }
-            if (!hasChild)
-                return false;
-            return true;
+        var namespaces = Object.keys(this.nsMap)
+            .filter(function (ns) { return !snippets.isBuiltin(ns) && !!_this.getNamespaceAttrs(ns); });
+        var config = pxt.appTarget.runtime || {};
+        if (config.loopsBlocks && !snippets.loops.removed)
+            namespaces.push(snippets.loops.nameid);
+        if (config.logicBlocks && !snippets.logic.removed)
+            namespaces.push(snippets.logic.nameid);
+        if (config.variablesBlocks && !snippets.variables.removed)
+            namespaces.push(snippets.variables.nameid);
+        if (config.mathBlocks && !snippets.maths.removed)
+            namespaces.push(snippets.maths.nameid);
+        if (config.functionBlocks && !snippets.functions.removed)
+            namespaces.push(snippets.functions.nameid);
+        if (config.listsBlocks && !snippets.arrays.removed)
+            namespaces.push(snippets.arrays.nameid);
+        if (config.textBlocks && !snippets.text.removed)
+            namespaces.push(snippets.text.nameid);
+        if (pxt.appTarget.cloud && pxt.appTarget.cloud.packages) {
+            namespaces.push(snippets.extensions.nameid);
         }
-        var index = 0;
-        function createCategories(names, isAdvanced) {
-            return names
-                .sort(function (_a, _b) {
-                var md1 = _a[1];
-                var md2 = _b[1];
-                // sort by fn weight
-                var w2 = (md2 ? md2.weight || 50 : 50);
-                var w1 = (md1 ? md1.weight || 50 : 50);
-                return w2 >= w1 ? 1 : -1;
-            }).map(function (_a) {
-                var ns = _a[0], md = _a[1];
-                if (!snippets.isBuiltin(ns)) {
-                    var blocks = parent.nsMap[ns].filter(function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated); });
-                    if (!filterCategory(ns, blocks))
-                        return undefined;
-                    var categoryName = md.block ? md.block : undefined;
-                    return {
-                        ns: ns,
-                        category: categoryName,
-                        color: md.color,
-                        icon: md.icon,
-                        groups: md.groups,
-                        labelLineWidth: md.labelLineWidth,
-                        injectIconClass: true,
-                        advanced: isAdvanced,
-                        index: index++
-                    };
+        return namespaces.concat(_super.prototype.getNamespaces.call(this));
+    };
+    Editor.prototype.moveFocusToToolbox = function () {
+        // Set focus in toolbox
+        if (this.toolbox)
+            this.toolbox.focus();
+    };
+    Editor.prototype.moveFocusToFlyout = function () {
+        // Set focus in the flyout
+        var monacoFlyout = document.getElementById('monacoFlyoutWidget');
+        var topBlock = monacoFlyout.getElementsByClassName("monacoDraggableBlock")[0];
+        if (topBlock)
+            topBlock.focus();
+    };
+    ///////////////////////////////////////////////////////////
+    ////////////         Flyout methods           /////////////
+    ///////////////////////////////////////////////////////////
+    Editor.prototype.getBlocksForCategory = function (ns, subns) {
+        if (!snippets.isBuiltin(ns)) {
+            return this.filterBlocks(subns, this.nsMap[ns]);
+        }
+        else {
+            return this.getBuiltinBlocks(ns, subns);
+        }
+    };
+    Editor.prototype.filterBlocks = function (subns, blocks) {
+        return blocks.filter((function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated)
+            && (block.name.indexOf('_') != 0)
+            && ((!subns && !block.attributes.subcategory && !block.attributes.advanced)
+                || (subns && ((block.attributes.advanced && subns == 'more')
+                    || (block.attributes.subcategory && subns == block.attributes.subcategory)))); }));
+    };
+    Editor.prototype.getBuiltinBlocks = function (ns, subns) {
+        var cat = snippets.getBuiltinCategory(ns);
+        var blocks = cat.blocks || [];
+        blocks.forEach(function (b) { b.noNamespace = true; });
+        if (!cat.custom && this.nsMap[ns.toLowerCase()])
+            blocks = blocks.concat(this.nsMap[ns.toLowerCase()].filter(function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated); }));
+        return this.filterBlocks(subns, blocks);
+    };
+    Editor.prototype.showFlyout = function (treeRow) {
+        if (!this.editor)
+            return;
+        var ns = treeRow.nameid;
+        // Create a new flyout
+        var monacoFlyout = this.createMonacoFlyout();
+        if (ns == 'search') {
+            this.showSearchFlyout();
+            return;
+        }
+        if (this.abstractShowFlyout(treeRow)) {
+            // Hide editor floats
+            this.parent.setState({ hideEditorFloats: true });
+        }
+        else {
+            this.closeFlyout();
+        }
+    };
+    Editor.prototype.showFlyoutHeadingLabel = function (ns, subns, icon, color) {
+        var categoryName = name ? name :
+            "" + (subns ? Util.capitalize(ns) + " > " + Util.capitalize(subns) : Util.capitalize(ns));
+        var iconClass = ("blocklyTreeIcon" + (icon ? (ns || icon).toLowerCase() : 'Default')).replace(/\s/g, '');
+        this.getMonacoLabel(categoryName, 'monacoFlyoutLabel monacoFlyoutHeading', true, icon, iconClass, color);
+    };
+    Editor.prototype.showFlyoutGroupLabel = function (group, groupicon, labelLineWidth) {
+        this.getMonacoLabel(pxt.Util.rlf("{id:group}" + group), 'monacoFlyoutLabel blocklyFlyoutGroup', false, undefined, undefined, undefined, true, labelLineWidth);
+    };
+    Editor.prototype.showFlyoutBlocks = function (ns, color, blocks) {
+        var monacoFlyout = this.getMonacoFlyout();
+        var filters = this.parent.state.editorState ? this.parent.state.editorState.filters : undefined;
+        var categoryState = filters ? (filters.namespaces && filters.namespaces[ns] != undefined ? filters.namespaces[ns] : filters.defaultState) : undefined;
+        this.createMonacoBlocks(this, monacoFlyout, ns, blocks, color, filters, categoryState);
+    };
+    Editor.prototype.showSearchFlyout = function () {
+        var _this = this;
+        var monacoBlocks = [];
+        var searchBlocks = this.toolbox.getSearchBlocks();
+        var monacoFlyout = this.getMonacoFlyout();
+        var that = this;
+        function getNamespaceColor(ns) {
+            var nsinfo = that.blockInfo.apis.byQName[ns];
+            var color = (nsinfo ? nsinfo.attributes.color : undefined)
+                || pxt.toolbox.getNamespaceColor(ns.toLowerCase())
+                || "255";
+            return color;
+        }
+        searchBlocks.forEach(function (block) {
+            if (!block.name) {
+                if (block.attributes.blockId == pxtc.PAUSE_UNTIL_TYPE) {
+                    var pauseUntilBlock = snippets.getPauseUntil();
+                    if (pauseUntilBlock) {
+                        var ns = pauseUntilBlock.attributes.blockNamespace;
+                        var color = getNamespaceColor(ns);
+                        monacoBlocks.push(_this.getMonacoBlock(pauseUntilBlock, ns, color));
+                    }
                 }
                 else {
-                    var cat = snippets.getBuiltinCategory(ns);
-                    var blocks = cat.blocks || [];
-                    var categoryName = cat.name;
-                    blocks.forEach(function (b) { b.noNamespace = true; });
-                    if (!cat.custom && parent.nsMap[ns.toLowerCase()])
-                        blocks = blocks.concat(parent.nsMap[ns.toLowerCase()].filter(function (block) { return !(block.attributes.blockHidden || block.attributes.deprecated); }));
-                    if (!filterCategory(ns, blocks))
-                        return undefined;
-                    return {
-                        ns: ns,
-                        category: categoryName,
-                        color: md.color,
-                        icon: md.icon,
-                        groups: md.groups,
-                        labelLineWidth: md.labelLineWidth,
-                        advanced: isAdvanced,
-                        index: index++
-                    };
+                    // For built in blocks, let's search from monaco snippets
+                    var builtin = snippets.allBuiltinBlocks()[block.attributes.blockId];
+                    if (builtin) {
+                        var builtinBlock = builtin[0];
+                        var ns = builtin[1];
+                        var attr = that.getNamespaceAttrs(ns);
+                        monacoBlocks.push(_this.getMonacoBlock(builtinBlock, ns, attr.color));
+                    }
+                    else {
+                        pxt.log("couldn't find buildin search qName for block: " + block.attributes.blockId);
+                    }
                 }
-            }).filter(function (cat) { return !!cat; });
-        }
-        var hasAdvanced = namespaces.some(function (_a) {
-            var md = _a[1];
-            return md.advanced;
-        });
-        var hasPackages = !pxt.shell.isReadOnly() && pxt.appTarget.cloud && pxt.appTarget.cloud.packages;
-        var nonAdvancedCategories = createCategories(namespaces.filter(function (_a) {
-            var md = _a[1];
-            return !(md.advanced);
-        }));
-        var advancedCategories = hasAdvanced ? createCategories(namespaces.filter(function (_a) {
-            var md = _a[1];
-            return md.advanced;
-        }), true) : [];
-        this.items = nonAdvancedCategories.concat(advancedCategories);
-        return React.createElement("div", { ref: function (e) { return _this.rootElement = e; }, id: 'monacoEditorToolbox', className: 'monacoToolboxDiv' },
-            React.createElement("div", { className: "blocklyTreeRoot" },
-                React.createElement("div", { role: "tree" },
-                    nonAdvancedCategories.map(function (treeRow) { return (React.createElement(CategoryItem, { key: treeRow.ns, toolbox: _this, selected: selectedNs == treeRow.ns, treeRow: treeRow, onCategoryClick: _this.setSelection.bind(_this) })); }),
-                    hasAdvanced ? React.createElement(TreeSeparator, { key: "advancedseparator" }) : undefined,
-                    hasAdvanced ? React.createElement(CategoryItem, { toolbox: this, treeRow: { ns: "", category: pxt.toolbox.advancedTitle(), color: pxt.toolbox.getNamespaceColor('advanced'), icon: showAdvanced ? 'advancedexpanded' : 'advancedcollapsed' }, onCategoryClick: this.advancedClicked.bind(this) }) : undefined,
-                    showAdvanced ? advancedCategories.map(function (treeRow) { return (React.createElement(CategoryItem, { key: treeRow.ns, toolbox: _this, selected: selectedNs == treeRow.ns, treeRow: treeRow, onCategoryClick: _this.setSelection.bind(_this) })); }) : undefined,
-                    hasPackages && showAdvanced ? React.createElement(TreeRow, { treeRow: { ns: "", category: pxt.toolbox.addPackageTitle(), color: '#717171', icon: "addpackage" }, onClick: this.showPackageDialog.bind(this) }) : undefined)));
-    };
-    return MonacoToolbox;
-}(data.Component));
-exports.MonacoToolbox = MonacoToolbox;
-var CategoryItem = /** @class */ (function (_super) {
-    __extends(CategoryItem, _super);
-    function CategoryItem(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleClick = function () {
-            if (_this.props.onCategoryClick)
-                _this.props.onCategoryClick(_this.props.treeRow, _this.props.treeRow.index);
-        };
-        _this.state = {
-            selected: props.selected
-        };
-        return _this;
-    }
-    CategoryItem.prototype.getTreeRow = function () {
-        return this.treeRowElement;
-    };
-    CategoryItem.prototype.componentWillReceiveProps = function (nextProps) {
-        var newState = {};
-        if (nextProps.selected != undefined) {
-            newState.selected = nextProps.selected;
-        }
-        if (Object.keys(newState).length > 0)
-            this.setState(newState);
-    };
-    CategoryItem.prototype.componentDidUpdate = function (prevProps, prevState) {
-        if (this.state.selected) {
-            this.props.toolbox.setSelectedItem(this);
-            this.treeRowElement.focus();
-        }
-    };
-    CategoryItem.prototype.renderCore = function () {
-        var _this = this;
-        var toolbox = this.props.toolbox;
-        var selected = this.state.selected;
-        var previousItem = function () {
-            pxt.tickEvent("monaco.toolbox.keyboard.prev");
-            toolbox.setPreviousItem();
-        };
-        var nextItem = function () {
-            pxt.tickEvent("monaco.toolbox.keyboard.next");
-            toolbox.setNextItem();
-        };
-        var isRtl = Util.isUserLanguageRtl();
-        var onKeyDown = function (e) {
-            var charCode = core.keyCodeFromEvent(e);
-            if (charCode == 40) {
-                nextItem();
-            }
-            else if (charCode == 38) {
-                previousItem();
-            }
-            else if ((charCode == 39 && !isRtl) || (charCode == 37 && isRtl)) {
-                // Focus inside flyout
-                toolbox.moveFocusToFlyout();
-            }
-            else if (charCode == 27) {
-                // Close the flyout
-                toolbox.closeFlyout();
             }
             else {
-                sui.fireClickOnEnter.call(_this, e);
+                var fn = _this.blockInfo.apis.byQName[block.name];
+                if (fn) {
+                    if (fn.name.indexOf('_') == 0)
+                        return;
+                    var ns = (fn.attributes.blockNamespace || fn.namespace).split('.')[0];
+                    var color = fn.attributes.color || getNamespaceColor(ns);
+                    monacoBlocks.push(_this.getMonacoBlock(fn, ns, color));
+                }
+                else {
+                    pxt.log("couldn't find non builtin search by qName: " + block.name);
+                }
             }
-        };
-        return React.createElement(TreeItem, null,
-            React.createElement(TreeRow, __assign({ ref: function (e) { return _this.treeRowElement = e; } }, this.props, { selected: selected, onClick: this.handleClick, onKeyDown: onKeyDown.bind(this) })));
-    };
-    return CategoryItem;
-}(data.Component));
-exports.CategoryItem = CategoryItem;
-var TreeRow = /** @class */ (function (_super) {
-    __extends(TreeRow, _super);
-    function TreeRow() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TreeRow.prototype.focus = function () {
-        this.treeRow.focus();
-    };
-    TreeRow.prototype.getProperties = function () {
-        var treeRow = this.props.treeRow;
-        return treeRow;
-    };
-    TreeRow.prototype.renderCore = function () {
-        var _this = this;
-        var _a = this.props, selected = _a.selected, onClick = _a.onClick, onKeyDown = _a.onKeyDown;
-        var _b = this.props.treeRow, ns = _b.ns, icon = _b.icon, color = _b.color, category = _b.category, injectIconClass = _b.injectIconClass;
-        var appTheme = pxt.appTarget.appTheme;
-        var metaColor = pxt.toolbox.convertColor(color);
-        var invertedMultipler = appTheme.blocklyOptions
-            && appTheme.blocklyOptions.toolboxOptions
-            && appTheme.blocklyOptions.toolboxOptions.invertedMultiplier || 0.3;
-        var onmouseenter = function () {
-            if (appTheme.invertedToolbox) {
-                _this.treeRow.style.backgroundColor = pxt.toolbox.fadeColor(metaColor || '#ddd', invertedMultipler, false);
-            }
-        };
-        var onmouseleave = function () {
-            if (appTheme.invertedToolbox) {
-                _this.treeRow.style.backgroundColor = (metaColor || '#ddd');
-            }
-        };
-        var treeRowStyle = {
-            paddingLeft: '0px'
-        };
-        var treeRowClass = 'blocklyTreeRow';
-        if (appTheme.coloredToolbox) {
-            // Colored toolbox
-            treeRowStyle.color = "" + metaColor;
-            treeRowStyle.borderLeft = "8px solid " + metaColor;
+        });
+        this.attachMonacoBlockAccessibility(monacoBlocks);
+        if (monacoBlocks.length == 0) {
+            this.getMonacoLabel(lf("No search results..."), 'monacoFlyoutLabel');
         }
-        else if (appTheme.invertedToolbox) {
-            // Inverted toolbox
-            treeRowStyle.backgroundColor = (metaColor || '#ddd');
-            treeRowStyle.color = '#fff';
+    };
+    Editor.prototype.getMonacoFlyout = function () {
+        return document.getElementById('monacoFlyoutWidget');
+    };
+    Editor.prototype.createMonacoFlyout = function () {
+        var monacoFlyout = this.getMonacoFlyout();
+        monacoFlyout.style.left = this.editor.getLayoutInfo().lineNumbersLeft + "px";
+        monacoFlyout.style.height = this.editor.getLayoutInfo().contentHeight + "px";
+        monacoFlyout.style.display = 'block';
+        monacoFlyout.className = 'monacoFlyout';
+        monacoFlyout.style.transform = 'none';
+        pxsim.U.clear(monacoFlyout);
+        return monacoFlyout;
+    };
+    Editor.prototype.createMonacoBlocks = function (monacoEditor, monacoFlyout, ns, fns, color, filters, categoryState) {
+        // Render the method blocks
+        var monacoBlocks = fns.sort(function (f1, f2) {
+            // sort by fn weight
+            var w2 = (f2.attributes.weight || 50) + (f2.attributes.advanced ? 0 : 1000);
+            var w1 = (f1.attributes.weight || 50) + (f1.attributes.advanced ? 0 : 1000);
+            return w2 > w1 ? 1 : -1;
+        }).map(function (fn) {
+            var monacoBlockDisabled = false;
+            var fnState = filters ? (filters.fns && filters.fns[fn.name] != undefined ? filters.fns[fn.name] : (categoryState != undefined ? categoryState : filters.defaultState)) : undefined;
+            monacoBlockDisabled = fnState == pxt.editor.FilterState.Disabled;
+            if (fnState == pxt.editor.FilterState.Hidden)
+                return undefined;
+            return monacoEditor.getMonacoBlock(fn, ns, color, monacoBlockDisabled); // try this
+        });
+        monacoEditor.attachMonacoBlockAccessibility(monacoBlocks);
+    };
+    Editor.prototype.attachMonacoBlockAccessibility = function (monacoBlocks) {
+        var _this = this;
+        var monacoEditor = this;
+        monacoBlocks.forEach(function (monacoBlock, index) {
+            if (!monacoBlock)
+                return;
+            // Accessibility
+            var isRtl = Util.isUserLanguageRtl();
+            monacoBlock.onkeydown = function (e) {
+                var charCode = core.keyCodeFromEvent(e);
+                if (charCode == 40) {
+                    // Next item
+                    if (index < monacoBlocks.length - 1)
+                        monacoBlocks[index + 1].focus();
+                }
+                else if (charCode == 38) {
+                    // Previous item
+                    if (index > 0)
+                        monacoBlocks[index - 1].focus();
+                }
+                else if ((charCode == 37 && !isRtl) || (charCode == 38 && isRtl)) {
+                    // Focus back to toolbox
+                    monacoEditor.moveFocusToToolbox();
+                }
+                else if (charCode == 27) {
+                    // Focus back to toolbox and close Flyout
+                    monacoEditor.hideFlyout();
+                    monacoEditor.moveFocusToToolbox();
+                }
+                else {
+                    sui.fireClickOnEnter.call(_this, e);
+                }
+            };
+        });
+    };
+    Editor.prototype.getMonacoLabel = function (label, className, hasIcon, icon, iconClass, iconColor, hasLine, labelLineWidth) {
+        var monacoFlyout = this.getMonacoFlyout();
+        var fontSize = this.parent.settings.editorFontSize;
+        var labelDiv = document.createElement('div');
+        labelDiv.className = className;
+        var labelText = document.createElement('div');
+        labelText.className = 'monacoFlyoutLabelText';
+        labelText.style.display = 'inline-block';
+        labelText.style.fontSize = fontSize + (hasIcon ? 5 : 0) + "px";
+        labelText.style.lineHeight = fontSize + 5 + "px";
+        labelText.textContent = label;
+        if (hasIcon) {
+            var labelIcon = document.createElement('span');
+            labelIcon.className = "monacoFlyoutHeadingIcon blocklyTreeIcon " + iconClass;
+            labelIcon.setAttribute('role', 'presentation');
+            labelIcon.style.display = 'inline-block';
+            labelIcon.style.color = "" + iconColor;
+            labelIcon.textContent = icon;
+            labelDiv.appendChild(labelIcon);
+        }
+        labelDiv.appendChild(labelText);
+        monacoFlyout.appendChild(labelDiv);
+        if (hasLine) {
+            var labelLine = document.createElement('hr');
+            labelLine.className = 'monacoFlyoutLabelLine';
+            labelLine.align = 'left';
+            labelLine.style.width = Math.min(labelLineWidth ? parseInt(labelLineWidth) : labelText.offsetWidth, 350) + "px";
+            labelDiv.appendChild(labelLine);
+        }
+        return labelDiv;
+    };
+    Editor.prototype.getMonacoBlock = function (fn, ns, color, isDisabled) {
+        // Check if the block is built in, ignore it as it's already defined in snippets
+        if (fn.attributes.blockBuiltin) {
+            pxt.log("ignoring built in block: " + fn.attributes.blockId);
+            return undefined;
+        }
+        var monacoEditor = this;
+        var monacoFlyout = this.getMonacoFlyout();
+        var snippet = fn.snippet;
+        if (!snippet) {
+            return undefined;
+        }
+        var monacoBlockArea = document.createElement('div');
+        monacoBlockArea.className = "monacoBlock " + (isDisabled ? 'monacoDisabledBlock' : '');
+        monacoFlyout.appendChild(monacoBlockArea);
+        var monacoBlock = document.createElement('div');
+        monacoBlock.className = 'monacoDraggableBlock';
+        monacoBlock.tabIndex = 0;
+        monacoBlockArea.appendChild(monacoBlock);
+        var comment = fn.attributes.jsDoc;
+        var snippetPrefix = fn.noNamespace ? "" : ns;
+        var isInstance = false;
+        var addNamespace = false;
+        var namespaceToUse = "";
+        var element = fn;
+        if (element.attributes.block) {
+            if (element.attributes.defaultInstance) {
+                snippetPrefix = element.attributes.defaultInstance;
+            }
+            else if (element.namespace) {
+                var nsInfo_1 = this.blockInfo.apis.byQName[element.namespace];
+                if (nsInfo_1.attributes.fixedInstances) {
+                    var instances_1 = Util.values(this.blockInfo.apis.byQName);
+                    var getExtendsTypesFor_1 = function (name) {
+                        return instances_1
+                            .filter(function (v) { return v.extendsTypes; })
+                            .filter(function (v) { return v.extendsTypes.reduce(function (x, y) { return x || y.indexOf(name) != -1; }, false); })
+                            .reduce(function (x, y) { return x.concat(y.extendsTypes); }, []);
+                    };
+                    // if blockNamespace exists, e.g., "pins", use it for snippet
+                    // else use nsInfo.namespace, e.g., "motors"
+                    namespaceToUse = element.attributes.blockNamespace || nsInfo_1.namespace || "";
+                    // all fixed instances for this namespace
+                    var fixedInstances = instances_1.filter(function (value) {
+                        return value.kind === pxtc.SymbolKind.Variable &&
+                            value.attributes.fixedInstance;
+                    });
+                    // first try to get fixed instances whose retType matches nsInfo.name
+                    // e.g., DigitalPin
+                    var exactInstances = fixedInstances.filter(function (value) {
+                        return value.retType == nsInfo_1.name;
+                    })
+                        .sort(function (v1, v2) { return v1.name.localeCompare(v2.name); });
+                    // second choice: use fixed instances whose retType extends type of nsInfo.name
+                    // e.g., nsInfo.name == AnalogPin and instance retType == PwmPin
+                    var extendedInstances = fixedInstances.filter(function (value) {
+                        return getExtendsTypesFor_1(nsInfo_1.name).indexOf(value.retType) !== -1;
+                    })
+                        .sort(function (v1, v2) { return v1.name.localeCompare(v2.name); });
+                    if (exactInstances.length) {
+                        snippetPrefix = "" + exactInstances[0].name;
+                    }
+                    else if (extendedInstances.length) {
+                        snippetPrefix = "" + extendedInstances[0].name;
+                    }
+                    isInstance = true;
+                    addNamespace = true;
+                }
+                else if (element.kind == pxtc.SymbolKind.Method || element.kind == pxtc.SymbolKind.Property) {
+                    var params = pxt.blocks.compileInfo(element);
+                    snippetPrefix = params.thisParameter.definitionName;
+                    isInstance = true;
+                }
+                else if (nsInfo_1.kind === pxtc.SymbolKind.Class) {
+                    return undefined;
+                }
+            }
+        }
+        var sigToken = document.createElement('span');
+        if (!fn.snippetOnly) {
+            sigToken.className = 'sig';
+        }
+        // completion is a bit busted but looks better
+        sigToken.textContent = snippet
+            .replace(/^[^(]*\(/, '(')
+            .replace(/^\s*\{\{\}\}\n/gm, '')
+            .replace(/\{\n\}/g, '{}')
+            .replace(/(?:\{\{)|(?:\}\})/g, '');
+        monacoBlock.title = comment;
+        if (!isDisabled) {
+            monacoBlock.draggable = true;
+            monacoBlock.onclick = function (e) {
+                pxt.tickEvent("monaco.toolbox.itemclick", undefined, { interactiveConsent: true });
+                monacoEditor.hideFlyout();
+                var model = monacoEditor.editor.getModel();
+                var currPos = monacoEditor.editor.getPosition();
+                var cursor = model.getOffsetAt(currPos);
+                var insertText = snippetPrefix ? snippetPrefix + "." + snippet : snippet;
+                insertText = addNamespace ? firstWord(namespaceToUse) + "." + insertText : insertText;
+                insertText = (currPos.column > 1) ? '\n' + insertText :
+                    model.getWordUntilPosition(currPos) != undefined && model.getWordUntilPosition(currPos).word != '' ?
+                        insertText + '\n' : insertText;
+                if (insertText.indexOf('{{}}') > -1) {
+                    cursor += (insertText.indexOf('{{}}'));
+                    insertText = insertText.replace('{{}}', '');
+                }
+                else
+                    cursor += (insertText.length);
+                insertText = insertText.replace(/(?:\{\{)|(?:\}\})/g, '');
+                monacoEditor.editor.pushUndoStop();
+                monacoEditor.editor.executeEdits("", [
+                    {
+                        identifier: { major: 0, minor: 0 },
+                        range: new monaco.Range(currPos.lineNumber, currPos.column, currPos.lineNumber, currPos.column),
+                        text: insertText,
+                        forceMoveMarkers: false
+                    }
+                ]);
+                monacoEditor.beforeCompile();
+                monacoEditor.editor.pushUndoStop();
+                var endPos = model.getPositionAt(cursor);
+                monacoEditor.editor.setPosition(endPos);
+                monacoEditor.editor.focus();
+                //monacoEditor.editor.setSelection(new monaco.Range(currPos.lineNumber, currPos.column, endPos.lineNumber, endPos.column));
+            };
+            monacoBlock.ondragstart = function (e) {
+                pxt.tickEvent("monaco.toolbox.itemdrag", undefined, { interactiveConsent: true });
+                setTimeout(function () {
+                    monacoFlyout.style.transform = "translateX(-9999px)";
+                });
+                var insertText = snippetPrefix ? snippetPrefix + "." + snippet : snippet;
+                insertText = addNamespace ? firstWord(namespaceToUse) + "." + insertText : insertText;
+                e.dataTransfer.setData('text', insertText); // IE11 only supports text
+            };
+            monacoBlock.ondragend = function (e) {
+                monacoFlyout.style.transform = "none";
+                monacoEditor.hideFlyout();
+            };
+            // Highlight on hover
+            var highlightBlock_1 = function () {
+                monacoBlock.style.backgroundColor = isDisabled ?
+                    "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
+                    "" + pxt.toolbox.fadeColor(color || '#ddd', 0.1, false);
+            };
+            var unhighlightBlock_1 = function () {
+                monacoBlock.style.backgroundColor = isDisabled ?
+                    "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
+                    "" + color;
+            };
+            monacoBlock.onmouseenter = function (e) {
+                highlightBlock_1();
+            };
+            monacoBlock.onmouseleave = function (e) {
+                unhighlightBlock_1();
+            };
+            monacoBlock.onfocus = function (e) {
+                highlightBlock_1();
+            };
+            monacoBlock.onblur = function (e) {
+                unhighlightBlock_1();
+            };
+        }
+        if (!fn.snippetOnly) {
+            if (isInstance) {
+                var instanceToken = document.createElement('span');
+                instanceToken.textContent = snippetPrefix + '.';
+                instanceToken.className = 'sigPrefix';
+                monacoBlock.appendChild(instanceToken);
+            }
+            var methodToken = document.createElement('span');
+            methodToken.textContent = fn.snippetName || fn.name;
+            monacoBlock.appendChild(methodToken);
+        }
+        monacoBlock.appendChild(sigToken);
+        // Draw the shape of the block
+        monacoBlock.style.fontSize = monacoEditor.parent.settings.editorFontSize + "px";
+        monacoBlock.style.lineHeight = monacoEditor.parent.settings.editorFontSize + 1 + "px";
+        monacoBlock.style.backgroundColor = isDisabled ?
+            "" + pxt.toolbox.fadeColor(color || '#ddd', 0.8, false) :
+            "" + color;
+        monacoBlock.style.borderColor = "" + pxt.toolbox.fadeColor(color || '#ddd', 0.2, false);
+        if (fn.retType && fn.retType == "boolean") {
+            // Show a hexagonal shape
+            monacoBlock.style.borderRadius = "0px";
+            var monacoBlockHeight = monacoBlock.offsetHeight - 2; /* Take 2 off to account for the missing border */
+            var monacoHexBlockId = monacoEditor.uniqueBlockId++;
+            monacoBlock.id = "monacoHexBlock" + monacoHexBlockId;
+            monacoBlock.className += ' monacoHexBlock';
+            var styleBlock = document.createElement('style');
+            styleBlock.appendChild(document.createTextNode("\n                    #monacoHexBlock" + monacoHexBlockId + ":before,\n                    #monacoHexBlock" + monacoHexBlockId + ":after {\n                        border-top: " + monacoBlockHeight / 2 + "px solid transparent;\n                        border-bottom: " + monacoBlockHeight / 2 + "px solid transparent;\n                    }\n                    #monacoHexBlock" + monacoHexBlockId + ":before {\n                        border-right: 17px solid " + color + ";\n                    }\n                    #monacoHexBlock" + monacoHexBlockId + ":after {\n                        border-left: 17px solid " + color + ";\n                    }\n                "));
+            monacoBlockArea.insertBefore(styleBlock, monacoBlock);
+        }
+        else if (fn.retType && fn.retType != "void") {
+            // Show a round shape
+            monacoBlock.style.borderRadius = "40px";
         }
         else {
-            // Standard toolbox
-            treeRowStyle.borderLeft = "8px solid " + metaColor;
+            // Show a normal shape
+            monacoBlock.style.borderRadius = "3px";
         }
-        // Selected
-        if (selected) {
-            treeRowClass += ' blocklyTreeSelected';
-            if (appTheme.invertedToolbox) {
-                treeRowStyle.backgroundColor = "" + pxt.toolbox.fadeColor(color, Blockly.Options.invertedMultiplier, false);
-            }
-            else {
-                treeRowStyle.backgroundColor = (metaColor || '#ddd');
-            }
-            treeRowStyle.color = '#fff';
-        }
-        // Icon
-        var iconClass = ("blocklyTreeIcon" + (icon ? (ns || icon).toLowerCase() : 'Default')).replace(/\s/g, '');
-        if (icon && injectIconClass) {
-            pxt.toolbox.appendToolboxIconCss(iconClass, icon);
-        }
-        return React.createElement("div", { ref: function (e) { return _this.treeRow = e; }, className: treeRowClass, style: treeRowStyle, tabIndex: 0, onMouseEnter: onmouseenter, onMouseLeave: onmouseleave, onClick: onClick, onKeyDown: onKeyDown ? onKeyDown : sui.fireClickOnEnter },
-            React.createElement("span", { className: "blocklyTreeIcon", role: "presentation" }),
-            React.createElement("span", { style: { display: 'inline-block' }, className: "blocklyTreeIcon " + iconClass, role: "presentation" }),
-            React.createElement("span", { className: "blocklyTreeLabel" }, category ? category : "" + Util.capitalize(ns)));
+        return monacoBlock;
     };
-    return TreeRow;
-}(data.Component));
-exports.TreeRow = TreeRow;
-var TreeSeparator = /** @class */ (function (_super) {
-    __extends(TreeSeparator, _super);
-    function TreeSeparator() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TreeSeparator.prototype.renderCore = function () {
-        return React.createElement(TreeItem, null,
-            React.createElement("div", { className: "blocklyTreeSeparator" }));
-    };
-    return TreeSeparator;
-}(data.Component));
-exports.TreeSeparator = TreeSeparator;
-var TreeItem = /** @class */ (function (_super) {
-    __extends(TreeItem, _super);
-    function TreeItem() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TreeItem.prototype.renderCore = function () {
-        return React.createElement("div", { role: "treeitem" }, this.props.children);
-    };
-    return TreeItem;
-}(data.Component));
-exports.TreeItem = TreeItem;
+    return Editor;
+}(toolboxeditor.ToolboxEditor));
+exports.Editor = Editor;
 function firstWord(s) {
     return /[^\.]+/.exec(s)[0];
 }
 
-},{"./compiler":11,"./core":13,"./data":15,"./monacoSnippets":33,"./package":35,"./srceditor":46,"./sui":47,"react":155}],33:[function(require,module,exports){
+},{"./compiler":11,"./core":13,"./monacoSnippets":34,"./package":36,"./sui":48,"./toolbox":49,"./toolboxeditor":50,"react":157}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loops = {
@@ -9568,19 +11367,25 @@ exports.loops = {
     nameid: 'loops',
     blocks: [
         {
-            name: "while",
+            name: "loops_while",
+            snippetName: "while",
             snippet: "while(true) {\n\n}",
             attributes: {
+                blockId: 'device_while',
+                weight: 48,
                 jsDoc: lf("Repeat code while condition is true")
             }
         },
         {
-            name: "for",
+            name: "loops_for",
+            snippetName: "for",
             snippet: "for(let i = 0; i < 5; i++) {\n\n}",
             attributes: {
+                blockId: 'pxt_controls_for',
+                weight: 47,
                 jsDoc: lf("Repeat code a number of times in a loop")
             }
-        },
+        }
     ],
     attributes: {
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
@@ -9594,26 +11399,33 @@ exports.logic = {
     nameid: 'logic',
     blocks: [
         {
-            name: "if",
+            name: "logic_if",
+            snippetName: "if",
             snippet: "if (true) {\n\n}",
             attributes: {
+                blockId: 'controls_if',
+                weight: 49,
                 jsDoc: lf("Runs code if the condition is true")
             }
         },
         {
-            name: "if",
+            name: "logic_if_else",
+            snippetName: "if",
             snippet: "if (true) {\n\n} else {\n\n}",
             attributes: {
+                blockId: 'controls_if',
+                weight: 48,
                 jsDoc: lf("Runs code if the condition is true; else run other code")
             }
         },
         {
-            name: "switch",
+            name: "logic_switch",
+            snippetName: "switch",
             snippet: "switch(item) {\n    case 0:\n        break;\n    case 1:\n        break;\n}",
             attributes: {
                 jsDoc: lf("Runs different code based on a value")
             }
-        },
+        }
     ],
     attributes: {
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
@@ -9627,26 +11439,32 @@ exports.variables = {
     nameid: 'variables',
     blocks: [
         {
-            name: "let",
+            name: "var_let",
+            snippetName: "let",
             snippet: "let item: number",
             snippetOnly: true,
             attributes: {
+                blockId: 'variables_set',
                 jsDoc: lf("Declares a variable named 'item'")
             }
         },
         {
-            name: "equals",
+            name: "var_equals",
+            snippetName: "equals",
             snippet: "item = 0",
             snippetOnly: true,
             attributes: {
+                blockId: 'variables_get',
                 jsDoc: lf("Assigns a value to a variable")
             }
         },
         {
-            name: "change",
+            name: "var_change",
+            snippetName: "change",
             snippet: "item += 1",
             snippetOnly: true,
             attributes: {
+                blockId: 'variables_change',
                 jsDoc: lf("Changes the value of item by 1")
             }
         },
@@ -9663,90 +11481,108 @@ exports.maths = {
     nameid: 'math',
     blocks: [
         {
-            name: "plus",
+            name: "Math.plus",
+            snippetName: "plus",
             snippet: "1 + 1",
             snippetOnly: true,
             attributes: {
+                weight: 90,
+                blockId: "math_arithmetic",
                 jsDoc: lf("Adds two numbers together")
             },
             retType: "number"
         },
         {
-            name: "minus",
+            name: "Math.minus",
+            snippetName: "minus",
             snippet: "1 - 1",
             snippetOnly: true,
             attributes: {
+                weight: 89,
+                blockId: "math_arithmetic",
                 jsDoc: lf("Subtracts the value of one number from another")
             },
             retType: "number"
         },
         {
-            name: "multiply",
+            name: "Math.multiply",
+            snippetName: "multiply",
             snippet: "1 * 1",
             snippetOnly: true,
             attributes: {
+                weight: 88,
+                blockId: "math_arithmetic",
                 jsDoc: lf("Multiplies two numbers together")
             },
             retType: "number"
         },
         {
-            name: "divide",
+            name: "Math.divide",
+            snippetName: "divide",
             snippet: "1 / 1",
             snippetOnly: true,
             attributes: {
+                weight: 87,
+                blockId: "math_arithmetic",
                 jsDoc: lf("Returns the quotient of one number divided by another")
             },
             retType: "number"
         },
         {
-            name: "remainder",
+            name: "Math.remainder",
+            snippetName: "remainder",
             snippet: "1 % 2",
             snippetOnly: true,
             attributes: {
+                weight: 80,
+                blockId: "math_modulo",
                 jsDoc: lf("Returns the remainder of one number divided by another")
             },
             retType: "number"
         },
         {
-            name: "max",
+            name: "Math.max",
+            snippetName: "max",
             snippet: "Math.max(1, 2)",
             attributes: {
+                weight: 75,
+                blockId: "math_op2",
                 jsDoc: lf("Returns the largest of two numbers")
             },
             retType: "number"
         },
         {
-            name: "min",
+            name: "Math.min",
+            snippetName: "min",
             snippet: "Math.min(1, 2)",
             attributes: {
+                weight: 74,
+                blockId: "math_op2",
                 jsDoc: lf("Returns the smallest of two numbers")
             },
             retType: "number"
         },
         {
-            name: "abs",
+            name: "Math.abs",
+            snippetName: "abs",
             snippet: "Math.abs(-1)",
             attributes: {
+                weight: 70,
+                blockId: "math_op3",
                 jsDoc: lf("Returns the absolute value of a number")
             },
             retType: "number"
         },
         {
-            name: "randomRange",
+            name: "Math.randomRange",
+            snippetName: "randomRange",
             snippet: "Math.randomRange(0, 10)",
             attributes: {
+                weight: 65,
                 jsDoc: lf("Returns a random number between min and max")
             },
             retType: "number"
-        },
-        {
-            name: "randomBoolean",
-            snippet: "Math.randomBoolean()",
-            attributes: {
-                jsDoc: lf("Randomly returns either true or false")
-            },
-            retType: "boolean"
-        },
+        }
     ],
     attributes: {
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
@@ -9760,16 +11596,20 @@ exports.functions = {
     nameid: 'functions',
     blocks: [
         {
-            name: "function doSomething",
+            name: "functionDef",
+            snippetName: "function doSomething",
             snippet: "function doSomething() {\n\n}",
             attributes: {
+                blockId: 'procedures_defnoreturn',
                 jsDoc: lf("Define a function")
             }
         },
         {
-            name: "doSomething",
+            name: "functionCall",
+            snippetName: "doSomething",
             snippet: "doSomething()",
             attributes: {
+                blockId: 'procedures_callnoreturn',
                 jsDoc: lf("Call a function")
             }
         },
@@ -9778,7 +11618,6 @@ exports.functions = {
         advanced: true,
         weight: 50.08,
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
-        color: pxt.toolbox.blockColors["functions"].toString(),
         icon: "functions",
         paramDefl: {}
     }
@@ -9789,99 +11628,120 @@ exports.arrays = {
     custom: true,
     blocks: [
         {
-            name: "create",
+            name: "array_create",
+            snippetName: "create",
             snippet: "let " + lf("{id:snippets}list") + " = [1, 2, 3];",
             snippetOnly: true,
             attributes: {
                 weight: 100,
+                blockId: "lists_create_with",
                 jsDoc: lf("Creates a new Array")
             },
             retType: "array"
         },
         {
-            name: "length",
+            name: "array_length",
+            snippetName: "length",
             snippet: lf("{id:snippets}list") + ".length",
             snippetOnly: true,
             attributes: {
                 weight: 99,
+                blockId: "lists_length",
                 jsDoc: lf("Returns the number of values in an Array")
             },
             retType: "number"
         },
         {
-            name: "get",
+            name: "array_get",
+            snippetName: "get",
             snippet: lf("{id:snippets}list") + "[0]",
             snippetOnly: true,
             attributes: {
                 weight: 98,
+                blockId: "lists_index_get",
                 jsDoc: lf("Returns the value in the Array at the given index")
             }
         },
         {
-            name: "set",
+            name: "array_set",
+            snippetName: "set",
             snippet: lf("{id:snippets}list") + "[0] = 1",
             snippetOnly: true,
             attributes: {
                 weight: 97,
+                blockId: "lists_index_set",
                 jsDoc: lf("Overwrites the value in an Array at the given index")
             }
         },
         {
-            name: "push",
+            name: "array_push",
+            snippetName: "push",
             snippet: lf("{id:snippets}list") + ".push(1)",
             attributes: {
                 weight: 96,
+                blockId: "array_push",
                 jsDoc: lf("Adds a value to the end of an Array")
             }
         },
         {
-            name: "pop",
+            name: "arary_pop",
+            snippetName: "pop",
             snippet: lf("{id:snippets}list") + ".pop()",
             attributes: {
                 weight: 95,
+                blockId: "array_pop",
                 jsDoc: lf("Removes and returns the value at the end of an Array")
             },
             retType: "object"
         },
         {
-            name: "insertAt",
+            name: "array_insertAt",
+            snippetName: "insertAt",
             snippet: lf("{id:snippets}list") + ".insertAt(0, 0)",
             attributes: {
                 weight: 50,
+                blockId: "array_insertAt",
                 jsDoc: lf("Inserts a value into the Array at the given index"),
                 advanced: true
             }
         },
         {
-            name: "removeAt",
+            name: "array_removeAt",
+            snippetName: "removeAt",
             snippet: lf("{id:snippets}list") + ".removeAt(0)",
             attributes: {
                 weight: 49,
+                blockId: "array_removeat",
                 jsDoc: lf("Removes a value from the Array at the given index and returns it"),
                 advanced: true
             },
             retType: "object"
         },
         {
-            name: "shift",
+            name: "array_shift",
+            snippetName: "shift",
             snippet: lf("{id:snippets}list") + ".shift()",
             attributes: {
                 weight: 48,
+                blockId: "array_shift",
                 jsDoc: lf("Removes and returns the value at the front of an Array"),
                 advanced: true
             }
         },
         {
-            name: "unshift",
+            name: "array_unshift",
+            snippetName: "unshift",
             snippet: lf("{id:snippets}list") + ".unshift(0)",
             attributes: {
                 weight: 47,
+                blockId: "array_unshift",
                 jsDoc: lf("Inserts a value at the beginning of an Array"),
                 advanced: true
             }
         },
         {
-            name: "indexOf",
+            name: "array_indexOf",
+            snippetName: "indexOf",
             snippet: "[\"A\", \"B\", \"C\"].indexOf(\"B\")",
             attributes: {
                 weight: 46,
@@ -9891,7 +11751,8 @@ exports.arrays = {
             retType: "number"
         },
         {
-            name: "reverse",
+            name: "array_reverse",
+            snippetName: "reverse",
             snippet: lf("{id:snippets}list") + ".reverse()",
             attributes: {
                 weight: 45,
@@ -9903,7 +11764,6 @@ exports.arrays = {
     attributes: {
         advanced: true,
         weight: 50.07,
-        color: pxt.toolbox.blockColors["arrays"].toString(),
         icon: "arrays",
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
         paramDefl: {}
@@ -9915,51 +11775,63 @@ exports.text = {
     custom: true,
     blocks: [
         {
-            name: "length",
+            name: "text_length",
+            snippetName: "length",
             snippet: "\"\".length",
             snippetOnly: true,
             attributes: {
+                blockId: 'text_length',
                 jsDoc: lf("Returns the number of characters in a string")
             },
             retType: "number"
         },
         {
-            name: "concat",
+            name: "text_concat",
+            snippetName: "concat",
             snippet: "\"\" + 5",
             snippetOnly: true,
             attributes: {
+                blockId: 'text_join',
                 jsDoc: lf("Combines a string with a number, boolean, string, or other object into one string")
             },
             retType: "string"
         },
         {
-            name: "compare",
+            name: "text_compare",
+            snippetName: "compare",
             snippet: "\"\".compare(\"\")",
             attributes: {
+                blockId: 'string_compare',
                 jsDoc: lf("Compares one string against another alphabetically and returns a number")
             },
             retType: "number"
         },
         {
-            name: "parseInt",
+            name: "text_parseInt",
+            snippetName: "parseInt",
             snippet: "parseInt(\"5\")",
             attributes: {
+                blockId: 'string_parseint',
                 jsDoc: lf("Converts a number written as text into a number")
             },
             retType: "number"
         },
         {
-            name: "substr",
+            name: "text_substr",
+            snippetName: "substr",
             snippet: "\"\".substr(0, 0)",
             attributes: {
+                blockId: 'string_substr',
                 jsDoc: lf("Returns the part of a string starting at a given index with the given length")
             },
             retType: "string"
         },
         {
-            name: "charAt",
+            name: "text_charAt",
+            snippetName: "charAt",
             snippet: "\"\".charAt(0)",
             attributes: {
+                blockId: 'string_get',
                 jsDoc: lf("Returns the character at the given index")
             },
             retType: "string"
@@ -9969,6 +11841,24 @@ exports.text = {
         advanced: true,
         weight: 50.06,
         icon: "text",
+        callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+        paramDefl: {}
+    }
+};
+exports.extensions = {
+    name: pxt.toolbox.addPackageTitle(),
+    nameid: 'addpackage',
+    blocks: [],
+    custom: true,
+    customClick: function (theEditor) {
+        theEditor.closeFlyout();
+        theEditor.showPackageDialog();
+        return true;
+    },
+    attributes: {
+        advanced: true,
+        weight: -1,
+        icon: "addpackage",
         callingConvention: ts.pxtc.ir.CallingConvention.Plain,
         paramDefl: {}
     }
@@ -9985,9 +11875,11 @@ function getPauseUntil() {
             snippet = opts.namespace + "." + snippet;
         }
         pauseUntil = {
-            name: callName,
+            name: 'pause_until',
+            snippetName: callName,
             snippet: snippet,
             attributes: {
+                blockNamespace: opts.category || "loops",
                 weight: opts.weight == null ? 0 : opts.weight,
                 jsDoc: lf("Pause execution of code until the given boolean expression is true"),
                 advanced: false
@@ -10007,6 +11899,7 @@ function getBuiltinCategory(ns) {
         case exports.text.nameid: return exports.text;
         case exports.arrays.nameid: return exports.arrays;
         case exports.functions.nameid: return exports.functions;
+        case exports.extensions.nameid: return exports.extensions;
     }
     return undefined;
 }
@@ -10020,16 +11913,70 @@ function isBuiltin(ns) {
         case exports.text.nameid:
         case exports.arrays.nameid:
         case exports.functions.nameid:
+        case exports.extensions.nameid:
             return true;
     }
     return false;
 }
 exports.isBuiltin = isBuiltin;
+var builtinBlockCacheById;
+var builtinBlockCacheByName;
+function cacheBuiltInBlocks() {
+    if (builtinBlockCacheById)
+        return;
+    builtinBlockCacheById = {};
+    builtinBlockCacheByName = {};
+    [exports.loops, exports.logic, exports.maths, exports.text, exports.arrays, exports.variables, exports.functions].forEach((function (builtin) {
+        builtin.blocks.forEach(function (block) {
+            if (block.type)
+                return; // Block type is assumed to be empty
+            if (!block.snippet)
+                return;
+            if (block.attributes.blockId && !builtinBlockCacheById[block.attributes.blockId]) {
+                builtinBlockCacheById[block.attributes.blockId] = [block, builtin.nameid];
+            }
+            if (!builtinBlockCacheByName[block.name]) {
+                builtinBlockCacheByName[block.name] = [block, builtin.nameid];
+            }
+        });
+    }));
+}
+function allBuiltinBlocks() {
+    cacheBuiltInBlocks();
+    // Add pause until built in block
+    var pauseUntil = this.getPauseUntil();
+    if (pauseUntil) {
+        builtinBlockCacheById[pxtc.PAUSE_UNTIL_TYPE] = pauseUntil;
+    }
+    return builtinBlockCacheById;
+}
+exports.allBuiltinBlocks = allBuiltinBlocks;
+function allBuiltinBlocksByName() {
+    cacheBuiltInBlocks();
+    // Add pause until built in block
+    var pauseUntil = this.getPauseUntil();
+    if (pauseUntil) {
+        builtinBlockCacheByName[pxtc.PAUSE_UNTIL_TYPE] = pauseUntil;
+    }
+    return builtinBlockCacheByName;
+}
+exports.allBuiltinBlocksByName = allBuiltinBlocksByName;
+function clearBuiltinBlockCache() {
+    builtinBlockCacheById = undefined;
+    builtinBlockCacheByName = undefined;
+}
+exports.clearBuiltinBlockCache = clearBuiltinBlockCache;
 function overrideCategory(ns, def) {
     var cat = getBuiltinCategory(ns);
     if (def && cat) {
+        if (Object.keys(def).length === 0) {
+            cat.removed = true;
+        }
         if (def.name) {
             cat.name = def.name;
+        }
+        if (def.icon) {
+            cat.attributes.icon = def.icon;
         }
         if (def.weight !== undefined) {
             cat.attributes.weight = def.weight;
@@ -10037,63 +11984,67 @@ function overrideCategory(ns, def) {
         if (def.advanced !== undefined) {
             cat.attributes.advanced = def.advanced;
         }
-        if (def.removed !== undefined) {
-            cat.removed = def.removed;
+        if (def.groups != undefined) {
+            cat.groups = def.groups;
         }
         if (def.blocks) {
             var currentWeight_1 = 100;
-            if (def.appendBlocks) {
-                currentWeight_1 = 50;
-                def.blocks.forEach(function (b, i) {
-                    if (b.weight) {
-                        currentWeight_1 = b.weight;
-                    }
-                    else {
-                        currentWeight_1--;
-                    }
-                    var blk = {
-                        name: b.name,
-                        snippet: b.snippet,
-                        snippetOnly: b.snippetOnly,
-                        attributes: {
-                            weight: currentWeight_1,
-                            advanced: b.advanced,
-                            jsDoc: b.jsDoc,
-                            group: b.group,
-                        },
-                        noNamespace: true,
-                        retType: b.retType
-                    };
-                    cat.blocks.push(blk);
-                });
-            }
-            else {
-                cat.blocks = def.blocks.map(function (b, i) {
-                    if (b.weight) {
-                        currentWeight_1 = b.weight;
-                    }
-                    else {
-                        currentWeight_1--;
-                    }
-                    return {
-                        name: b.name,
-                        snippet: b.snippet,
-                        snippetOnly: b.snippetOnly,
-                        attributes: {
-                            weight: currentWeight_1,
-                            advanced: b.advanced,
-                            jsDoc: b.jsDoc,
-                            group: b.group,
-                        },
-                        noNamespace: true,
-                        retType: b.retType
-                    };
-                });
-            }
+            cat.blocks = def.blocks.map(function (b, i) {
+                if (b.weight) {
+                    currentWeight_1 = b.weight;
+                }
+                else {
+                    currentWeight_1--;
+                }
+                return blockFromJson(b, currentWeight_1);
+            });
         }
     }
 }
 exports.overrideCategory = overrideCategory;
+function blockFromJson(b, currentWeight) {
+    return {
+        name: b.name,
+        snippet: b.snippet,
+        snippetName: b.snippetName,
+        snippetOnly: b.snippetOnly,
+        attributes: {
+            blockId: b.blockId,
+            weight: currentWeight || b.weight,
+            advanced: b.advanced,
+            jsDoc: b.jsDoc,
+            group: b.group,
+        },
+        noNamespace: true,
+        retType: b.retType,
+        blockXml: b.blockXml
+    };
+}
+function blockToJson(b) {
+    return {
+        name: b.name,
+        snippet: b.snippet,
+        snippetName: b.snippetName,
+        snippetOnly: b.snippetOnly,
+        retType: b.retType,
+        weight: b.attributes.weight,
+        advanced: b.attributes.advanced,
+        jsDoc: b.attributes.jsDoc,
+        group: b.attributes.group,
+        blockXml: b.blockXml,
+        blockId: b.attributes.blockId
+    };
+}
+function categoryToJson(c) {
+    return {
+        name: c.name,
+        icon: c.attributes.icon,
+        color: c.attributes.color,
+        weight: c.attributes.weight,
+        advanced: c.attributes.advanced,
+        blocks: (c.blocks) ? c.blocks.map(function (b) { return blockToJson(b); }) : []
+    };
+}
 function overrideToolbox(def) {
     overrideCategory(exports.loops.nameid, def.loops);
     overrideCategory(exports.logic.nameid, def.logic);
@@ -10104,8 +12055,20 @@ function overrideToolbox(def) {
     overrideCategory(exports.functions.nameid, def.functions);
 }
 exports.overrideToolbox = overrideToolbox;
+function getToolboxDefinition() {
+    return {
+        loops: categoryToJson(getBuiltinCategory(exports.loops.nameid)),
+        logic: categoryToJson(getBuiltinCategory(exports.logic.nameid)),
+        variables: categoryToJson(getBuiltinCategory(exports.variables.nameid)),
+        maths: categoryToJson(getBuiltinCategory(exports.maths.nameid)),
+        text: categoryToJson(getBuiltinCategory(exports.text.nameid)),
+        arrays: categoryToJson(getBuiltinCategory(exports.arrays.nameid)),
+        functions: categoryToJson(getBuiltinCategory(exports.functions.nameid))
+    };
+}
+exports.getToolboxDefinition = getToolboxDefinition;
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 /// <reference path="../../localtypings/mscc.d.ts" />
@@ -10123,6 +12086,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
 var sui = require("./sui");
+var electron = require("./electron");
 var Cloud = pxt.Cloud;
 var GenericBanner = /** @class */ (function (_super) {
     __extends(GenericBanner, _super);
@@ -10131,6 +12095,7 @@ var GenericBanner = /** @class */ (function (_super) {
         _this.delayTime = _this.props.delayTime || 0;
         _this.doneSleeping = _this.sleepDone();
         _this.bannerType = _this.props.bannerType || "default";
+        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
     GenericBanner.prototype.componentDidMount = function () {
@@ -10157,22 +12122,25 @@ var GenericBanner = /** @class */ (function (_super) {
             this.timer = setTimeout(function () { return _this.hide("automatic"); }, this.delayTime + this.props.displayTime);
         }
         this.props.parent.setBannerVisible(true);
-        this.forceUpdate();
+        this.render();
     };
     GenericBanner.prototype.hide = function (mode) {
         pxt.tickEvent("notificationBanner." + mode + "Close");
         pxt.storage.setLocal("lastBannerClosedTime", pxt.Util.nowSeconds().toString());
         this.props.parent.setBannerVisible(false);
-        this.forceUpdate();
+        this.render();
+    };
+    GenericBanner.prototype.handleClick = function () {
+        this.hide("manual");
+        clearTimeout(this.timer);
     };
     GenericBanner.prototype.renderCore = function () {
-        var _this = this;
         return ((this.props.parent.state.bannerVisible && this.doneSleeping) ?
             React.createElement("div", { id: "notificationBanner", className: "ui attached " + this.bannerType + " message" },
                 React.createElement("div", { className: "bannerLeft" },
                     React.createElement("div", { className: "content" }, this.props.children)),
                 React.createElement("div", { className: "bannerRight" },
-                    React.createElement(sui.Icon, { icon: "close", tabIndex: 0, onClick: function () { _this.hide("manual"); clearTimeout(_this.timer); } }))) :
+                    React.createElement(sui.Icon, { icon: "close", tabIndex: 0, onClick: this.handleClick }))) :
             React.createElement("div", null));
     };
     return GenericBanner;
@@ -10180,28 +12148,36 @@ var GenericBanner = /** @class */ (function (_super) {
 exports.GenericBanner = GenericBanner;
 var NotificationBanner = /** @class */ (function (_super) {
     __extends(NotificationBanner, _super);
-    function NotificationBanner() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function NotificationBanner(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleBannerClick = _this.handleBannerClick.bind(_this);
+        return _this;
     }
+    NotificationBanner.prototype.handleBannerClick = function () {
+        pxt.tickEvent("banner.linkClicked", undefined, { interactiveConsent: true });
+    };
     NotificationBanner.prototype.renderCore = function () {
         if (pxt.analytics.isCookieBannerVisible()) {
             // don't show any banner while cookie banner is up
             return React.createElement("div", null);
         }
         var targetTheme = pxt.appTarget.appTheme;
-        var isApp = pxt.winrt.isWinRT();
+        var isApp = pxt.winrt.isWinRT() || electron.isElectron;
         var isLocalServe = location.hostname === "localhost";
         var isExperimentalUrlPath = location.pathname !== "/"
             && (targetTheme.appPathNames || []).indexOf(location.pathname) === -1;
         var showExperimentalBanner = !isLocalServe && isApp && isExperimentalUrlPath;
         var isWindows10 = pxt.BrowserUtils.isWindows10();
         var targetConfig = this.getData("target-config:");
-        var showWindowsStoreBanner = isWindows10 && Cloud.isOnline() && targetConfig && targetConfig.windowsStoreLink && !isApp;
+        var showWindowsStoreBanner = isWindows10 && Cloud.isOnline() && targetConfig && targetConfig.windowsStoreLink
+            && !isApp
+            && !pxt.shell.isSandboxMode();
         if (showWindowsStoreBanner) {
             return (React.createElement(GenericBanner, { parent: this.props.parent, delayTime: 10000, displayTime: 45000, sleepTime: 604800 },
-                React.createElement(sui.Link, { className: "link", target: "_blank", ariaLabel: lf("View app in the Windows store"), href: targetConfig.windowsStoreLink, onClick: function () { return pxt.tickEvent("banner.linkClicked", undefined, { interactiveConsent: true }); } },
-                    React.createElement("img", { className: "bannerIcon", src: pxt.Util.pathJoin(pxt.webConfig.commitCdnUrl, "images/windowsstorebag.png") })),
-                React.createElement(sui.Link, { className: "link", target: "_blank", ariaLabel: lf("View app in the Windows store"), href: targetConfig.windowsStoreLink, onClick: function () { return pxt.tickEvent("banner.linkClicked", undefined, { interactiveConsent: true }); } }, lf("Want a faster download? Get the app!"))));
+                React.createElement(sui.Link, { className: "link", target: "_blank", ariaLabel: lf("View app in the Windows store"), href: targetConfig.windowsStoreLink, onClick: this.handleBannerClick },
+                    React.createElement("img", { className: "bannerIcon", src: pxt.Util.pathJoin(pxt.webConfig.commitCdnUrl, "images/windowsstorebag.png"), alt: lf("Windows store logo") })),
+                React.createElement(sui.Link, { className: "link", target: "_blank", ariaLabel: lf("View app in the Windows store"), href: targetConfig.windowsStoreLink, onClick: this.handleBannerClick }, lf("Want a faster download? Get the app!"))));
         }
         if (showExperimentalBanner) {
             var liveUrl = pxt.appTarget.appTheme.homeUrl + location.search + location.hash;
@@ -10216,7 +12192,7 @@ var NotificationBanner = /** @class */ (function (_super) {
 }(data.Component));
 exports.NotificationBanner = NotificationBanner;
 
-},{"./data":15,"./sui":47,"react":155}],35:[function(require,module,exports){
+},{"./data":15,"./electron":21,"./sui":48,"react":157}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var workspace = require("./workspace");
@@ -10329,10 +12305,74 @@ var EditorPackage = /** @class */ (function () {
     EditorPackage.prototype.getTopHeader = function () {
         return this.topPkg.header;
     };
+    EditorPackage.prototype.afterMainLoadAsync = function () {
+        if (this.assetsPkg)
+            return this.assetsPkg.loadAssetsAsync();
+        return Promise.resolve();
+    };
+    EditorPackage.prototype.saveAssetAsync = function (filename, data) {
+        var _this = this;
+        return workspace.saveAssetAsync(this.header.id, filename, data)
+            .then(function () { return _this.assetsPkg.loadAssetsAsync(); });
+    };
+    EditorPackage.prototype.loadAssetsAsync = function () {
+        var _this = this;
+        if (this.id != "assets")
+            return Promise.resolve();
+        return workspace.listAssetsAsync(this.topPkg.header.id)
+            .then(function (res) {
+            var removeMe = Util.flatClone(_this.files);
+            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
+                var asset = res_1[_i];
+                var fn = asset.name;
+                var ex = Util.lookup(_this.files, fn);
+                if (ex) {
+                    delete removeMe[fn];
+                }
+                else {
+                    ex = new File(_this, fn, "File size: " + asset.size + "; URL: " + asset.url);
+                    _this.files[fn] = ex;
+                }
+            }
+            for (var _a = 0, _b = Object.keys(removeMe); _a < _b.length; _a++) {
+                var n = _b[_a];
+                delete _this.files[n];
+            }
+            var assetsTs = "";
+            var _loop_1 = function (f_1) {
+                var asset = res.filter(function (a) { return a.name == f_1.name; })[0];
+                var bn = f_1.name.replace(/\..*/, "").replace(/[^a-zA-Z0-9_]/g, "_");
+                assetsTs += "    export const " + bn + " = \"" + asset.url + "\";\n";
+            };
+            for (var _c = 0, _d = _this.sortedFiles(); _c < _d.length; _c++) {
+                var f_1 = _d[_c];
+                _loop_1(f_1);
+            }
+            var assetsFN = "assets.ts";
+            var f = _this.topPkg.lookupFile(assetsFN);
+            if (f || assetsTs) {
+                assetsTs = "namespace assets {\n" + assetsTs + "}\n";
+                var cfg = _this.topPkg.ksPkg.config;
+                if (cfg.files.indexOf(assetsFN) < 0) {
+                    cfg.files.push(assetsFN);
+                    _this.topPkg.ksPkg.saveConfig();
+                }
+                if (!f)
+                    _this.topPkg.setFile(assetsFN, assetsTs);
+                else
+                    return f.setContentAsync(assetsTs);
+            }
+            return Promise.resolve();
+        });
+    };
     EditorPackage.prototype.makeTopLevel = function () {
         this.topPkg = this;
         this.outputPkg = new EditorPackage(null, this);
         this.outputPkg.id = "built";
+        if (pxt.appTarget.runtime && pxt.appTarget.runtime.assetExtensions) {
+            this.assetsPkg = new EditorPackage(null, this);
+            this.assetsPkg.id = "assets";
+        }
     };
     EditorPackage.prototype.updateConfigAsync = function (update) {
         var cfgFile = this.files[pxt.CONFIG_NAME];
@@ -10464,7 +12504,11 @@ var EditorPackage = /** @class */ (function () {
     EditorPackage.prototype.pkgAndDeps = function () {
         if (this.topPkg != this)
             return this.topPkg.pkgAndDeps();
-        return Util.values(this.ksPkg.deps).map(getEditorPkg).concat([this.outputPkg]);
+        var res = Util.values(this.ksPkg.deps).map(getEditorPkg);
+        if (this.assetsPkg)
+            res.push(this.assetsPkg);
+        res.push(this.outputPkg);
+        return res;
     };
     EditorPackage.prototype.filterFiles = function (cond) {
         return Util.concat(this.pkgAndDeps().map(function (e) { return Util.values(e.files).filter(cond); }));
@@ -10566,7 +12610,13 @@ function mainEditorPkg() {
 }
 exports.mainEditorPkg = mainEditorPkg;
 function genFileName(extension) {
-    var sanitizedName = mainEditorPkg().header.name.replace(/[\\\/.,?*^:<>!;'#$%^&|"\x00-\x1F ]/g, "-");
+    /* tslint:disable:no-control-regex */
+    var sanitizedName = mainEditorPkg().header.name.replace(/[()\\\/.,?*^:<>!;'#$%^&|"\x00-\x1F ]\s/g, '');
+    /* tslint:enable:no-control-regex */
+    if (pxt.appTarget.appTheme && pxt.appTarget.appTheme.fileNameExclusiveFilter) {
+        var rx = new RegExp(pxt.appTarget.appTheme.fileNameExclusiveFilter, 'g');
+        sanitizedName = sanitizedName.replace(rx, '');
+    }
     var fn = (pxt.appTarget.nickname || pxt.appTarget.id) + "-" + sanitizedName + extension;
     return fn;
 }
@@ -10592,6 +12642,7 @@ function loadPkgAsync(id) {
         if (!str)
             return Promise.resolve();
         return exports.mainPkg.installAllAsync()
+            .then(function () { return mainEditorPkg().afterMainLoadAsync(); })
             .catch(function (e) {
             core.errorNotification(lf("Cannot load package: {0}", e.message));
         });
@@ -10646,7 +12697,7 @@ data.mountVirtualApi("pkg-status", {
     },
 });
 
-},{"./core":13,"./data":15,"./db":16,"./workspace":50}],36:[function(require,module,exports){
+},{"./core":13,"./data":15,"./db":16,"./workspace":52}],37:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -10659,6 +12710,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var ReactDOM = require("react-dom");
@@ -10667,8 +12735,8 @@ var sui = require("./sui");
 var core = require("./core");
 var compiler = require("./compiler");
 var codecard = require("./codecard");
-var gallery = require("./gallery");
 var carousel = require("./carousel");
+var dialogs_1 = require("./dialogs");
 var Projects = /** @class */ (function (_super) {
     __extends(Projects, _super);
     function Projects(props) {
@@ -10676,6 +12744,13 @@ var Projects = /** @class */ (function (_super) {
         _this.state = {
             visible: false
         };
+        _this.showLanguagePicker = _this.showLanguagePicker.bind(_this);
+        _this.showAboutDialog = _this.showAboutDialog.bind(_this);
+        _this.chgHeader = _this.chgHeader.bind(_this);
+        _this.chgGallery = _this.chgGallery.bind(_this);
+        _this.chgCode = _this.chgCode.bind(_this);
+        _this.importProject = _this.importProject.bind(_this);
+        _this.setSelected = _this.setSelected.bind(_this);
         return _this;
     }
     Projects.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
@@ -10713,6 +12788,99 @@ var Projects = /** @class */ (function (_super) {
         var offset = 30;
         containerDomNode.parentElement.scrollTop = containerDomNode.parentElement.scrollTop + delta - offset;
     };
+    Projects.prototype.showLanguagePicker = function () {
+        pxt.tickEvent("projects.langpicker");
+        this.props.parent.showLanguagePicker();
+    };
+    Projects.prototype.showAboutDialog = function () {
+        dialogs_1.showAboutDialogAsync();
+    };
+    Projects.prototype.chgHeader = function (hdr) {
+        pxt.tickEvent("projects.header");
+        core.showLoading("changeheader", lf("loading..."));
+        this.props.parent.loadHeaderAsync(hdr)
+            .done(function () {
+            core.hideLoading("changeheader");
+        });
+    };
+    Projects.prototype.chgGallery = function (scr) {
+        pxt.tickEvent("projects.gallery", { name: scr.name });
+        switch (scr.cardType) {
+            case "template":
+                var prj = pxt.Util.clone(pxt.appTarget.blocksprj);
+                prj.config.dependencies = {}; // clear all dependencies
+                this.chgCode(scr, true, prj);
+                break;
+            case "example":
+                this.chgCode(scr, true);
+                break;
+            case "codeExample":
+                this.chgCode(scr, false);
+                break;
+            case "side":
+                this.props.parent.newEmptyProject(scr.name, scr.url);
+                break;
+            case "tutorial":
+                this.props.parent.startTutorial(scr.url, scr.name);
+                break;
+            default:
+                var m = /^\/#tutorial:([a-z0A-Z0-9\-\/]+)$/.exec(scr.url); // Tutorial
+                if (m)
+                    this.props.parent.startTutorial(m[1]);
+                else {
+                    if (scr.youTubeId && !scr.url)
+                        window.open('https://youtu.be/' + scr.youTubeId, 'yt');
+                    else if (/^https:\/\//i.test(scr.url))
+                        window.open(scr.url, '_blank');
+                    else if (scr.url)
+                        if (/^\//i.test(scr.url))
+                            window.open(scr.url, '_blank');
+                        else
+                            core.errorNotification(lf("Sorry, the project url looks invalid."));
+                    else
+                        this.props.parent.newEmptyProject(scr.name.toLowerCase());
+                }
+        }
+    };
+    Projects.prototype.chgCode = function (scr, loadBlocks, prj) {
+        var _this = this;
+        core.showLoading("changingcode", lf("loading..."));
+        var name = scr.name.toLowerCase().replace(/\W/, '');
+        pxt.gallery.loadExampleAsync(name, scr.url)
+            .done(function (opts) {
+            if (opts) {
+                if (prj)
+                    opts.prj = prj;
+                if (loadBlocks) {
+                    return _this.props.parent.createProjectAsync(opts)
+                        .then(function () {
+                        return compiler.getBlocksAsync()
+                            .then(function (blocksInfo) { return compiler.decompileAsync("main.ts", blocksInfo); })
+                            .then(function (resp) {
+                            pxt.debug("example decompilation: " + resp.success);
+                            if (resp.success) {
+                                _this.props.parent.overrideBlocksFile(resp.outfiles["main.blocks"]);
+                            }
+                        });
+                    })
+                        .done(function () {
+                        core.hideLoading("changingcode");
+                    });
+                }
+                else {
+                    opts.tsOnly = true;
+                    return _this.props.parent.createProjectAsync(opts)
+                        .then(function () { return Promise.delay(500); })
+                        .done(function () { return core.hideLoading("changingcode"); });
+                }
+            }
+            core.hideLoading("changingcode");
+        });
+    };
+    Projects.prototype.importProject = function () {
+        pxt.tickEvent("projects.importdialog", undefined, { interactiveConsent: true });
+        this.props.parent.importProjectDialog();
+    };
     Projects.prototype.renderCore = function () {
         var _this = this;
         var _a = this.state, selectedCategory = _a.selectedCategory, selectedIndex = _a.selectedIndex;
@@ -10730,95 +12898,6 @@ var Projects = /** @class */ (function (_super) {
         // lf("Projects")
         // lf("Examples")
         // lf("Tutorials")
-        var chgHeader = function (hdr) {
-            pxt.tickEvent("projects.header");
-            core.showLoading("changeheader", lf("loading..."));
-            _this.props.parent.loadHeaderAsync(hdr)
-                .done(function () {
-                core.hideLoading("changeheader");
-            });
-        };
-        var chgGallery = function (scr) {
-            pxt.tickEvent("projects.gallery", { name: scr.name });
-            switch (scr.cardType) {
-                case "template":
-                    var prj = pxt.Util.clone(pxt.appTarget.blocksprj);
-                    prj.config.dependencies = {}; // clear all dependencies
-                    chgCode(scr, true, prj);
-                    break;
-                case "example":
-                    chgCode(scr, true);
-                    break;
-                case "codeExample":
-                    chgCode(scr, false);
-                    break;
-                case "side":
-                    _this.props.parent.newEmptyProject(scr.name, scr.url);
-                    break;
-                case "tutorial":
-                    _this.props.parent.startTutorial(scr.url, scr.name);
-                    break;
-                default:
-                    var m = /^\/#tutorial:([a-z0A-Z0-9\-\/]+)$/.exec(scr.url); // Tutorial
-                    if (m)
-                        _this.props.parent.startTutorial(m[1]);
-                    else {
-                        if (scr.youTubeId && !scr.url)
-                            window.open('https://youtu.be/' + scr.youTubeId, 'yt');
-                        else if (/^https:\/\//i.test(scr.url))
-                            window.open(scr.url, '_blank');
-                        else if (scr.url)
-                            if (/^\//i.test(scr.url))
-                                window.open(scr.url, '_blank');
-                            else
-                                core.errorNotification(lf("Sorry, the project url looks invalid."));
-                        else
-                            _this.props.parent.newEmptyProject(scr.name.toLowerCase());
-                    }
-            }
-        };
-        var chgCode = function (scr, loadBlocks, prj) {
-            core.showLoading("changingcode", lf("loading..."));
-            var name = scr.name.toLowerCase().replace(/\W/, '');
-            gallery.loadExampleAsync(name, scr.url)
-                .done(function (opts) {
-                if (opts) {
-                    if (prj)
-                        opts.prj = prj;
-                    if (loadBlocks) {
-                        return _this.props.parent.createProjectAsync(opts)
-                            .then(function () {
-                            return compiler.getBlocksAsync()
-                                .then(function (blocksInfo) { return compiler.decompileAsync("main.ts", blocksInfo); })
-                                .then(function (resp) {
-                                pxt.debug("example decompilation: " + resp.success);
-                                if (resp.success) {
-                                    _this.props.parent.overrideBlocksFile(resp.outfiles["main.blocks"]);
-                                }
-                            });
-                        })
-                            .done(function () {
-                            core.hideLoading("changingcode");
-                        });
-                    }
-                    else {
-                        opts.tsOnly = true;
-                        return _this.props.parent.createProjectAsync(opts)
-                            .then(function () { return Promise.delay(500); })
-                            .done(function () { return core.hideLoading("changingcode"); });
-                    }
-                }
-                core.hideLoading("changingcode");
-            });
-        };
-        var importProject = function () {
-            pxt.tickEvent("projects.importdialog", undefined, { interactiveConsent: true });
-            _this.props.parent.importProjectDialog();
-        };
-        var showLanguagePicker = function () {
-            pxt.tickEvent("projects.langpicker");
-            _this.props.parent.showLanguagePicker();
-        };
         var showHeroBanner = !!targetTheme.homeScreenHero;
         var tabClasses = sui.cx([
             'ui segment bottom attached tab active tabsegment'
@@ -10832,31 +12911,36 @@ var Projects = /** @class */ (function (_super) {
                         React.createElement("h2", { className: "ui header" },
                             lf("My Projects"),
                             " ")),
-                    React.createElement("div", { className: "column right aligned" }, pxt.appTarget.compile || (pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.publishing && pxt.appTarget.cloud.importing) ?
-                        React.createElement(sui.Button, { key: "import", icon: "upload", className: "mini import-dialog-btn", textClass: "landscape only", text: lf("Import"), title: lf("Import a project"), onClick: function () { return importProject(); } }) : undefined)),
+                    React.createElement("div", { className: "column right aligned" }, pxt.appTarget.compile || (pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.importing) ?
+                        React.createElement(sui.Button, { key: "import", icon: "upload", className: "mini import-dialog-btn", textClass: "landscape only", text: lf("Import"), title: lf("Import a project"), onClick: this.importProject }) : undefined)),
                 React.createElement("div", { className: "content" },
-                    React.createElement(ProjectsCarousel, { key: "mystuff_carousel", parent: this.props.parent, name: 'recent', onClick: function (scr) { return chgHeader(scr); } }))),
+                    React.createElement(ProjectsCarousel, { key: "mystuff_carousel", parent: this.props.parent, name: 'recent', onClick: this.chgHeader }))),
             Object.keys(galleries).map(function (galleryName) {
                 return React.createElement("div", { key: galleryName + "_gallerysegment", className: "ui segment gallerysegment" },
                     React.createElement("h2", { className: "ui header heading" },
                         pxt.Util.rlf(galleryName),
                         " "),
                     React.createElement("div", { className: "content" },
-                        React.createElement(ProjectsCarousel, { ref: "" + (selectedCategory == galleryName ? 'activeCarousel' : ''), key: galleryName + "_carousel", parent: _this.props.parent, name: galleryName, path: galleries[galleryName], onClick: function (scr) { return chgGallery(scr); }, setSelected: function (index) { return _this.setSelected(galleryName, index); }, selectedIndex: selectedCategory == galleryName ? selectedIndex : undefined })));
+                        React.createElement(ProjectsCarousel, { ref: "" + (selectedCategory == galleryName ? 'activeCarousel' : ''), key: galleryName + "_carousel", parent: _this.props.parent, name: galleryName, path: galleries[galleryName], onClick: _this.chgGallery, setSelected: _this.setSelected, selectedIndex: selectedCategory == galleryName ? selectedIndex : undefined })));
             }),
             targetTheme.organizationUrl || targetTheme.organizationUrl || targetTheme.privacyUrl ? React.createElement("div", { className: "ui horizontal small divided link list homefooter" },
-                targetTheme.organizationUrl && targetTheme.organization ? React.createElement("a", { className: "item", target: "_blank", rel: "noopener", href: targetTheme.organizationUrl }, targetTheme.organization) : undefined,
-                targetTheme.selectLanguage ? React.createElement(sui.Link, { className: "item", text: lf("Language"), onClick: function () { return showLanguagePicker(); }, onKeyDown: sui.fireClickOnEnter }) : undefined,
-                targetTheme.termsOfUseUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.termsOfUseUrl, rel: "noopener" }, lf("Terms of Use")) : undefined,
-                targetTheme.privacyUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.privacyUrl, rel: "noopener" }, lf("Privacy")) : undefined) : undefined);
+                targetTheme.organizationUrl && targetTheme.organization ? React.createElement("a", { className: "item", target: "_blank", rel: "noopener noreferrer", href: targetTheme.organizationUrl }, targetTheme.organization) : undefined,
+                targetTheme.selectLanguage ? React.createElement(sui.Link, { className: "item", text: lf("Language"), onClick: this.showLanguagePicker, onKeyDown: sui.fireClickOnEnter }) : undefined,
+                targetTheme.termsOfUseUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.termsOfUseUrl, rel: "noopener noreferrer" }, lf("Terms of Use")) : undefined,
+                targetTheme.privacyUrl ? React.createElement("a", { target: "_blank", className: "item", href: targetTheme.privacyUrl, rel: "noopener noreferrer" }, lf("Privacy")) : undefined,
+                pxt.appTarget.versions ? React.createElement(sui.Link, { className: "item", text: "v" + pxt.appTarget.versions.target, onClick: this.showAboutDialog, onKeyDown: sui.fireClickOnEnter }) : undefined) : undefined);
     };
     return Projects;
 }(data.Component));
 exports.Projects = Projects;
 var ProjectsMenu = /** @class */ (function (_super) {
     __extends(ProjectsMenu, _super);
-    function ProjectsMenu() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function ProjectsMenu(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.brandIconClick = _this.brandIconClick.bind(_this);
+        _this.orgIconClick = _this.orgIconClick.bind(_this);
+        return _this;
     }
     ProjectsMenu.prototype.brandIconClick = function () {
         pxt.tickEvent("projects.brand", undefined, { interactiveConsent: true });
@@ -10868,11 +12952,10 @@ var ProjectsMenu = /** @class */ (function (_super) {
         return false;
     };
     ProjectsMenu.prototype.renderCore = function () {
-        var _this = this;
         var targetTheme = pxt.appTarget.appTheme;
         return React.createElement("div", { id: "homemenu", className: "ui borderless fixed " + (targetTheme.invertedMenu ? "inverted" : '') + " menu", role: "menubar" },
             React.createElement("div", { className: "left menu" },
-                React.createElement("a", { href: targetTheme.logoUrl, "aria-label": lf("{0} Logo", targetTheme.boardName), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo brand", onClick: function () { return _this.brandIconClick(); } },
+                React.createElement("a", { href: targetTheme.logoUrl, "aria-label": lf("{0} Logo", targetTheme.boardName), role: "menuitem", target: "blank", rel: "noopener", className: "ui item logo brand", onClick: this.brandIconClick },
                     targetTheme.logo || targetTheme.portraitLogo
                         ? React.createElement("img", { className: "ui logo " + (targetTheme.logo ? " portrait hide" : ''), src: targetTheme.logo || targetTheme.portraitLogo, alt: lf("{0} Logo", targetTheme.boardName) })
                         : React.createElement("span", { className: "name" }, targetTheme.boardName),
@@ -10882,7 +12965,7 @@ var ProjectsMenu = /** @class */ (function (_super) {
                 " ",
                 React.createElement("span", null, lf("Home"))),
             React.createElement("div", { className: "right menu" },
-                React.createElement("a", { href: targetTheme.organizationUrl, target: "blank", rel: "noopener", className: "ui item logo organization", onClick: function () { return _this.orgIconClick(); } },
+                React.createElement("a", { href: targetTheme.organizationUrl, target: "blank", rel: "noopener", className: "ui item logo organization", onClick: this.orgIconClick },
                     targetTheme.organizationWideLogo || targetTheme.organizationLogo
                         ? React.createElement("img", { className: "ui logo " + (targetTheme.organizationWideLogo ? " portrait hide" : ''), src: targetTheme.organizationWideLogo || targetTheme.organizationLogo, alt: lf("{0} Logo", targetTheme.organization) })
                         : React.createElement("span", { className: "name" }, targetTheme.organization),
@@ -10899,7 +12982,11 @@ var ProjectsCarousel = /** @class */ (function (_super) {
         _this.prevGalleries = [];
         _this.hasFetchErrors = false;
         _this.state = {};
+        _this.closeDetail = _this.closeDetail.bind(_this);
         _this.closeDetailOnEscape = _this.closeDetailOnEscape.bind(_this);
+        _this.reload = _this.reload.bind(_this);
+        _this.newProject = _this.newProject.bind(_this);
+        _this.handleCardClick = _this.handleCardClick.bind(_this);
         return _this;
     }
     ProjectsCarousel.prototype.componentDidMount = function () {
@@ -10930,8 +13017,9 @@ var ProjectsCarousel = /** @class */ (function (_super) {
         this.props.parent.newProject();
     };
     ProjectsCarousel.prototype.closeDetail = function () {
+        var name = this.props.name;
         pxt.tickEvent("projects.detail.close");
-        this.props.setSelected(undefined);
+        this.props.setSelected(name, undefined);
     };
     ProjectsCarousel.prototype.getCarouselDOM = function () {
         var carouselDom = ReactDOM.findDOMNode(this.refs["carousel"]);
@@ -10954,39 +13042,43 @@ var ProjectsCarousel = /** @class */ (function (_super) {
             document.addEventListener('keydown', this.closeDetailOnEscape);
         }
     };
+    ProjectsCarousel.prototype.reload = function () {
+        this.setState({});
+    };
+    ProjectsCarousel.prototype.handleCardClick = function (scr, index) {
+        var name = this.props.name;
+        if (this.props.setSelected) {
+            // Set this item as selected
+            pxt.tickEvent("projects.detail.open");
+            this.props.setSelected(name, index);
+        }
+        else {
+            this.props.onClick(scr);
+        }
+    };
     ProjectsCarousel.prototype.renderCore = function () {
         var _this = this;
-        var _a = this.props, path = _a.path, selectedIndex = _a.selectedIndex;
-        var onClick = function (scr, index) {
-            if (_this.props.setSelected) {
-                // Set this item as selected
-                pxt.tickEvent("projects.detail.open");
-                _this.props.setSelected(index);
-            }
-            else {
-                _this.props.onClick(scr);
-            }
-        };
+        var _a = this.props, name = _a.name, path = _a.path, selectedIndex = _a.selectedIndex;
         if (path) {
             // Fetch the gallery
             this.hasFetchErrors = false;
             var cards = this.fetchGallery(path);
             if (this.hasFetchErrors) {
                 return React.createElement("div", { className: "ui carouselouter" },
-                    React.createElement("div", { className: "carouselcontainer", tabIndex: 0, onClick: function () { return _this.setState({}); } },
+                    React.createElement("div", { role: "button", className: "carouselcontainer", tabIndex: 0, onClick: this.reload },
                         React.createElement("p", { className: "ui grey inverted segment" }, lf("Oops, please connect to the Internet and try again."))));
             }
             else {
                 return React.createElement("div", null,
                     React.createElement(carousel.Carousel, { ref: "carousel", bleedPercent: 20, selectedIndex: selectedIndex }, cards.map(function (scr, index) {
-                        return React.createElement(codecard.CodeCardView, { className: "example", key: path + scr.name, name: scr.name, url: scr.url, imageUrl: scr.imageUrl, youTubeId: scr.youTubeId, label: scr.label, labelClass: scr.labelClass, onClick: function () { return onClick(scr, index); } });
+                        return React.createElement(ProjectsCodeCard, { className: "example", key: path + scr.name, name: scr.name, url: scr.url, imageUrl: scr.imageUrl, youTubeId: scr.youTubeId, label: scr.label, labelClass: scr.labelClass, scr: scr, index: index, onCardClick: _this.handleCardClick });
                     })),
                     React.createElement("div", { ref: "detailView", className: "detailview " + (cards.filter(function (scr, index) { return index == selectedIndex; }).length > 0 ? 'visible' : '') },
                         cards.filter(function (scr, index) { return index == selectedIndex; }).length > 0 ?
                             React.createElement("div", { className: "close" },
-                                React.createElement(sui.Icon, { tabIndex: 0, icon: "remove circle", onClick: function () { return _this.closeDetail(); } })) : undefined,
+                                React.createElement(sui.Icon, { tabIndex: 0, icon: "remove circle", onClick: this.closeDetail })) : undefined,
                         cards.filter(function (scr, index) { return index == selectedIndex; }).map(function (scr) {
-                            return React.createElement(ProjectsDetail, { parent: _this.props.parent, name: scr.name, key: 'detail' + scr.name, description: scr.description, url: scr.url, imageUrl: scr.imageUrl, largeImageUrl: scr.largeImageUrl, youTubeId: scr.youTubeId, onClick: function () { return _this.props.onClick(scr); }, cardType: scr.cardType });
+                            return React.createElement(ProjectsDetail, { parent: _this.props.parent, name: scr.name, key: 'detail' + scr.name, description: scr.description, url: scr.url, imageUrl: scr.imageUrl, largeImageUrl: scr.largeImageUrl, youTubeId: scr.youTubeId, scr: scr, onClick: _this.props.onClick, cardType: scr.cardType });
                         })));
             }
         }
@@ -10994,26 +13086,50 @@ var ProjectsCarousel = /** @class */ (function (_super) {
             var headers = this.fetchLocalData();
             var showNewProject = pxt.appTarget.appTheme && !pxt.appTarget.appTheme.hideNewProjectButton;
             return React.createElement(carousel.Carousel, { bleedPercent: 20 },
-                showNewProject ? React.createElement("div", { className: "ui card link newprojectcard", title: lf("Creates a new empty project"), onClick: function () { return _this.newProject(); }, onKeyDown: sui.fireClickOnEnter },
+                showNewProject ? React.createElement("div", { role: "button", className: "ui card link newprojectcard", title: lf("Creates a new empty project"), onClick: this.newProject, onKeyDown: sui.fireClickOnEnter },
                     React.createElement("div", { className: "content" },
                         React.createElement(sui.Icon, { icon: "huge add circle" }),
                         React.createElement("span", { className: "header" }, lf("New Project")))) : undefined,
                 headers.map(function (scr, index) {
-                    return React.createElement(codecard.CodeCardView, { key: 'local' + scr.id + scr.recentUse, ref: function (view) { if (index === 1)
-                            _this.latestProject = view; }, cardType: "file", className: "file", name: scr.name, time: scr.recentUse, url: scr.pubId && scr.pubCurrent ? "/" + scr.pubId : "", onClick: function () { return onClick(scr); } });
+                    return React.createElement(ProjectsCodeCard, { key: 'local' + scr.id + scr.recentUse, 
+                        // ref={(view) => { if (index === 1) this.latestProject = view }}
+                        cardType: "file", className: "file", name: scr.name, time: scr.recentUse, url: scr.pubId && scr.pubCurrent ? "/" + scr.pubId : "", scr: scr, onCardClick: _this.handleCardClick });
                 }));
         }
     };
     return ProjectsCarousel;
 }(data.Component));
 exports.ProjectsCarousel = ProjectsCarousel;
+var ProjectsCodeCard = /** @class */ (function (_super) {
+    __extends(ProjectsCodeCard, _super);
+    function ProjectsCodeCard(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    ProjectsCodeCard.prototype.handleClick = function () {
+        this.props.onCardClick(this.props.scr, this.props.index);
+    };
+    ProjectsCodeCard.prototype.renderCore = function () {
+        var _a = this.props, scr = _a.scr, onCardClick = _a.onCardClick, onClick = _a.onClick, rest = __rest(_a, ["scr", "onCardClick", "onClick"]);
+        return React.createElement(codecard.CodeCardView, __assign({}, rest, { onClick: this.handleClick }));
+    };
+    return ProjectsCodeCard;
+}(sui.StatelessUIElement));
 var ProjectsDetail = /** @class */ (function (_super) {
     __extends(ProjectsDetail, _super);
-    function ProjectsDetail() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function ProjectsDetail(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleDetailClick = _this.handleDetailClick.bind(_this);
+        return _this;
     }
+    ProjectsDetail.prototype.handleDetailClick = function () {
+        var _a = this.props, scr = _a.scr, onClick = _a.onClick;
+        onClick(scr);
+    };
     ProjectsDetail.prototype.renderCore = function () {
-        var _a = this.props, name = _a.name, description = _a.description, imageUrl = _a.imageUrl, largeImageUrl = _a.largeImageUrl, youTubeId = _a.youTubeId, onClick = _a.onClick, cardType = _a.cardType;
+        var _a = this.props, name = _a.name, description = _a.description, imageUrl = _a.imageUrl, largeImageUrl = _a.largeImageUrl, youTubeId = _a.youTubeId, cardType = _a.cardType;
         var image = largeImageUrl || imageUrl || (youTubeId ? "https://img.youtube.com/vi/" + youTubeId + "/0.jpg" : undefined);
         var clickLabel = lf("Show Instructions");
         if (cardType == "tutorial")
@@ -11026,7 +13142,7 @@ var ProjectsDetail = /** @class */ (function (_super) {
             clickLabel = lf("Play Video");
         var actions = [{
                 label: clickLabel,
-                onClick: onClick,
+                onClick: this.handleDetailClick,
                 icon: '',
                 className: 'huge positive'
             }];
@@ -11041,9 +13157,7 @@ var ProjectsDetail = /** @class */ (function (_super) {
                         " "),
                     React.createElement("p", { className: "detail" }, description),
                     React.createElement("div", { className: "actions" }, actions.map(function (action) {
-                        return React.createElement(sui.Button, { key: "action_" + action.label, icon: action.icon, text: action.label, className: "approve " + (action.icon ? 'icon right labeled' : '') + " " + (action.className || ''), onClick: function () {
-                                action.onClick();
-                            }, onKeyDown: sui.fireClickOnEnter });
+                        return React.createElement(sui.Button, { key: "action_" + action.label, icon: action.icon, text: action.label, className: "approve " + (action.icon ? 'icon right labeled' : '') + " " + (action.className || ''), onClick: action.onClick, onKeyDown: sui.fireClickOnEnter });
                     })))));
     };
     return ProjectsDetail;
@@ -11056,6 +13170,9 @@ var ImportDialog = /** @class */ (function (_super) {
         _this.state = {
             visible: false
         };
+        _this.close = _this.close.bind(_this);
+        _this.importHex = _this.importHex.bind(_this);
+        _this.importUrl = _this.importUrl.bind(_this);
         return _this;
     }
     ImportDialog.prototype.hide = function () {
@@ -11067,25 +13184,24 @@ var ImportDialog = /** @class */ (function (_super) {
     ImportDialog.prototype.show = function () {
         this.setState({ visible: true });
     };
+    ImportDialog.prototype.importHex = function () {
+        pxt.tickEvent("projects.import", undefined, { interactiveConsent: true });
+        this.hide();
+        this.props.parent.showImportFileDialog();
+    };
+    ImportDialog.prototype.importUrl = function () {
+        pxt.tickEvent("projects.importurl", undefined, { interactiveConsent: true });
+        this.hide();
+        this.props.parent.showImportUrlDialog();
+    };
     ImportDialog.prototype.renderCore = function () {
-        var _this = this;
         var visible = this.state.visible;
-        var importHex = function () {
-            pxt.tickEvent("projects.import", undefined, { interactiveConsent: true });
-            _this.hide();
-            _this.props.parent.showImportFileDialog();
-        };
-        var importUrl = function () {
-            pxt.tickEvent("projects.importurl", undefined, { interactiveConsent: true });
-            _this.hide();
-            _this.props.parent.showImportUrlDialog();
-        };
-        return (React.createElement(sui.Modal, { isOpen: visible, className: "importdialog", size: "small", onClose: function () { return _this.close(); }, dimmer: true, closeIcon: true, header: lf("Import"), closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
+        return (React.createElement(sui.Modal, { isOpen: visible, className: "importdialog", size: "small", onClose: this.close, dimmer: true, closeIcon: true, header: lf("Import"), closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
             React.createElement("div", { className: "ui two cards" },
                 pxt.appTarget.compile ?
-                    React.createElement(codecard.CodeCardView, { ariaLabel: lf("Open files from your computer"), role: "button", key: 'import', icon: "upload", iconColor: "secondary", name: lf("Import File..."), description: lf("Open files from your computer"), onClick: function () { return importHex(); } }) : undefined,
-                pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.publishing && pxt.appTarget.cloud.importing ?
-                    React.createElement(codecard.CodeCardView, { ariaLabel: lf("Open a shared project URL"), role: "button", key: 'importurl', icon: "cloud download", iconColor: "secondary", name: lf("Import URL..."), description: lf("Open a shared project URL"), onClick: function () { return importUrl(); } }) : undefined)));
+                    React.createElement(codecard.CodeCardView, { ariaLabel: lf("Open files from your computer"), role: "button", key: 'import', icon: "upload", iconColor: "secondary", name: lf("Import File..."), description: lf("Open files from your computer"), onClick: this.importHex }) : undefined,
+                pxt.appTarget.cloud && pxt.appTarget.cloud.sharing && pxt.appTarget.cloud.importing ?
+                    React.createElement(codecard.CodeCardView, { ariaLabel: lf("Open a shared project URL"), role: "button", key: 'importurl', icon: "cloud download", iconColor: "secondary", name: lf("Import URL..."), description: lf("Open a shared project URL"), onClick: this.importUrl }) : undefined)));
     };
     return ImportDialog;
 }(data.Component));
@@ -11097,15 +13213,23 @@ var ExitAndSaveDialog = /** @class */ (function (_super) {
         _this.state = {
             visible: false
         };
+        _this.hide = _this.hide.bind(_this);
+        _this.modalDidOpen = _this.modalDidOpen.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
+        _this.cancel = _this.cancel.bind(_this);
+        _this.save = _this.save.bind(_this);
         return _this;
     }
+    ExitAndSaveDialog.prototype.componentWillReceiveProps = function (newProps) {
+        this.setState({ projectName: newProps.parent.state.projectName });
+    };
     ExitAndSaveDialog.prototype.hide = function () {
         this.setState({ visible: false });
     };
     ExitAndSaveDialog.prototype.show = function () {
         this.setState({ visible: true });
     };
-    ExitAndSaveDialog.prototype.modalDidUpdate = function (ref) {
+    ExitAndSaveDialog.prototype.modalDidOpen = function (ref) {
         // Save on enter typed
         var dialogInput = document.getElementById('projectNameInput');
         if (dialogInput) {
@@ -11121,46 +13245,45 @@ var ExitAndSaveDialog = /** @class */ (function (_super) {
             };
         }
     };
-    ExitAndSaveDialog.prototype.renderCore = function () {
+    ExitAndSaveDialog.prototype.handleChange = function (name) {
+        this.setState({ projectName: name });
+    };
+    ExitAndSaveDialog.prototype.cancel = function () {
+        pxt.tickEvent("exitandsave.cancel", undefined, { interactiveConsent: true });
+        this.hide();
+    };
+    ExitAndSaveDialog.prototype.save = function () {
         var _this = this;
-        var visible = this.state.visible;
-        var projectName = this.props.parent.state.projectName;
-        var newName = projectName;
-        var save = function () {
-            _this.hide();
-            if (_this.props.parent.state.projectName != newName)
-                pxt.tickEvent("exitandsave.projectrename", undefined, { interactiveConsent: true });
-            _this.props.parent.updateHeaderNameAsync(newName)
-                .done(function () {
-                _this.props.parent.openHome();
-            });
-        };
-        var cancel = function () {
-            pxt.tickEvent("exitandsave.cancel", undefined, { interactiveConsent: true });
-            _this.hide();
-        };
-        var onChange = function (name) {
-            newName = name;
-        };
+        var newName = this.state.projectName;
+        this.hide();
+        if (this.props.parent.state.projectName != newName)
+            pxt.tickEvent("exitandsave.projectrename", undefined, { interactiveConsent: true });
+        this.props.parent.updateHeaderNameAsync(newName)
+            .done(function () {
+            _this.props.parent.openHome();
+        });
+    };
+    ExitAndSaveDialog.prototype.renderCore = function () {
+        var _a = this.state, visible = _a.visible, projectName = _a.projectName;
         var actions = [{
                 label: lf("Done"),
-                onclick: save,
+                onclick: this.save,
                 icon: 'check',
                 className: 'approve positive'
             }, {
                 label: lf("Cancel"),
                 icon: 'cancel',
-                onclick: cancel
+                onclick: this.cancel
             }];
-        return (React.createElement(sui.Modal, { isOpen: visible, className: "exitandsave", size: "tiny", onClose: function () { return _this.hide(); }, dimmer: true, buttons: actions, closeIcon: true, header: lf("Exit Project"), closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true, modalDidUpdate: this.modalDidUpdate },
+        return (React.createElement(sui.Modal, { isOpen: visible, className: "exitandsave", size: "tiny", onClose: this.hide, dimmer: true, buttons: actions, closeIcon: true, header: lf("Exit Project"), closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true, modalDidOpen: this.modalDidOpen },
             React.createElement("div", { className: "ui form" },
-                React.createElement(sui.Input, { id: "projectNameInput", label: lf("Project Name"), ariaLabel: lf("Type a name for your project"), value: projectName, onChange: onChange }))));
+                React.createElement(sui.Input, { ref: "filenameinput", autoFocus: true, id: "projectNameInput", label: lf("Project Name"), ariaLabel: lf("Type a name for your project"), value: projectName || '', onChange: this.handleChange }))));
     };
     return ExitAndSaveDialog;
 }(data.Component));
 exports.ExitAndSaveDialog = ExitAndSaveDialog;
 
-},{"./carousel":7,"./codecard":10,"./compiler":11,"./core":13,"./data":15,"./gallery":25,"./sui":47,"react":155,"react-dom":143}],37:[function(require,module,exports){
+},{"./carousel":7,"./codecard":10,"./compiler":11,"./core":13,"./data":15,"./dialogs":18,"./sui":48,"react":157,"react-dom":145}],38:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -11178,13 +13301,23 @@ var pkg = require("./package");
 var srceditor = require("./srceditor");
 var sui = require("./sui");
 var core = require("./core");
+var data = require("./data");
 var Util = pxt.Util;
 var Editor = /** @class */ (function (_super) {
     __extends(Editor, _super);
-    function Editor() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function Editor(parent) {
+        var _this = _super.call(this, parent) || this;
+        _this.parent = parent;
         _this.config = {};
         _this.changeMade = false;
+        _this.handleNameInputRef = function (c) {
+            _this.nameInput = c;
+        };
+        _this.editSettingsText = _this.editSettingsText.bind(_this);
+        _this.save = _this.save.bind(_this);
+        _this.setFileName = _this.setFileName.bind(_this);
+        _this.isUserConfigActive = _this.isUserConfigActive.bind(_this);
+        _this.applyUserConfig = _this.applyUserConfig.bind(_this);
         return _this;
     }
     Editor.prototype.prepare = function () {
@@ -11196,80 +13329,83 @@ var Editor = /** @class */ (function (_super) {
     Editor.prototype.hasEditorToolbar = function () {
         return false;
     };
+    Editor.prototype.save = function () {
+        var _this = this;
+        var c = this.config;
+        this.isSaving = true;
+        if (!c.name) {
+            // Error saving no name
+            core.errorNotification(lf("Please choose a project name. It can't be blank."));
+            this.isSaving = false;
+            return;
+        }
+        var f = pkg.mainEditorPkg().lookupFile("this/" + pxt.CONFIG_NAME);
+        f.setContentAsync(JSON.stringify(this.config, null, 4) + "\n").then(function () {
+            pkg.mainPkg.config.name = c.name;
+            _this.parent.setState({ projectName: c.name });
+            _this.parent.forceUpdate();
+            Util.nextTick(_this.changeCallback);
+            _this.isSaving = false;
+            _this.changeMade = true;
+            // switch to previous coding experience
+            _this.parent.openPreviousEditor();
+            core.resetFocus();
+        });
+    };
+    Editor.prototype.setFileName = function (v) {
+        var c = this.config;
+        c.name = v;
+        this.parent.forceUpdate();
+    };
+    Editor.prototype.isUserConfigActive = function (uc) {
+        var cfg = Util.jsonFlatten(this.config.yotta ? this.config.yotta.config : {});
+        var ucfg = Util.jsonFlatten(uc.config);
+        return !Object.keys(ucfg).some(function (k) { return ucfg[k] === null ? !!cfg[k] : cfg[k] !== ucfg[k]; });
+    };
+    Editor.prototype.applyUserConfig = function (uc) {
+        var cfg = Util.jsonFlatten(this.config.yotta ? this.config.yotta.config : {});
+        var ucfg = Util.jsonFlatten(uc.config);
+        if (this.isUserConfigActive(uc)) {
+            Object.keys(ucfg).forEach(function (k) { return delete cfg[k]; });
+        }
+        else {
+            Object.keys(ucfg).forEach(function (k) { return cfg[k] = ucfg[k]; });
+        }
+        // update cfg
+        if (Object.keys(cfg).length) {
+            if (!this.config.yotta)
+                this.config.yotta = {};
+            Object.keys(cfg).filter(function (k) { return cfg[k] === null; }).forEach(function (k) { return delete cfg[k]; });
+            this.config.yotta.config = Util.jsonUnFlatten(cfg);
+        }
+        else {
+            if (this.config.yotta) {
+                delete this.config.yotta.config;
+                if (!Object.keys(this.config.yotta).length)
+                    delete this.config.yotta;
+            }
+        }
+        // trigger update            
+        this.save();
+    };
     Editor.prototype.display = function () {
         var _this = this;
         var c = this.config;
-        var save = function () {
-            _this.isSaving = true;
-            if (!c.name) {
-                // Error saving no name
-                core.errorNotification(lf("Please choose a project name. It can't be blank."));
-                _this.isSaving = false;
-                return;
-            }
-            var f = pkg.mainEditorPkg().lookupFile("this/" + pxt.CONFIG_NAME);
-            f.setContentAsync(JSON.stringify(_this.config, null, 4) + "\n").then(function () {
-                pkg.mainPkg.config.name = c.name;
-                _this.parent.setState({ projectName: c.name });
-                _this.parent.forceUpdate();
-                Util.nextTick(_this.changeCallback);
-                _this.isSaving = false;
-                _this.changeMade = true;
-                // switch to previous coding experience
-                _this.parent.openPreviousEditor();
-                core.resetFocus();
-            });
-        };
-        var setFileName = function (v) {
-            c.name = v;
-            _this.parent.forceUpdate();
-        };
         var userConfigs = [];
         pkg.allEditorPkgs().map(function (ep) { return ep.getKsPkg(); })
             .filter(function (dep) { return !!dep && dep.isLoaded && !!dep.config && !!dep.config.yotta && !!dep.config.yotta.userConfigs; })
             .forEach(function (dep) { return userConfigs = userConfigs.concat(dep.config.yotta.userConfigs); });
-        var isUserConfigActive = function (uc) {
-            var cfg = Util.jsonFlatten(_this.config.yotta ? _this.config.yotta.config : {});
-            var ucfg = Util.jsonFlatten(uc.config);
-            return !Object.keys(ucfg).some(function (k) { return ucfg[k] === null ? !!cfg[k] : cfg[k] !== ucfg[k]; });
-        };
-        var applyUserConfig = function (uc) {
-            var cfg = Util.jsonFlatten(_this.config.yotta ? _this.config.yotta.config : {});
-            var ucfg = Util.jsonFlatten(uc.config);
-            if (isUserConfigActive(uc)) {
-                Object.keys(ucfg).forEach(function (k) { return delete cfg[k]; });
-            }
-            else {
-                Object.keys(ucfg).forEach(function (k) { return cfg[k] = ucfg[k]; });
-            }
-            // update cfg
-            if (Object.keys(cfg).length) {
-                if (!_this.config.yotta)
-                    _this.config.yotta = {};
-                Object.keys(cfg).filter(function (k) { return cfg[k] === null; }).forEach(function (k) { return delete cfg[k]; });
-                _this.config.yotta.config = Util.jsonUnFlatten(cfg);
-            }
-            else {
-                if (_this.config.yotta) {
-                    delete _this.config.yotta.config;
-                    if (!Object.keys(_this.config.yotta).length)
-                        delete _this.config.yotta;
-                }
-            }
-            // trigger update            
-            save();
-        };
         return (React.createElement("div", { className: "ui content" },
             React.createElement("h3", { className: "ui small header" },
                 React.createElement("div", { className: "content" }, lf("Project Settings"))),
             React.createElement("div", { className: "ui segment form text" },
-                React.createElement(sui.Input, { ref: function (e) { return _this.nameInput = e; }, id: "fileNameInput", label: lf("Name"), ariaLabel: lf("Type a name for your project"), value: c.name, onChange: setFileName }),
+                React.createElement(sui.Input, { ref: this.handleNameInputRef, id: "fileNameInput", label: lf("Name"), ariaLabel: lf("Type a name for your project"), value: c.name || '', onChange: this.setFileName }),
                 userConfigs.map(function (uc) {
-                    return React.createElement(sui.Checkbox, { key: "userconfig-" + uc.description, inputLabel: uc.description, checked: isUserConfigActive(uc), onChange: function () { return applyUserConfig(uc); } });
+                    return React.createElement(UserConfigCheckbox, { key: "userconfig-" + uc.description, uc: uc, isUserConfigActive: _this.isUserConfigActive, applyUserConfig: _this.applyUserConfig });
                 }),
                 React.createElement(sui.Field, null,
-                    React.createElement(sui.Button, { text: lf("Save"), className: "green " + (this.isSaving ? 'disabled' : ''), onClick: function () { return save(); } }),
-                    React.createElement(sui.Button, { text: lf("Edit Settings As text"), onClick: function () { return _this.editSettingsText(); } })))));
+                    React.createElement(sui.Button, { text: lf("Save"), className: "green " + (this.isSaving ? 'disabled' : ''), onClick: this.save }),
+                    React.createElement(sui.Button, { text: lf("Edit Settings As text"), onClick: this.editSettingsText })))));
     };
     Editor.prototype.isIncomplete = function () {
         return !this.changeMade;
@@ -11314,8 +13450,32 @@ var Editor = /** @class */ (function (_super) {
     return Editor;
 }(srceditor.Editor));
 exports.Editor = Editor;
+var UserConfigCheckbox = /** @class */ (function (_super) {
+    __extends(UserConfigCheckbox, _super);
+    function UserConfigCheckbox(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.isUserConfigActive = _this.isUserConfigActive.bind(_this);
+        _this.applyUserConfig = _this.applyUserConfig.bind(_this);
+        return _this;
+    }
+    UserConfigCheckbox.prototype.isUserConfigActive = function () {
+        var _a = this.props, applyUserConfig = _a.applyUserConfig, isUserConfigActive = _a.isUserConfigActive, uc = _a.uc;
+        return isUserConfigActive(uc);
+    };
+    UserConfigCheckbox.prototype.applyUserConfig = function () {
+        var _a = this.props, applyUserConfig = _a.applyUserConfig, isUserConfigActive = _a.isUserConfigActive, uc = _a.uc;
+        applyUserConfig(uc);
+    };
+    UserConfigCheckbox.prototype.renderCore = function () {
+        var uc = this.props.uc;
+        var isChecked = this.isUserConfigActive();
+        return React.createElement(sui.Checkbox, { key: "userconfig-" + uc.description, inputLabel: uc.description, checked: isChecked, onChange: this.applyUserConfig });
+    };
+    return UserConfigCheckbox;
+}(data.Component));
 
-},{"./core":13,"./package":35,"./srceditor":46,"./sui":47,"react":155}],38:[function(require,module,exports){
+},{"./core":13,"./data":15,"./package":36,"./srceditor":47,"./sui":48,"react":157}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var workspace = require("./workspace");
@@ -11546,7 +13706,7 @@ function testBlobEncodeAsync(dataURL, sz) {
 }
 exports.testBlobEncodeAsync = testBlobEncodeAsync;
 
-},{"./data":15,"./workspace":50}],39:[function(require,module,exports){
+},{"./data":15,"./workspace":52}],40:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -11559,6 +13719,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var ReactDOM = require("react-dom");
@@ -11567,6 +13744,7 @@ var sui = require("./sui");
 var pkg = require("./package");
 var core = require("./core");
 var codecard = require("./codecard");
+var electron = require("./electron");
 var ScriptSearch = /** @class */ (function (_super) {
     __extends(ScriptSearch, _super);
     function ScriptSearch(props) {
@@ -11577,6 +13755,12 @@ var ScriptSearch = /** @class */ (function (_super) {
             searchFor: '',
             visible: false
         };
+        _this.hide = _this.hide.bind(_this);
+        _this.handleSearchKeyUpdate = _this.handleSearchKeyUpdate.bind(_this);
+        _this.handleSearch = _this.handleSearch.bind(_this);
+        _this.addUrl = _this.addUrl.bind(_this);
+        _this.addBundle = _this.addBundle.bind(_this);
+        _this.installGh = _this.installGh.bind(_this);
         return _this;
     }
     ScriptSearch.prototype.hide = function () {
@@ -11640,6 +13824,121 @@ var ScriptSearch = /** @class */ (function (_super) {
             searchInput.focus();
         }
     };
+    ScriptSearch.prototype.handleSearchKeyUpdate = function (ev) {
+        if (ev.keyCode == 13)
+            this.handleSearch();
+    };
+    ScriptSearch.prototype.handleSearch = function () {
+        var str = ReactDOM.findDOMNode(this.refs["searchInput"]).value;
+        // Hidden navigation, used to test /beta or other versions inside released UWP apps
+        // Secret prefix is /@, e.g.: /@beta
+        var urlPathExec = /^\/@(.*)$/.exec(str);
+        var urlPath = urlPathExec && urlPathExec[1];
+        if (urlPath) {
+            if (urlPath === "devtools" && electron.isPxtElectron) {
+                electron.openDevTools();
+                this.hide();
+            }
+            else {
+                var homeUrl_1 = pxt.appTarget.appTheme.homeUrl;
+                if (!/\/$/.test(homeUrl_1)) {
+                    homeUrl_1 += "/";
+                }
+                urlPath = urlPath.replace(/^\//, "");
+                pxt.winrt.releaseAllDevicesAsync()
+                    .then(function () {
+                    window.location.href = homeUrl_1 + urlPath;
+                })
+                    .done();
+            }
+        }
+        else {
+            this.setState({ searchFor: str });
+        }
+    };
+    ScriptSearch.prototype.addUrl = function (scr) {
+        var _this = this;
+        this.hide();
+        var p = pkg.mainEditorPkg();
+        return p.addDepAsync(scr.name, "pub:" + scr.id)
+            .then(function () { return _this.props.parent.reloadHeaderAsync(); });
+    };
+    ScriptSearch.prototype.addBundle = function (scr) {
+        pxt.tickEvent("packages.bundled", { name: scr.name });
+        this.hide();
+        this.addDepIfNoConflict(scr, "*")
+            .done();
+    };
+    ScriptSearch.prototype.installGh = function (scr) {
+        var _this = this;
+        pxt.tickEvent("packages.github", { name: scr.fullName });
+        this.hide();
+        core.showLoading("downloadingpackage", lf("downloading package..."));
+        pxt.packagesConfigAsync()
+            .then(function (config) { return pxt.github.latestVersionAsync(scr.fullName, config); })
+            .then(function (tag) { return pxt.github.pkgConfigAsync(scr.fullName, tag)
+            .then(function (cfg) {
+            core.hideLoading("downloadingpackage");
+            return cfg;
+        })
+            .then(function (cfg) { return _this.addDepIfNoConflict(cfg, "github:" + scr.fullName + "#" + tag); }); })
+            .catch(core.handleNetworkError)
+            .finally(function () { return core.hideLoading("downloadingpackage"); });
+    };
+    ScriptSearch.prototype.addDepIfNoConflict = function (config, version) {
+        var _this = this;
+        return pkg.mainPkg.findConflictsAsync(config, version)
+            .then(function (conflicts) {
+            var inUse = config.core ? [] // skip conflict checking for a new core package
+                : conflicts.filter(function (c) { return pkg.mainPkg.isPackageInUse(c.pkg0.id); });
+            var addDependencyPromise = Promise.resolve(true);
+            if (inUse.length) {
+                addDependencyPromise = addDependencyPromise
+                    .then(function () { return core.confirmAsync({
+                    header: lf("Cannot add {0} package", config.name),
+                    hideCancel: true,
+                    agreeLbl: lf("Ok"),
+                    body: lf("Remove all the blocks from the {0} package and try again.", inUse[0].pkg0.id)
+                }); })
+                    .then(function () {
+                    return false;
+                });
+            }
+            else if (conflicts.length) {
+                var body_1 = conflicts.length === 1 ?
+                    // Single conflict: "Package a is..."
+                    lf("Package {0} is incompatible with {1}. Remove {0} and add {1}?", conflicts[0].pkg0.id, config.name) :
+                    // 2 conflicts: "Packages A and B are..."; 3+ conflicts: "Packages A, B, C and D are..."
+                    lf("Packages {0} and {1} are incompatible with {2}. Remove them and add {2}?", conflicts.slice(0, -1).map(function (c) { return c.pkg0.id; }).join(", "), conflicts.slice(-1)[0].pkg0.id, config.name);
+                addDependencyPromise = addDependencyPromise
+                    .then(function () { return core.confirmAsync({
+                    header: lf("Some packages will be removed"),
+                    agreeLbl: lf("Remove package(s) and add {0}", config.name),
+                    agreeClass: "pink",
+                    body: body_1
+                }); })
+                    .then(function (buttonPressed) {
+                    if (buttonPressed !== 0) {
+                        var p_1 = pkg.mainEditorPkg();
+                        return Promise.all(conflicts.map(function (c) {
+                            return p_1.removeDepAsync(c.pkg0.id);
+                        }))
+                            .then(function () { return true; });
+                    }
+                    return Promise.resolve(false);
+                });
+            }
+            return addDependencyPromise
+                .then(function (shouldAdd) {
+                if (shouldAdd) {
+                    var p = pkg.mainEditorPkg();
+                    return p.addDepAsync(config.name, version)
+                        .then(function () { return _this.props.parent.reloadHeaderAsync(); });
+                }
+                return Promise.resolve();
+            });
+        });
+    };
     ScriptSearch.prototype.renderCore = function () {
         var _this = this;
         if (!this.state.visible)
@@ -11653,112 +13952,6 @@ var ScriptSearch = /** @class */ (function (_super) {
             return pxt.Util.strcmp(a.name, b.name);
         };
         bundles.sort(coresFirst);
-        var addUrl = function (scr) {
-            _this.hide();
-            var p = pkg.mainEditorPkg();
-            return p.addDepAsync(scr.name, "pub:" + scr.id)
-                .then(function () { return _this.props.parent.reloadHeaderAsync(); });
-        };
-        var addBundle = function (scr) {
-            pxt.tickEvent("packages.bundled", { name: scr.name });
-            _this.hide();
-            addDepIfNoConflict(scr, "*")
-                .done();
-        };
-        var upd = function (v) {
-            var str = ReactDOM.findDOMNode(_this.refs["searchInput"]).value;
-            // Hidden navigation, used to test /beta or other versions inside released UWP apps
-            // Secret prefix is /@, e.g.: /@beta
-            var urlPathExec = /^\/@(.*)$/.exec(str);
-            var urlPath = urlPathExec && urlPathExec[1];
-            if (urlPath) {
-                var homeUrl_1 = pxt.appTarget.appTheme.homeUrl;
-                if (!/\/$/.test(homeUrl_1)) {
-                    homeUrl_1 += "/";
-                }
-                urlPath = urlPath.replace(/^\//, "");
-                pxt.winrt.releaseAllDevicesAsync()
-                    .then(function () {
-                    window.location.href = homeUrl_1 + urlPath;
-                })
-                    .done();
-            }
-            else {
-                _this.setState({ searchFor: str });
-            }
-        };
-        var kupd = function (ev) {
-            if (ev.keyCode == 13)
-                upd(ev);
-        };
-        var installGh = function (scr) {
-            pxt.tickEvent("packages.github", { name: scr.fullName });
-            _this.hide();
-            core.showLoading("downloadingpackage", lf("downloading package..."));
-            pxt.packagesConfigAsync()
-                .then(function (config) { return pxt.github.latestVersionAsync(scr.fullName, config); })
-                .then(function (tag) { return pxt.github.pkgConfigAsync(scr.fullName, tag)
-                .then(function (cfg) {
-                core.hideLoading("downloadingpackage");
-                return cfg;
-            })
-                .then(function (cfg) { return addDepIfNoConflict(cfg, "github:" + scr.fullName + "#" + tag); }); })
-                .catch(core.handleNetworkError)
-                .finally(function () { return core.hideLoading("downloadingpackage"); });
-        };
-        var addDepIfNoConflict = function (config, version) {
-            return pkg.mainPkg.findConflictsAsync(config, version)
-                .then(function (conflicts) {
-                var inUse = config.core ? [] // skip conflict checking for a new core package
-                    : conflicts.filter(function (c) { return pkg.mainPkg.isPackageInUse(c.pkg0.id); });
-                var addDependencyPromise = Promise.resolve(true);
-                if (inUse.length) {
-                    addDependencyPromise = addDependencyPromise
-                        .then(function () { return core.confirmAsync({
-                        header: lf("Cannot add {0} package", config.name),
-                        hideCancel: true,
-                        agreeLbl: lf("Ok"),
-                        body: lf("Remove all the blocks from the {0} package and try again.", inUse[0].pkg0.id)
-                    }); })
-                        .then(function () {
-                        return false;
-                    });
-                }
-                else if (conflicts.length) {
-                    var body_1 = conflicts.length === 1 ?
-                        // Single conflict: "Package a is..."
-                        lf("Package {0} is incompatible with {1}. Remove {0} and add {1}?", conflicts[0].pkg0.id, config.name) :
-                        // 2 conflicts: "Packages A and B are..."; 3+ conflicts: "Packages A, B, C and D are..."
-                        lf("Packages {0} and {1} are incompatible with {2}. Remove them and add {2}?", conflicts.slice(0, -1).map(function (c) { return c.pkg0.id; }).join(", "), conflicts.slice(-1)[0].pkg0.id, config.name);
-                    addDependencyPromise = addDependencyPromise
-                        .then(function () { return core.confirmAsync({
-                        header: lf("Some packages will be removed"),
-                        agreeLbl: lf("Remove package(s) and add {0}", config.name),
-                        agreeClass: "pink",
-                        body: body_1
-                    }); })
-                        .then(function (buttonPressed) {
-                        if (buttonPressed !== 0) {
-                            var p_1 = pkg.mainEditorPkg();
-                            return Promise.all(conflicts.map(function (c) {
-                                return p_1.removeDepAsync(c.pkg0.id);
-                            }))
-                                .then(function () { return true; });
-                        }
-                        return Promise.resolve(false);
-                    });
-                }
-                return addDependencyPromise
-                    .then(function (shouldAdd) {
-                    if (shouldAdd) {
-                        var p = pkg.mainEditorPkg();
-                        return p.addDepAsync(config.name, version)
-                            .then(function () { return _this.props.parent.reloadHeaderAsync(); });
-                    }
-                    return Promise.resolve();
-                });
-            });
-        };
         var isEmpty = function () {
             if (_this.state.searchFor) {
                 if (bundles.length || ghdata.length || urldata.length)
@@ -11768,26 +13961,26 @@ var ScriptSearch = /** @class */ (function (_super) {
             return false;
         };
         var headerText = lf("Extensions");
-        return (React.createElement(sui.Modal, { isOpen: this.state.visible, dimmer: true, className: "searchdialog", size: "fullscreen", onClose: function () { return _this.setState({ visible: false }); }, closeIcon: true, header: headerText, helpUrl: "/packages", closeOnDimmerClick: true, closeOnEscape: true, description: lf("Add a package to the project") },
+        return (React.createElement(sui.Modal, { isOpen: this.state.visible, dimmer: true, className: "searchdialog", size: "fullscreen", onClose: this.hide, closeIcon: true, header: headerText, helpUrl: "/packages", closeOnDimmerClick: true, closeOnEscape: true, description: lf("Add a package to the project") },
             React.createElement("div", { className: "ui vertical segment" },
                 React.createElement("div", { className: "ui search" },
                     React.createElement("div", { className: "ui fluid action input", role: "search" },
                         React.createElement("div", { "aria-live": "polite", className: "accessible-hidden" }, lf("{0} result matching '{1}'", bundles.length + ghdata.length + urldata.length, this.state.searchFor)),
-                        React.createElement("input", { ref: "searchInput", type: "text", placeholder: lf("Search or enter project URL..."), onKeyUp: kupd }),
-                        React.createElement("button", { title: lf("Search"), className: "ui right icon button", onClick: upd },
+                        React.createElement("input", { autoFocus: true, ref: "searchInput", type: "text", placeholder: lf("Search or enter project URL..."), onKeyUp: this.handleSearchKeyUpdate }),
+                        React.createElement("button", { title: lf("Search"), className: "ui right icon button", onClick: this.handleSearch },
                             React.createElement(sui.Icon, { icon: "search" })))),
                 React.createElement("div", { className: "ui cards", role: "listbox" },
                     urldata.map(function (scr) {
-                        return React.createElement(codecard.CodeCardView, { key: 'url' + scr.id, name: scr.name, description: scr.description, url: "/" + scr.id, onClick: function () { return addUrl(scr); }, color: "red", role: "option" });
+                        return React.createElement(ScriptSearchCodeCard, { key: 'url' + scr.id, name: scr.name, description: scr.description, url: "/" + scr.id, scr: scr, onCardClick: _this.addUrl, color: "red", role: "link" });
                     }),
                     bundles.map(function (scr) {
-                        return React.createElement(codecard.CodeCardView, { key: 'bundled' + scr.name, name: scr.name, description: scr.description, url: "/" + scr.installedVersion, imageUrl: scr.icon, onClick: function () { return addBundle(scr); }, label: /\bbeta\b/i.test(scr.description) ? lf("Beta") : undefined, role: "option" });
+                        return React.createElement(ScriptSearchCodeCard, { key: 'bundled' + scr.name, name: scr.name, description: scr.description, url: "/" + scr.installedVersion, imageUrl: scr.icon, scr: scr, onCardClick: _this.addBundle, label: /\bbeta\b/i.test(scr.description) ? lf("Beta") : undefined, role: "link" });
                     }),
                     ghdata.filter(function (repo) { return repo.status == pxt.github.GitRepoStatus.Approved; }).map(function (scr) {
-                        return React.createElement(codecard.CodeCardView, { name: scr.name.replace(/^pxt-/, ""), description: scr.description, key: 'gha' + scr.fullName, onClick: function () { return installGh(scr); }, url: 'github:' + scr.fullName, color: "blue", imageUrl: pxt.github.repoIconUrl(scr), label: /\bbeta\b/i.test(scr.description) ? lf("Beta") : undefined, role: "option" });
+                        return React.createElement(ScriptSearchCodeCard, { name: scr.name.replace(/^pxt-/, ""), description: scr.description, key: 'gha' + scr.fullName, scr: scr, onCardClick: _this.installGh, url: 'github:' + scr.fullName, color: "blue", imageUrl: pxt.github.repoIconUrl(scr), label: /\bbeta\b/i.test(scr.description) ? lf("Beta") : undefined, role: "link" });
                     }),
                     ghdata.filter(function (repo) { return repo.status != pxt.github.GitRepoStatus.Approved; }).map(function (scr) {
-                        return React.createElement(codecard.CodeCardView, { name: scr.name.replace(/^pxt-/, ""), description: (scr.description || ""), extracontent: lf("User provided package, not endorsed by Microsoft."), key: 'ghd' + scr.fullName, onClick: function () { return installGh(scr); }, imageUrl: pxt.github.repoIconUrl(scr), url: 'github:' + scr.fullName, color: "red", role: "option" });
+                        return React.createElement(ScriptSearchCodeCard, { name: scr.name.replace(/^pxt-/, ""), description: (scr.description || ""), extracontent: lf("User provided package, not endorsed by Microsoft."), key: 'ghd' + scr.fullName, scr: scr, onCardClick: _this.installGh, imageUrl: pxt.github.repoIconUrl(scr), url: 'github:' + scr.fullName, color: "red", role: "link" });
                     })),
                 isEmpty() ?
                     React.createElement("div", { className: "ui items" },
@@ -11797,8 +13990,25 @@ var ScriptSearch = /** @class */ (function (_super) {
     return ScriptSearch;
 }(data.Component));
 exports.ScriptSearch = ScriptSearch;
+var ScriptSearchCodeCard = /** @class */ (function (_super) {
+    __extends(ScriptSearchCodeCard, _super);
+    function ScriptSearchCodeCard(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    ScriptSearchCodeCard.prototype.handleClick = function () {
+        var _a = this.props, scr = _a.scr, onCardClick = _a.onCardClick;
+        onCardClick(scr);
+    };
+    ScriptSearchCodeCard.prototype.renderCore = function () {
+        var _a = this.props, onCardClick = _a.onCardClick, onClick = _a.onClick, scr = _a.scr, rest = __rest(_a, ["onCardClick", "onClick", "scr"]);
+        return React.createElement(codecard.CodeCardView, __assign({}, rest, { onClick: this.handleClick }));
+    };
+    return ScriptSearchCodeCard;
+}(sui.StatelessUIElement));
 
-},{"./codecard":10,"./core":13,"./data":15,"./package":35,"./sui":47,"react":155,"react-dom":143}],40:[function(require,module,exports){
+},{"./codecard":10,"./core":13,"./data":15,"./electron":21,"./package":36,"./sui":48,"react":157,"react-dom":145}],41:[function(require,module,exports){
 "use strict";
 /// <reference path="../../localtypings/smoothie.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -11841,9 +14051,22 @@ var Editor = /** @class */ (function (_super) {
         _this.hcLineColors = ["000"];
         _this.currentLineColors = _this.lineColors;
         _this.highContrast = false;
+        _this.handleStartPauseRef = function (c) {
+            _this.startPauseButton = c;
+        };
+        _this.handleChartRootRef = function (c) {
+            _this.chartRoot = c;
+        };
+        _this.handleConsoleRootRef = function (c) {
+            _this.consoleRoot = c;
+        };
         window.addEventListener("message", _this.processEvent.bind(_this), false);
         var serialTheme = pxt.appTarget.serial && pxt.appTarget.serial.editorTheme;
         _this.lineColors = (serialTheme && serialTheme.lineColors) || _this.lineColors;
+        _this.goBack = _this.goBack.bind(_this);
+        _this.toggleRecording = _this.toggleRecording.bind(_this);
+        _this.downloadRaw = _this.downloadRaw.bind(_this);
+        _this.downloadCSV = _this.downloadCSV.bind(_this);
         return _this;
     }
     Editor.prototype.getId = function () {
@@ -12142,24 +14365,23 @@ var Editor = /** @class */ (function (_super) {
         this.parent.openPreviousEditor();
     };
     Editor.prototype.display = function () {
-        var _this = this;
         return (React.createElement("div", { id: "serialArea" },
             React.createElement("div", { id: "serialHeader", className: "ui serialHeader" },
                 React.createElement("div", { className: "leftHeaderWrapper" },
                     React.createElement("div", { className: "leftHeader" },
-                        React.createElement(sui.Button, { text: lf("Go back"), title: lf("Go back to the previous editor"), className: "icon circular small editorBack left labeled", ariaLabel: lf("Go back"), onClick: this.goBack.bind(this) },
+                        React.createElement(sui.Button, { text: lf("Go back"), title: lf("Go back to the previous editor"), className: "icon circular small editorBack left labeled", ariaLabel: lf("Go back"), onClick: this.goBack },
                             React.createElement(sui.Icon, { icon: "arrow left" })))),
                 React.createElement("div", { className: "rightHeader" },
-                    React.createElement(sui.Button, { title: lf("Export data"), className: "ui icon blue button editorExport", ariaLabel: lf("Export data"), onClick: function () { return _this.downloadCSV(); } },
+                    React.createElement(sui.Button, { title: lf("Export data"), className: "ui icon blue button editorExport", ariaLabel: lf("Export data"), onClick: this.downloadCSV },
                         React.createElement(sui.Icon, { icon: "download" })),
-                    React.createElement(StartPauseButton, { ref: function (e) { return _this.startPauseButton = e; }, active: this.active, toggle: this.toggleRecording.bind(this) }),
+                    React.createElement(StartPauseButton, { ref: this.handleStartPauseRef, active: this.active, toggle: this.toggleRecording }),
                     React.createElement("span", { className: "ui small header" }, this.isSim ? lf("Simulator") : lf("Device")))),
-            React.createElement("div", { id: "serialCharts", ref: function (e) { return _this.chartRoot = e; } }),
+            React.createElement("div", { id: "serialCharts", ref: this.handleChartRootRef }),
             React.createElement("div", { id: "consoleHeader", className: "ui serialHeader" },
                 React.createElement("div", { className: "rightHeader" },
-                    React.createElement(sui.Button, { title: lf("Copy text"), className: "ui icon button editorExport", ariaLabel: lf("Copy text"), onClick: function () { return _this.downloadRaw(); } },
+                    React.createElement(sui.Button, { title: lf("Copy text"), className: "ui icon button editorExport", ariaLabel: lf("Copy text"), onClick: this.downloadRaw },
                         React.createElement(sui.Icon, { icon: "copy" })))),
-            React.createElement("div", { id: "serialConsole", ref: function (e) { return _this.consoleRoot = e; } })));
+            React.createElement("div", { id: "serialConsole", ref: this.handleConsoleRootRef })));
     };
     Editor.prototype.domUpdate = function () {
     };
@@ -12332,7 +14554,7 @@ var ResourceImporter = /** @class */ (function () {
 }());
 exports.ResourceImporter = ResourceImporter;
 
-},{"./core":13,"./data":15,"./srceditor":46,"./sui":47,"react":155}],41:[function(require,module,exports){
+},{"./core":13,"./data":15,"./srceditor":47,"./sui":48,"react":157}],42:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtsim.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -12377,7 +14599,7 @@ var SerialIndicator = /** @class */ (function (_super) {
     SerialIndicator.prototype.renderCore = function () {
         if (!this.state.active)
             return React.createElement("div", null);
-        return (React.createElement("div", { title: lf("Open console"), className: "ui label circular", tabIndex: 0, onClick: this.props.onClick, onKeyDown: sui.fireClickOnEnter },
+        return (React.createElement("div", { role: "button", title: lf("Open console"), className: "ui label circular", tabIndex: 0, onClick: this.props.onClick, onKeyDown: sui.fireClickOnEnter },
             React.createElement("div", { className: "detail" },
                 React.createElement("img", { alt: lf("Animated bar chart"), className: "barcharticon", src: pxt.Util.pathJoin(pxt.webConfig.commitCdnUrl, "images/Bars_black.gif") })),
             React.createElement("span", null, lf("Show console")),
@@ -12387,7 +14609,7 @@ var SerialIndicator = /** @class */ (function (_super) {
 }(data.Component));
 exports.SerialIndicator = SerialIndicator;
 
-},{"./data":15,"./sui":47,"react":155}],42:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],43:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -12399,6 +14621,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var data = require("./data");
@@ -12420,6 +14650,9 @@ var ShareEditor = /** @class */ (function (_super) {
             visible: false,
             advancedMenu: false
         };
+        _this.hide = _this.hide.bind(_this);
+        _this.toggleAdvancedMenu = _this.toggleAdvancedMenu.bind(_this);
+        _this.setAdvancedMode = _this.setAdvancedMode.bind(_this);
         return _this;
     }
     ShareEditor.prototype.hide = function () {
@@ -12435,6 +14668,13 @@ var ShareEditor = /** @class */ (function (_super) {
             || this.state.pubCurrent != nextState.pubCurrent
             || this.state.currentPubId != nextState.currentPubId
             || this.state.sharingError != nextState.sharingError;
+    };
+    ShareEditor.prototype.toggleAdvancedMenu = function () {
+        var advancedMenu = !!this.state.advancedMenu;
+        this.setState({ advancedMenu: !advancedMenu });
+    };
+    ShareEditor.prototype.setAdvancedMode = function (mode) {
+        this.setState({ mode: mode });
     };
     ShareEditor.prototype.renderCore = function () {
         var _this = this;
@@ -12501,34 +14741,6 @@ var ShareEditor = /** @class */ (function (_super) {
         ];
         var action = !ready ? lf("Publish project") : undefined;
         var actionLoading = this.props.parent.state.publishing && !this.state.sharingError;
-        var fbUrl = '';
-        var twitterUrl = '';
-        if (showSocialIcons) {
-            var twitterText = lf("Check out what I made!");
-            var socialOptions = pxt.appTarget.appTheme.socialOptions;
-            if (socialOptions.twitterHandle && socialOptions.orgTwitterHandle) {
-                twitterText = lf("Check out what I made with @{0} and @{1}!", socialOptions.twitterHandle, socialOptions.orgTwitterHandle);
-            }
-            else if (socialOptions.twitterHandle) {
-                twitterText = lf("Check out what I made with @{0}!", socialOptions.twitterHandle);
-            }
-            else if (socialOptions.orgTwitterHandle) {
-                twitterText = lf("Check out what I made with @{0}!", socialOptions.orgTwitterHandle);
-            }
-            fbUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
-            twitterUrl = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(url) +
-                ("&text=" + encodeURIComponent(twitterText)) +
-                (socialOptions.hashtags ? "&hashtags=" + encodeURIComponent(socialOptions.hashtags) : '');
-            (socialOptions.related ? "&related=" + encodeURIComponent(socialOptions.related) : '');
-        }
-        var showFbPopup = function () {
-            pxt.tickEvent('share.facebook', undefined, { interactiveConsent: true });
-            sui.popupWindow(fbUrl, lf("Share on Facebook"), 600, 600);
-        };
-        var showTwtPopup = function () {
-            pxt.tickEvent('share.twitter', undefined, { interactiveConsent: true });
-            sui.popupWindow(twitterUrl, lf("Share on Twitter"), 600, 600);
-        };
         var actions = [];
         if (action) {
             actions.push({
@@ -12539,7 +14751,7 @@ var ShareEditor = /** @class */ (function (_super) {
                 className: 'primary'
             });
         }
-        return (React.createElement(sui.Modal, { isOpen: visible, className: "sharedialog", size: "small", onClose: function () { return _this.setState({ visible: false }); }, dimmer: true, header: lf("Share Project"), closeIcon: true, buttons: actions, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
+        return (React.createElement(sui.Modal, { isOpen: visible, className: "sharedialog", size: "small", onClose: this.hide, dimmer: true, header: lf("Share Project"), closeIcon: true, buttons: actions, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
             React.createElement("div", { className: "ui form" },
                 action ?
                     React.createElement("div", null,
@@ -12554,17 +14766,15 @@ var ShareEditor = /** @class */ (function (_super) {
                     React.createElement(sui.Input, { id: "projectUri", class: "mini", readOnly: true, lines: 1, value: url, copy: true, selectOnClick: true, "aria-describedby": "projectUriLabel" }),
                     React.createElement("label", { htmlFor: "projectUri", id: "projectUriLabel", className: "accessible-hidden" }, lf("This is the read-only internet address of your project.")),
                     showSocialIcons ? React.createElement("div", { className: "social-icons" },
-                        React.createElement("a", { className: "ui button large icon facebook", tabIndex: 0, "aria-label": "Facebook", onClick: function (e) { showFbPopup(); e.preventDefault(); return false; } },
-                            React.createElement(sui.Icon, { icon: "facebook" })),
-                        React.createElement("a", { className: "ui button large icon twitter", tabIndex: 0, "aria-label": "Twitter", onClick: function (e) { showTwtPopup(); e.preventDefault(); return false; } },
-                            React.createElement(sui.Icon, { icon: "twitter" }))) : undefined)
+                        React.createElement(SocialButton, { url: url, ariaLabel: "Facebook", type: 'facebook', heading: lf("Share on Facebook") }),
+                        React.createElement(SocialButton, { url: url, ariaLabel: "Twitter", type: 'twitter', heading: lf("Share on Twitter") })) : undefined)
                     : undefined,
                 ready && !hideEmbed ? React.createElement("div", null,
                     React.createElement("div", { className: "ui divider" }),
-                    React.createElement(sui.Link, { icon: "chevron " + (advancedMenu ? "down" : "right"), text: lf("Embed"), ariaExpanded: advancedMenu, onClick: function () { return _this.setState({ advancedMenu: !advancedMenu }); } }),
+                    React.createElement(sui.Link, { icon: "chevron " + (advancedMenu ? "down" : "right"), text: lf("Embed"), ariaExpanded: advancedMenu, onClick: this.toggleAdvancedMenu }),
                     advancedMenu ?
                         React.createElement(sui.Menu, { pointing: true, secondary: true }, formats.map(function (f) {
-                            return React.createElement(sui.MenuItem, { key: "tab" + f.label, id: "tab" + f.mode, active: mode == f.mode, name: f.label, onClick: function () { return _this.setState({ mode: f.mode }); } });
+                            return React.createElement(EmbedMenuItem, __assign({ key: "tab" + f.label, onClick: _this.setAdvancedMode, currentMode: mode }, f));
                         })) : undefined,
                     advancedMenu ?
                         React.createElement(sui.Field, null,
@@ -12574,8 +14784,70 @@ var ShareEditor = /** @class */ (function (_super) {
     return ShareEditor;
 }(data.Component));
 exports.ShareEditor = ShareEditor;
+var SocialButton = /** @class */ (function (_super) {
+    __extends(SocialButton, _super);
+    function SocialButton(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    SocialButton.prototype.handleClick = function (e) {
+        var _a = this.props, type = _a.type, shareUrl = _a.url, heading = _a.heading;
+        var twitterText = lf("Check out what I made!");
+        var socialOptions = pxt.appTarget.appTheme.socialOptions;
+        if (socialOptions.twitterHandle && socialOptions.orgTwitterHandle) {
+            twitterText = lf("Check out what I made with @{0} and @{1}!", socialOptions.twitterHandle, socialOptions.orgTwitterHandle);
+        }
+        else if (socialOptions.twitterHandle) {
+            twitterText = lf("Check out what I made with @{0}!", socialOptions.twitterHandle);
+        }
+        else if (socialOptions.orgTwitterHandle) {
+            twitterText = lf("Check out what I made with @{0}!", socialOptions.orgTwitterHandle);
+        }
+        var fbUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(shareUrl);
+        var twitterUrl = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(shareUrl) +
+            ("&text=" + encodeURIComponent(twitterText)) +
+            (socialOptions.hashtags ? "&hashtags=" + encodeURIComponent(socialOptions.hashtags) : '') +
+            (socialOptions.related ? "&related=" + encodeURIComponent(socialOptions.related) : '');
+        pxt.tickEvent("share." + type, undefined, { interactiveConsent: true });
+        var url = '';
+        switch (type) {
+            case "facebook":
+                url = fbUrl;
+                break;
+            case "twitter":
+                url = twitterUrl;
+                break;
+        }
+        sui.popupWindow(url, heading, 600, 600);
+        e.preventDefault();
+    };
+    SocialButton.prototype.renderCore = function () {
+        var _a = this.props, type = _a.type, ariaLabel = _a.ariaLabel;
+        return React.createElement("a", { role: "button", className: "ui button large icon " + type, tabIndex: 0, "aria-label": ariaLabel, onClick: this.handleClick },
+            React.createElement(sui.Icon, { icon: type }));
+    };
+    return SocialButton;
+}(data.Component));
+var EmbedMenuItem = /** @class */ (function (_super) {
+    __extends(EmbedMenuItem, _super);
+    function EmbedMenuItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    EmbedMenuItem.prototype.handleClick = function () {
+        this.props.onClick(this.props.mode);
+    };
+    EmbedMenuItem.prototype.renderCore = function () {
+        var _a = this.props, label = _a.label, mode = _a.mode, currentMode = _a.currentMode;
+        return React.createElement(sui.MenuItem, { id: "tab" + mode, active: currentMode == mode, name: label, onClick: this.handleClick });
+    };
+    return EmbedMenuItem;
+}(sui.StatelessUIElement));
 
-},{"./data":15,"./sui":47,"react":155}],43:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],44:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -12594,8 +14866,16 @@ var data = require("./data");
 var sui = require("./sui");
 var SimulatorToolbar = /** @class */ (function (_super) {
     __extends(SimulatorToolbar, _super);
-    function SimulatorToolbar() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function SimulatorToolbar(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.toggleTrace = _this.toggleTrace.bind(_this);
+        _this.toggleMute = _this.toggleMute.bind(_this);
+        _this.restartSimulator = _this.restartSimulator.bind(_this);
+        _this.openInstructions = _this.openInstructions.bind(_this);
+        _this.startStopSimulator = _this.startStopSimulator.bind(_this);
+        _this.toggleSimulatorFullscreen = _this.toggleSimulatorFullscreen.bind(_this);
+        return _this;
     }
     SimulatorToolbar.prototype.openInstructions = function () {
         pxt.tickEvent("simulator.make", undefined, { interactiveConsent: true });
@@ -12613,6 +14893,10 @@ var SimulatorToolbar = /** @class */ (function (_super) {
         pxt.tickEvent("simulator.trace", undefined, { interactiveConsent: true });
         this.props.parent.toggleTrace();
     };
+    SimulatorToolbar.prototype.toggleDebug = function () {
+        pxt.tickEvent("simulator.debug", undefined, { interactiveConsent: true });
+        this.props.parent.toggleDebugging();
+    };
     SimulatorToolbar.prototype.toggleMute = function () {
         pxt.tickEvent("simulator.mute", { view: 'computer', muteTo: '' + !this.props.parent.state.mute }, { interactiveConsent: true });
         this.props.parent.toggleMute();
@@ -12622,20 +14906,23 @@ var SimulatorToolbar = /** @class */ (function (_super) {
         this.props.parent.toggleSimulatorFullscreen();
     };
     SimulatorToolbar.prototype.renderCore = function () {
-        var _this = this;
         var parentState = this.props.parent.state;
+        if (!parentState.currFile)
+            return React.createElement("div", null);
         var targetTheme = pxt.appTarget.appTheme;
         var simOpts = pxt.appTarget.simulator;
         var sandbox = pxt.shell.isSandboxMode();
         var make = !sandbox && parentState.showParts && simOpts && (simOpts.instructions || (simOpts.parts && pxt.options.debug));
         var isRunning = parentState.running;
         var isFullscreen = parentState.fullscreen;
-        var isTracing = parentState.tracing;
         var isMuted = parentState.mute;
         var inTutorial = !!parentState.tutorialOptions && !!parentState.tutorialOptions.tutorial;
         var run = true; // !compileBtn || !pxt.appTarget.simulator.autoRun || !isBlocks;
         var restart = run && !simOpts.hideRestart;
-        var trace = run && simOpts.enableTrace;
+        var trace = run && !!simOpts.enableTrace;
+        var tracing = this.props.parent.state.tracing;
+        var traceTooltip = tracing ? lf("Disable Slow-Mo") : lf("Slow-Mo");
+        var debugging = parentState.debugging;
         var fullscreen = run && !inTutorial && !simOpts.hideFullscreen;
         var audio = run && !inTutorial && targetTheme.hasAudio;
         var isHeadless = simOpts.headless;
@@ -12644,24 +14931,24 @@ var SimulatorToolbar = /** @class */ (function (_super) {
         var runTooltip = isRunning ? lf("Stop the simulator") : lf("Start the simulator");
         var makeTooltip = lf("Open assembly instructions");
         var restartTooltip = lf("Restart the simulator");
-        var traceTooltip = parentState.tracing ? lf("Disable Slow-Mo") : lf("Slow-Mo");
+        var debugTooltip = debugging ? lf("Disable Debugging") : lf("Debugging");
         var fullscreenTooltip = isFullscreen ? lf("Exit fullscreen mode") : lf("Launch in fullscreen");
         var muteTooltip = isMuted ? lf("Unmute audio") : lf("Mute audio");
         return React.createElement("aside", { className: "ui item grid centered portrait hide simtoolbar", role: "complementary", "aria-label": lf("Simulator toolbar") },
             React.createElement("div", { className: "ui icon tiny buttons " + (isFullscreen ? 'massive' : ''), style: { padding: "0" } },
-                make ? React.createElement(sui.Button, { icon: 'configure', className: "secondary", title: makeTooltip, onClick: function () { return _this.openInstructions(); } }) : undefined,
-                run ? React.createElement(sui.Button, { key: 'runbtn', className: "play-button " + (isRunning ? "stop" : "play"), icon: isRunning ? "stop" : "play green", title: runTooltip, onClick: function () { return _this.startStopSimulator(); } }) : undefined,
-                restart ? React.createElement(sui.Button, { key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: function () { return _this.restartSimulator(); } }) : undefined,
-                trace ? React.createElement(sui.Button, { key: 'debug', className: "trace-button " + (isTracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: function () { return _this.toggleTrace(); } }) : undefined),
+                make ? React.createElement(sui.Button, { disabled: debugging, icon: 'configure', className: "secondary", title: makeTooltip, onClick: this.openInstructions }) : undefined,
+                run ? React.createElement(sui.Button, { disabled: debugging, key: 'runbtn', className: "play-button " + (isRunning ? "stop" : "play"), icon: isRunning ? "stop" : "play green", title: runTooltip, onClick: this.startStopSimulator }) : undefined,
+                restart ? React.createElement(sui.Button, { disabled: debugging, key: 'restartbtn', className: "restart-button", icon: "refresh", title: restartTooltip, onClick: this.restartSimulator }) : undefined,
+                trace ? React.createElement(sui.Button, { key: 'trace', className: "trace-button " + (tracing ? 'orange' : ''), icon: "xicon turtle", title: traceTooltip, onClick: this.toggleTrace }) : undefined),
             React.createElement("div", { className: "ui icon tiny buttons " + (isFullscreen ? 'massive' : ''), style: { padding: "0" } },
-                audio ? React.createElement(sui.Button, { key: 'mutebtn', className: "mute-button " + (isMuted ? 'red' : ''), icon: "" + (isMuted ? 'volume off' : 'volume up'), title: muteTooltip, onClick: function () { return _this.toggleMute(); } }) : undefined,
-                fullscreen ? React.createElement(sui.Button, { key: 'fullscreenbtn', className: "fullscreen-button", icon: "xicon " + (isFullscreen ? 'fullscreencollapse' : 'fullscreen'), title: fullscreenTooltip, onClick: function () { return _this.toggleSimulatorFullscreen(); } }) : undefined));
+                audio ? React.createElement(sui.Button, { key: 'mutebtn', className: "mute-button " + (isMuted ? 'red' : ''), icon: "" + (isMuted ? 'volume off' : 'volume up'), title: muteTooltip, onClick: this.toggleMute }) : undefined,
+                fullscreen ? React.createElement(sui.Button, { key: 'fullscreenbtn', className: "fullscreen-button", icon: "xicon " + (isFullscreen ? 'fullscreencollapse' : 'fullscreen'), title: fullscreenTooltip, onClick: this.toggleSimulatorFullscreen }) : undefined));
     };
     return SimulatorToolbar;
 }(data.Component));
 exports.SimulatorToolbar = SimulatorToolbar;
 
-},{"./data":15,"./sui":47,"react":155}],44:[function(require,module,exports){
+},{"./data":15,"./sui":48,"react":157}],45:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtsim.d.ts" />
 /// <reference path="../../localtypings/pxtparts.d.ts" />
@@ -12683,8 +14970,17 @@ function setTranslations(translations) {
 }
 exports.setTranslations = setTranslations;
 function init(root, cfg) {
-    root.innerHTML =
-        "\n        <div id=\"simulators\" class='simulator'>\n        </div>\n        <div id=\"debugger\" class=\"ui item landscape only\">\n        </div>\n        ";
+    if (!root)
+        return;
+    pxsim.U.clear(root);
+    var simulatorsDiv = document.createElement('div');
+    simulatorsDiv.id = 'simulators';
+    simulatorsDiv.className = 'simulator';
+    root.appendChild(simulatorsDiv);
+    var debuggerDiv = document.createElement('div');
+    debuggerDiv.id = 'debugger';
+    debuggerDiv.className = 'ui item landscape only';
+    root.appendChild(debuggerDiv);
     debuggerDOM = document.getElementById('debugger');
     var options = {
         revealElement: function (el) {
@@ -12710,7 +15006,7 @@ function init(root, cfg) {
                 if (pxt.options.light) {
                     if (completeHandler)
                         completeHandler();
-                    el.remove();
+                    pxsim.U.remove(el);
                     return;
                 }
                 // Play exit animation
@@ -12723,7 +15019,7 @@ function init(root, cfg) {
                     el.style.animationDuration = '';
                     if (completeHandler)
                         completeHandler();
-                    el.remove();
+                    pxsim.U.remove(el);
                 });
             }
         },
@@ -12731,12 +15027,41 @@ function init(root, cfg) {
             pxsim.U.removeClass(el, "simHeadless");
         },
         onDebuggerBreakpoint: function (brk) {
-            updateDebuggerButtons(brk);
-            var brkInfo = lastCompileResult.breakpoints[brk.breakpointId];
-            if (config)
-                config.highlightStatement(brkInfo, brk);
-            if (brk.exceptionMessage) {
-                core.errorNotification(lf("Program Error: {0}", brk.exceptionMessage));
+            // walk stack until breakpoint is found
+            // and can be highlighted
+            var highlighted = false;
+            if (config) {
+                var frameid = 0;
+                var brkid = brk.breakpointId;
+                while (!highlighted) {
+                    // try highlight current statement
+                    if (brkid) {
+                        var brkInfo = lastCompileResult.breakpoints[brkid];
+                        highlighted = config.highlightStatement(brkInfo, brk);
+                    }
+                    // try next frame
+                    if (!highlighted) {
+                        frameid++;
+                        var frame = brk.stackframes ? brk.stackframes[frameid] : undefined;
+                        // no more frames, done
+                        if (!frame)
+                            break;
+                        brkid = frame.breakpointId;
+                    }
+                }
+            }
+            // no exception and no highlighting, keep going
+            if (!brk.exceptionMessage && config && !highlighted) {
+                // keep going until breakpoint is hit
+                exports.driver.resume(pxsim.SimulatorDebuggerCommand.StepInto);
+                return;
+            }
+            // we had an expected but could not find a block            
+            if (!highlighted && brk.exceptionMessage) {
+                pxt.debug("runtime error: " + brk.exceptionMessage);
+                pxt.debug(brk.exceptionStack);
+                if (config)
+                    config.orphanException(brk);
             }
             postSimEditorEvent("stopped", brk.exceptionMessage);
         },
@@ -12762,7 +15087,6 @@ function init(root, cfg) {
             postSimEditorEvent("resumed");
             if (config)
                 config.highlightStatement(null);
-            updateDebuggerButtons();
         },
         onStateChanged: function (state) {
             if (state === pxsim.SimulatorState.Stopped) {
@@ -12771,7 +15095,6 @@ function init(root, cfg) {
             else if (state === pxsim.SimulatorState.Running) {
                 this.onDebuggerResume();
             }
-            updateDebuggerButtons();
             cfg.onStateChanged(state);
         },
         onSimulatorCommand: function (msg) {
@@ -12821,7 +15144,6 @@ function init(root, cfg) {
     };
     exports.driver = new pxsim.SimulatorDriver(document.getElementById('simulators'), options);
     config = cfg;
-    updateDebuggerButtons();
 }
 exports.init = init;
 function postSimEditorEvent(subtype, exception) {
@@ -12838,7 +15160,6 @@ function setState(editor, tutMode) {
     if (config && config.editor != editor) {
         config.editor = editor;
         config.highlightStatement(null);
-        updateDebuggerButtons();
     }
     tutorialMode = tutMode;
 }
@@ -12957,91 +15278,78 @@ function getStoppedClass() {
     }
     return undefined;
 }
-function updateDebuggerButtons(brk) {
-    if (brk === void 0) { brk = null; }
-    //updateDebuggerButtonsInternal(brk);
-}
-function updateDebuggerButtonsInternal(brk) {
-    if (brk === void 0) { brk = null; }
-    function btn(icon, name, label, click) {
-        var b = document.createElement('button');
-        b.className = "ui mini button teal " + (icon ? 'icon' : '');
+/*
+function updateDebuggerButtonsInternal(brk: pxsim.DebuggerBreakpointMessage = null) {
+    function btn(icon: string, name: string, label: string, click: () => void) {
+        let b = document.createElement('button');
+        b.className = `ui mini button teal ${icon ? 'icon' : ''}`;
         b.title = pxt.Util.htmlEscape(label);
         if (icon) {
-            var i = document.createElement('i');
-            i.className = icon + " icon";
+            let i = document.createElement('i');
+            i.className = `${icon} icon`;
             b.appendChild(i);
         }
-        if (name)
-            b.appendChild(document.createTextNode(pxt.Util.htmlEscape(name)));
+        if (name) b.appendChild(document.createTextNode(pxt.Util.htmlEscape(name)));
         b.addEventListener('click', click);
         return b;
     }
+
     pxsim.U.removeChildren(debuggerDOM);
-    if (!exports.driver.runOptions.debug)
-        return;
-    var advanced = config.editor == 'tsprj';
-    if (exports.driver.state == pxsim.SimulatorState.Paused) {
-        var $resume = btn("play", lf("Resume"), lf("Resume execution"), function () { return exports.driver.resume(pxsim.SimulatorDebuggerCommand.Resume); });
-        var $stepOver = btn("xicon stepover", lf("Step over"), lf("Step over next function call"), function () { return exports.driver.resume(pxsim.SimulatorDebuggerCommand.StepOver); });
-        var $stepInto = btn("xicon stepinto", lf("Step into"), lf("Step into next function call"), function () { return exports.driver.resume(pxsim.SimulatorDebuggerCommand.StepInto); });
-        debuggerDOM.appendChild($resume).appendChild($stepOver);
+    if (!driver.runOptions.debug) return;
+    let advanced = config.editor == 'tsprj';
+
+    if (driver.state == pxsim.SimulatorState.Paused) {
+        let $resume = btn("play", lf("Resume"), lf("Resume execution"), () => driver.resume(pxsim.SimulatorDebuggerCommand.Resume));
+        let $stepOver = btn("xicon stepover", lf("Step over"), lf("Step over next function call"), () => driver.resume(pxsim.SimulatorDebuggerCommand.StepOver));
+        let $stepInto = btn("xicon stepinto", lf("Step into"), lf("Step into next function call"), () => driver.resume(pxsim.SimulatorDebuggerCommand.StepInto));
+        debuggerDOM.appendChild($resume).appendChild($stepOver)
         if (advanced)
             debuggerDOM.appendChild($stepInto);
-    }
-    else if (exports.driver.state == pxsim.SimulatorState.Running) {
-        var $pause = btn("pause", lf("Pause"), lf("Pause execution on the next instruction"), function () { return exports.driver.resume(pxsim.SimulatorDebuggerCommand.Pause); });
+    } else if (driver.state == pxsim.SimulatorState.Running) {
+        let $pause = btn("pause", lf("Pause"), lf("Pause execution on the next instruction"), () => driver.resume(pxsim.SimulatorDebuggerCommand.Pause));
         debuggerDOM.appendChild($pause);
     }
-    if (!brk || !advanced)
-        return;
-    function vars(hd, frame) {
-        var frameView = document.createElement('div');
-        var heading = document.createElement('h4');
+
+    if (!brk || !advanced) return;
+
+    function vars(hd: string, frame: pxsim.Variables) {
+        let frameView = document.createElement('div');
+        let heading = document.createElement('h4');
         heading.appendChild(document.createTextNode(hd));
         frameView.appendChild(heading);
-        for (var _i = 0, _a = Object.keys(frame); _i < _a.length; _i++) {
-            var k = _a[_i];
-            var v = frame[k];
-            var sv = "";
+        for (let k of Object.keys(frame)) {
+            let v = frame[k]
+            let sv = ""
             switch (typeof (v)) {
-                case "number":
-                    sv = v + "";
-                    break;
-                case "boolean":
-                    sv = v + "";
-                    break;
-                case "string":
-                    sv = JSON.stringify(v);
-                    break;
+                case "number": sv = v + ""; break;
+                case "boolean": sv = v + ""; break;
+                case "string": sv = JSON.stringify(v); break;
                 case "object":
-                    if (v == null)
-                        sv = "null";
-                    else if (v.id !== undefined)
-                        sv = "(object)";
-                    else if (v.text)
-                        sv = v.text;
-                    else
-                        sv = "(unknown)";
+                    if (v == null) sv = "null";
+                    else if (v.id !== undefined) sv = "(object)"
+                    else if (v.text) sv = v.text;
+                    else sv = "(unknown)"
                     break;
-                default: U.oops();
+                default: U.oops()
             }
-            var n = k.replace(/___\d+$/, "");
-            frameView.appendChild(document.createElement('div').appendChild(document.createTextNode(n + ": " + sv)));
+            let n = k.replace(/___\d+$/, "")
+            frameView.appendChild(document.createElement('div').appendChild(document.createTextNode(`${n}: ${sv}`)));
         }
-        return frameView;
+        return frameView
     }
-    var dbgView = document.createElement('div');
+
+    let dbgView = document.createElement('div');
     dbgView.className = "ui segment debuggerview";
-    dbgView.appendChild(vars(U.lf("globals"), brk.globals));
-    brk.stackframes.forEach(function (sf) {
-        var info = sf.funcInfo;
-        dbgView.appendChild(vars(info.functionName, sf.locals));
-    });
+    dbgView.appendChild(vars(U.lf("globals"), brk.globals))
+    brk.stackframes.forEach(sf => {
+        let info = sf.funcInfo as pxtc.FunctionLocationInfo
+        dbgView.appendChild(vars(info.functionName, sf.locals))
+    })
     debuggerDOM.appendChild(dbgView);
 }
+*/ 
 
-},{"./core":13}],45:[function(require,module,exports){
+},{"./core":13}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var audio = require("./audio");
@@ -13087,7 +15395,7 @@ function initTutorial() {
 }
 exports.initTutorial = initTutorial;
 
-},{"./audio":4}],46:[function(require,module,exports){
+},{"./audio":4}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
@@ -13163,21 +15471,21 @@ var Editor = /** @class */ (function () {
     Editor.prototype.saveToTypeScript = function () {
         return Promise.resolve('');
     };
-    Editor.prototype.highlightStatement = function (stmt, brk) { };
+    Editor.prototype.highlightStatement = function (stmt, brk) { return false; };
     Editor.prototype.clearHighlightedStatements = function () { };
-    Editor.prototype.filterToolbox = function (filters, showCategories) {
-        if (showCategories === void 0) { showCategories = pxt.toolbox.CategoryMode.All; }
-        return null;
-    };
     Editor.prototype.setHighContrast = function (hc) { };
     Editor.prototype.hasEditorToolbar = function () {
         return true;
+    };
+    Editor.prototype.filterToolbox = function (filters, showCategories) {
+    };
+    Editor.prototype.insertBreakpoint = function () {
     };
     return Editor;
 }());
 exports.Editor = Editor;
 
-},{"react":155}],47:[function(require,module,exports){
+},{"react":157}],48:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -13209,10 +15517,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var ReactDOM = require("react-dom");
+var ReactModal = require("react-modal");
 var data = require("./data");
 var core = require("./core");
-var app_1 = require("./app");
-var ReactModal = require("react-modal");
+exports.appElement = document.getElementById('content');
 function cx(classes) {
     return classes.filter(function (c) { return !!c && c.trim() != ''; }).join(' ');
 }
@@ -13263,7 +15571,7 @@ var StatelessUIElement = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return StatelessUIElement;
-}(data.Component));
+}(data.PureComponent));
 exports.StatelessUIElement = StatelessUIElement;
 var DropdownMenu = /** @class */ (function (_super) {
     __extends(DropdownMenu, _super);
@@ -13360,7 +15668,9 @@ var DropdownMenu = /** @class */ (function (_super) {
             // Remove separators
             if (child.classList.contains("divider"))
                 continue;
-            // TODO: Check if item is visible
+            // Check if item is intended for mobile only views
+            if (child.classList.contains("mobile") && !pxt.BrowserUtils.isMobile())
+                continue;
             children.push(child);
         }
         var _loop_1 = function (i) {
@@ -13511,7 +15821,7 @@ var Link = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Link.prototype.renderCore = function () {
-        return (React.createElement("a", { className: genericClassName("ui", this.props) + " " + (this.props.disabled ? "disabled" : ""), id: this.props.id, href: this.props.href, target: this.props.target, role: this.props.role, title: this.props.title, tabIndex: this.props.tabIndex || 0, "aria-label": this.props.ariaLabel, "aria-expanded": this.props.ariaExpanded, onClick: this.props.onClick, onKeyDown: this.props.onKeyDown || fireClickOnEnter },
+        return (React.createElement("a", { className: genericClassName("ui", this.props) + " " + (this.props.disabled ? "disabled" : ""), id: this.props.id, href: this.props.href, target: this.props.target, download: this.props.download, role: this.props.role, title: this.props.title, tabIndex: this.props.tabIndex || 0, "aria-label": this.props.ariaLabel, "aria-expanded": this.props.ariaExpanded, onClick: this.props.onClick, onKeyDown: this.props.onKeyDown || fireClickOnEnter },
             genericContent(this.props),
             this.props.children));
     };
@@ -13535,14 +15845,21 @@ var Field = /** @class */ (function (_super) {
     return Field;
 }(data.Component));
 exports.Field = Field;
-///////////////////////////////////////////////////////////
-////////////             Input                /////////////
-///////////////////////////////////////////////////////////
 var Input = /** @class */ (function (_super) {
     __extends(Input, _super);
-    function Input() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Input(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            value: props.value
+        };
+        _this.copy = _this.copy.bind(_this);
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
+        return _this;
     }
+    Input.prototype.componentWillReceiveProps = function (newProps) {
+        this.setState({ value: newProps.value });
+    };
     Input.prototype.clearValue = function () {
         this.setState({ value: undefined });
     };
@@ -13566,44 +15883,52 @@ var Input = /** @class */ (function (_super) {
         catch (e) {
         }
     };
+    Input.prototype.handleClick = function (e) {
+        if (this.props.selectOnClick) {
+            e.target.setSelectionRange(0, 9999);
+        }
+    };
+    Input.prototype.handleChange = function (e) {
+        var newValue = e.target.value;
+        if (!this.props.readOnly && (!this.state || this.state.value !== newValue)) {
+            this.setState({ value: newValue });
+        }
+        if (this.props.onChange) {
+            this.props.onChange(newValue);
+        }
+    };
     Input.prototype.renderCore = function () {
-        var _this = this;
         var p = this.props;
         var copyBtn = p.copy && document.queryCommandSupported('copy')
-            ? React.createElement(Button, { className: "ui right labeled primary icon button", text: lf("Copy"), icon: "copy", onClick: function () { return _this.copy(); } })
+            ? React.createElement(Button, { className: "ui right labeled primary icon button", text: lf("Copy"), icon: "copy", onClick: this.copy })
             : null;
-        var value = (this.state && this.state.value !== undefined) ? this.state.value : p.value;
-        var onChange = function (newValue) {
-            if (!p.readOnly && (!_this.state || _this.state.value !== newValue)) {
-                _this.setState({ value: newValue });
-            }
-            if (p.onChange) {
-                p.onChange(newValue);
-            }
-        };
+        var value = this.state.value;
         return (React.createElement(Field, { ariaLabel: p.ariaLabel, htmlFor: p.id, label: p.label },
             React.createElement("div", { className: "ui input" + (p.inputLabel ? " labelled" : "") + (p.copy ? " action fluid" : "") + (p.disabled ? " disabled" : "") },
                 p.inputLabel ? (React.createElement("div", { className: "ui label" }, p.inputLabel)) : "",
-                !p.lines || p.lines == 1 ? React.createElement("input", { id: p.id, className: p.class || "", type: p.type || "text", placeholder: p.placeholder, value: value, readOnly: !!p.readOnly, onClick: function (e) { return p.selectOnClick ? e.target.setSelectionRange(0, 9999) : undefined; }, onChange: function (v) { return onChange(v.target.value); } })
-                    : React.createElement("textarea", { id: p.id, className: "ui input " + (p.class || "") + (p.inputLabel ? " labelled" : ""), rows: p.lines, placeholder: p.placeholder, value: value, readOnly: !!p.readOnly, onClick: function (e) { return p.selectOnClick ? e.target.setSelectionRange(0, 9999) : undefined; }, onChange: function (v) { return onChange(v.target.value); } }),
+                !p.lines || p.lines == 1 ? React.createElement("input", { autoFocus: p.autoFocus, id: p.id, className: p.class || "", type: p.type || "text", placeholder: p.placeholder, value: value || '', readOnly: !!p.readOnly, onClick: this.handleClick, onChange: this.handleChange })
+                    : React.createElement("textarea", { id: p.id, className: "ui input " + (p.class || "") + (p.inputLabel ? " labelled" : ""), rows: p.lines, placeholder: p.placeholder, value: value || '', readOnly: !!p.readOnly, onClick: this.handleClick, onChange: this.handleChange }),
                 copyBtn)));
     };
     return Input;
 }(data.Component));
 exports.Input = Input;
-///////////////////////////////////////////////////////////
-////////////           Checkbox               /////////////
-///////////////////////////////////////////////////////////
 var Checkbox = /** @class */ (function (_super) {
     __extends(Checkbox, _super);
-    function Checkbox() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Checkbox(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleChange = _this.handleChange.bind(_this);
+        return _this;
     }
+    Checkbox.prototype.handleChange = function (v) {
+        this.props.onChange(v.target.value);
+    };
     Checkbox.prototype.renderCore = function () {
         var p = this.props;
         return React.createElement(Field, { label: p.label },
             React.createElement("div", { className: "ui toggle checkbox" },
-                React.createElement("input", { type: "checkbox", checked: p.checked, onChange: function (v) { return p.onChange(v.target.value); } }),
+                React.createElement("input", { type: "checkbox", checked: p.checked, "aria-checked": p.checked, onChange: this.handleChange }),
                 p.inputLabel ? React.createElement("label", null, p.inputLabel) : undefined));
     };
     return Checkbox;
@@ -13611,7 +15936,7 @@ var Checkbox = /** @class */ (function (_super) {
 exports.Checkbox = Checkbox;
 exports.Icon = function (props) {
     var icon = props.icon, className = props.className, onClick = props.onClick, onKeyDown = props.onKeyDown, children = props.children, rest = __rest(props, ["icon", "className", "onClick", "onKeyDown", "children"]);
-    return React.createElement("i", __assign({ className: "icon " + icon + " " + !!className, onClick: onClick, onKeyDown: onKeyDown || fireClickOnEnter, "aria-hidden": true, role: "presentation" }, rest), children);
+    return React.createElement("i", __assign({ className: "icon " + icon + " " + className, onClick: onClick, onKeyDown: onKeyDown || fireClickOnEnter, "aria-hidden": true, role: "presentation" }, rest), children);
 };
 var MenuItem = /** @class */ (function (_super) {
     __extends(MenuItem, _super);
@@ -13638,7 +15963,7 @@ var MenuItem = /** @class */ (function (_super) {
             className
         ]);
         if (children) {
-            return React.createElement("div", { className: classes, onClick: this.handleClick }, children);
+            return React.createElement("div", { role: "menuitem", className: classes, onClick: this.handleClick }, children);
         }
         return (React.createElement("div", { id: id, tabIndex: active ? 0 : -1, className: classes, onClick: this.handleClick, role: "tab", "aria-controls": ariaControls, "aria-selected": active, "aria-label": content || name },
             icon ? React.createElement(exports.Icon, { icon: icon }) : undefined,
@@ -13658,11 +15983,11 @@ var Menu = /** @class */ (function (_super) {
             if (!leftOrUpKey && !rightorBottomKey) {
                 return;
             }
-            var menuItems = core.findChild(_this, ".item");
+            var menuItems = _this.child(".item");
             var activeNodeIndex = -1;
             var i = 0;
             while (activeNodeIndex === -1 && i < menuItems.length) {
-                if (menuItems.item(i).classList.contains("active")) {
+                if (menuItems[i].classList.contains("active")) {
                     activeNodeIndex = i;
                 }
                 i++;
@@ -13673,18 +15998,18 @@ var Menu = /** @class */ (function (_super) {
             var selectedTab;
             if ((leftOrUpKey && !pxt.Util.isUserLanguageRtl()) || (rightorBottomKey && pxt.Util.isUserLanguageRtl())) {
                 if (activeNodeIndex === 0) {
-                    selectedTab = menuItems.item(menuItems.length - 1);
+                    selectedTab = menuItems[menuItems.length - 1];
                 }
                 else {
-                    selectedTab = menuItems.item(activeNodeIndex - 1);
+                    selectedTab = menuItems[activeNodeIndex - 1];
                 }
             }
             else if ((rightorBottomKey && !pxt.Util.isUserLanguageRtl()) || (leftOrUpKey && pxt.Util.isUserLanguageRtl())) {
                 if (activeNodeIndex === menuItems.length - 1) {
-                    selectedTab = menuItems.item(0);
+                    selectedTab = menuItems[0];
                 }
                 else {
-                    selectedTab = menuItems.item(activeNodeIndex + 1);
+                    selectedTab = menuItems[activeNodeIndex + 1];
                 }
             }
             if (selectedTab !== undefined) {
@@ -13696,7 +16021,7 @@ var Menu = /** @class */ (function (_super) {
     }
     Menu.prototype.componentDidMount = function () {
         var _this = this;
-        var menuItems = core.findChild(this, ".item");
+        var menuItems = this.child(".item");
         menuItems.forEach(function (elem, index) {
             elem.onkeydown = _this.handleKeyboardNavigation;
         });
@@ -13769,14 +16094,16 @@ var Modal = /** @class */ (function (_super) {
         };
         _this.id = ts.pxtc.Util.guidGen();
         _this.state = {};
+        _this.onRequestClose = _this.onRequestClose.bind(_this);
+        _this.afterOpen = _this.afterOpen.bind(_this);
         return _this;
     }
     Modal.prototype.afterOpen = function () {
-        var modalDidUpdate = this.props.modalDidUpdate;
+        var modalDidOpen = this.props.modalDidOpen;
         this.setState({ scrolling: false });
         this.setPositionAndClassNames();
-        if (modalDidUpdate)
-            modalDidUpdate(this.getRef());
+        if (modalDidOpen)
+            modalDidOpen(this.getRef());
     };
     Modal.prototype.onClose = function () {
         cancelAnimationFrame(this.animationRequestId);
@@ -13787,9 +16114,13 @@ var Modal = /** @class */ (function (_super) {
             && modal.node.firstChild && modal.node.firstChild.firstChild;
         return ref;
     };
+    Modal.prototype.onRequestClose = function () {
+        var onClose = this.props.onClose;
+        this.onClose();
+        onClose();
+    };
     Modal.prototype.render = function () {
-        var _this = this;
-        var _a = this.props, isOpen = _a.isOpen, size = _a.size, longer = _a.longer, basic = _a.basic, className = _a.className, onClose = _a.onClose, closeIcon = _a.closeIcon, children = _a.children, header = _a.header, headerClass = _a.headerClass, helpUrl = _a.helpUrl, description = _a.description, closeOnDimmerClick = _a.closeOnDimmerClick, closeOnDocumentClick = _a.closeOnDocumentClick, closeOnEscape = _a.closeOnEscape, shouldCloseOnEsc = _a.shouldCloseOnEsc, shouldCloseOnOverlayClick = _a.shouldCloseOnOverlayClick, rest = __rest(_a, ["isOpen", "size", "longer", "basic", "className", "onClose", "closeIcon", "children", "header", "headerClass", "helpUrl", "description", "closeOnDimmerClick", "closeOnDocumentClick", "closeOnEscape", "shouldCloseOnEsc", "shouldCloseOnOverlayClick"]);
+        var _a = this.props, isOpen = _a.isOpen, size = _a.size, longer = _a.longer, basic = _a.basic, className = _a.className, onClose = _a.onClose, closeIcon = _a.closeIcon, children = _a.children, header = _a.header, headerClass = _a.headerClass, helpUrl = _a.helpUrl, description = _a.description, closeOnDimmerClick = _a.closeOnDimmerClick, closeOnDocumentClick = _a.closeOnDocumentClick, closeOnEscape = _a.closeOnEscape, shouldCloseOnEsc = _a.shouldCloseOnEsc, shouldCloseOnOverlayClick = _a.shouldCloseOnOverlayClick, shouldFocusAfterRender = _a.shouldFocusAfterRender, rest = __rest(_a, ["isOpen", "size", "longer", "basic", "className", "onClose", "closeIcon", "children", "header", "headerClass", "helpUrl", "description", "closeOnDimmerClick", "closeOnDocumentClick", "closeOnEscape", "shouldCloseOnEsc", "shouldCloseOnOverlayClick", "shouldFocusAfterRender"]);
         var _b = this.state, marginTop = _b.marginTop, scrolling = _b.scrolling, mountClasses = _b.mountClasses;
         var classes = cx([
             'ui',
@@ -13797,8 +16128,13 @@ var Modal = /** @class */ (function (_super) {
             longer ? 'longer' : '',
             basic ? 'basic' : '',
             scrolling ? 'scrolling' : '',
+            closeIcon ? 'closable' : '',
             'modal transition visible active',
             className
+        ]);
+        var portalClassName = cx([
+            core.highContrast ? 'hc' : '',
+            mountClasses
         ]);
         var closeIconName = closeIcon === true ? 'close' : closeIcon;
         var aria = {
@@ -13810,11 +16146,7 @@ var Modal = /** @class */ (function (_super) {
                 marginTop: marginTop
             }
         };
-        var onRequestClose = function () {
-            _this.onClose();
-            onClose();
-        };
-        return React.createElement(ReactModal, __assign({ isOpen: isOpen, ref: "modal", appElement: app_1.appElement, onRequestClose: onRequestClose, onAfterOpen: this.afterOpen.bind(this), shouldReturnFocusAfterClose: true, shouldFocusAfterRender: true, shouldCloseOnEsc: shouldCloseOnEsc || closeOnEscape, shouldCloseOnOverlayClick: shouldCloseOnOverlayClick || (closeOnDocumentClick || closeOnDimmerClick), portalClassName: mountClasses, overlayClassName: "ui page modals dimmer transition " + (isOpen ? 'visible active' : ''), className: classes, style: customStyles, aria: aria }, rest),
+        return React.createElement(ReactModal, __assign({ isOpen: isOpen, ref: "modal", appElement: exports.appElement, onRequestClose: this.onRequestClose, onAfterOpen: this.afterOpen, shouldReturnFocusAfterClose: true, shouldFocusAfterRender: shouldFocusAfterRender, shouldCloseOnEsc: shouldCloseOnEsc || closeOnEscape, shouldCloseOnOverlayClick: shouldCloseOnOverlayClick || (closeOnDocumentClick || closeOnDimmerClick), portalClassName: portalClassName, overlayClassName: "ui page modals dimmer transition " + (isOpen ? 'visible active' : ''), className: classes, style: customStyles, aria: aria }, rest),
             header ? React.createElement("div", { id: this.id + 'title', className: "header " + (headerClass || "") },
                 header,
                 helpUrl ?
@@ -13825,32 +16157,48 @@ var Modal = /** @class */ (function (_super) {
             React.createElement("div", { id: this.id + 'desc', className: (longer ? 'scrolling' : '') + " content" }, children),
             this.props.buttons && this.props.buttons.length > 0 ?
                 React.createElement("div", { className: "actions" }, this.props.buttons.map(function (action) {
-                    return React.createElement(Button, { key: "action_" + action.label, icon: action.icon, text: action.label, className: "approve " + (action.icon ? 'icon right labeled' : '') + " " + (action.className || '') + " " + (action.loading ? "loading disabled" : ""), onClick: function () {
-                            action.onclick();
-                        }, onKeyDown: fireClickOnEnter });
+                    return action.url ?
+                        React.createElement(Link, { key: "action_" + action.label, icon: action.icon, text: action.label, className: "ui button approve " + (action.icon ? 'icon right labeled' : '') + " " + (action.className || '') + " " + (action.loading ? "loading disabled" : ""), href: action.url, target: !action.fileName ? '_blank' : undefined, download: action.fileName ? pxt.Util.htmlEscape(action.fileName) : undefined })
+                        : React.createElement(ModalButtonElement, __assign({ key: "action_" + action.label }, action));
                 })) : undefined,
-            closeIcon ? React.createElement("div", { className: "closeIcon", tabIndex: 0, onClick: onClose, onKeyDown: fireClickOnEnter },
+            closeIcon ? React.createElement("div", { role: "button", className: "closeIcon", tabIndex: 0, onClick: onClose, onKeyDown: fireClickOnEnter },
                 React.createElement(exports.Icon, { icon: "close remove circle" }),
                 " ") : undefined);
     };
     return Modal;
 }(React.Component));
 exports.Modal = Modal;
+var ModalButtonElement = /** @class */ (function (_super) {
+    __extends(ModalButtonElement, _super);
+    function ModalButtonElement(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    ModalButtonElement.prototype.handleClick = function () {
+        this.props.onclick();
+    };
+    ModalButtonElement.prototype.renderCore = function () {
+        var action = this.props;
+        return React.createElement(Button, { icon: action.icon, text: action.label, className: "approve " + (action.icon ? 'icon right labeled' : '') + " " + (action.className || '') + " " + (action.loading ? "loading disabled" : ""), onClick: this.handleClick, onKeyDown: fireClickOnEnter });
+    };
+    return ModalButtonElement;
+}(data.PureComponent));
 var Dimmer = /** @class */ (function (_super) {
     __extends(Dimmer, _super);
     function Dimmer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Dimmer.prototype.render = function () {
-        var _a = this.props, disabled = _a.disabled, inverted = _a.inverted, page = _a.page, simple = _a.simple, closable = _a.closable, className = _a.className, onClose = _a.onClose, active = _a.active, children = _a.children, rest = __rest(_a, ["disabled", "inverted", "page", "simple", "closable", "className", "onClose", "active", "children"]);
+        var _a = this.props, disabled = _a.disabled, inverted = _a.inverted, page = _a.page, simple = _a.simple, closable = _a.closable, onClose = _a.onClose, active = _a.active, children = _a.children, rest = __rest(_a, ["disabled", "inverted", "page", "simple", "closable", "onClose", "active", "children"]);
         var portalClasses = cx([
             'ui dimmer',
             active ? 'active transition visible' : '',
             disabled ? 'disabled' : '',
             inverted ? 'inverted' : '',
             page ? 'page' : '',
-            simple ? 'simple' : '',
-            className
+            simple ? 'simple' : ''
         ]);
         var customStyles = {
             content: {
@@ -13858,7 +16206,7 @@ var Dimmer = /** @class */ (function (_super) {
                 border: '0'
             }
         };
-        return React.createElement(ReactModal, __assign({ appElement: app_1.appElement, style: customStyles, shouldCloseOnOverlayClick: closable, onRequestClose: onClose, overlayClassName: portalClasses }, rest), children);
+        return React.createElement(ReactModal, __assign({ appElement: exports.appElement, style: customStyles, shouldCloseOnOverlayClick: closable, onRequestClose: onClose, overlayClassName: portalClasses }, rest), children);
     };
     return Dimmer;
 }(UIElement));
@@ -13885,36 +16233,949 @@ var Loader = /** @class */ (function (_super) {
 }(UIElement));
 exports.Loader = Loader;
 
-},{"./app":2,"./core":13,"./data":15,"react":155,"react-dom":143,"react-modal":152}],48:[function(require,module,exports){
+},{"./core":13,"./data":15,"react":157,"react-dom":145,"react-modal":154}],49:[function(require,module,exports){
 "use strict";
+/// <reference path="../../localtypings/pxtarget.d.ts" />
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var pkg = require("./package");
-var compiler = require("./compiler");
-var iface;
-function td2tsAsync(td) {
-    if (!iface)
-        iface = pxt.worker.makeWebWorker(pxt.webConfig.tdworkerjs);
-    return pkg.mainPkg.getCompileOptionsAsync()
-        .then(function (opts) {
-        opts.ast = true;
-        return compiler.workerOpAsync("compileTd", { options: opts });
-    })
-        .then(function (apiinfo) {
-        var arg = {
-            text: td,
-            useExtensions: true,
-            apiInfo: apiinfo
+var React = require("react");
+var data = require("./data");
+var sui = require("./sui");
+var core = require("./core");
+var Util = pxt.Util;
+var Toolbox = /** @class */ (function (_super) {
+    __extends(Toolbox, _super);
+    function Toolbox(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleRootElementRef = function (c) {
+            _this.rootElement = c;
         };
-        return iface.opAsync("td2ts", arg);
-    })
-        .then(function (resp) {
-        pxt.debug(resp);
-        return resp.text;
-    });
-}
-exports.td2tsAsync = td2tsAsync;
+        _this.state = {
+            categories: [],
+            visible: false,
+            loading: false,
+            showAdvanced: false
+        };
+        _this.setSelection = _this.setSelection.bind(_this);
+        _this.advancedClicked = _this.advancedClicked.bind(_this);
+        _this.recoverToolbox = _this.recoverToolbox.bind(_this);
+        return _this;
+    }
+    Toolbox.prototype.getElement = function () {
+        return this.rootElement;
+    };
+    Toolbox.prototype.hide = function () {
+        this.setState({ visible: false });
+    };
+    Toolbox.prototype.showLoading = function () {
+        this.setState({ visible: true, loading: true });
+    };
+    Toolbox.prototype.show = function () {
+        this.setState({ visible: true });
+    };
+    Toolbox.prototype.setSelectedItem = function (item) {
+        this.selectedItem = item;
+    };
+    Toolbox.prototype.setPreviousItem = function () {
+        if (this.selectedIndex > 0) {
+            var newIndex = --this.selectedIndex;
+            // Check if the previous item has a subcategory
+            var previousItem = this.items[newIndex];
+            this.setSelection(previousItem, newIndex);
+        }
+        else if (this.state.showSearchBox) {
+            // Focus the search box if it exists
+            var searchBox = this.refs.searchbox;
+            if (searchBox)
+                searchBox.focus();
+        }
+    };
+    Toolbox.prototype.setNextItem = function () {
+        if (this.items.length - 1 > this.selectedIndex) {
+            var newIndex = ++this.selectedIndex;
+            this.setSelection(this.items[newIndex], newIndex);
+        }
+    };
+    Toolbox.prototype.setSearch = function () {
+        // Focus the search box if it exists
+        var searchBox = this.refs.searchbox;
+        if (searchBox)
+            searchBox.focus();
+    };
+    Toolbox.prototype.clear = function () {
+        this.clearSelection();
+        this.selectedIndex = 0;
+        this.selectedTreeRow = undefined;
+    };
+    Toolbox.prototype.clearSelection = function () {
+        this.setState({ selectedItem: undefined, expandedItem: undefined, focusSearch: false });
+    };
+    Toolbox.prototype.clearSearch = function () {
+        this.setState({ hasSearch: false, searchBlocks: undefined, focusSearch: false });
+    };
+    Toolbox.prototype.setSelection = function (treeRow, index, force) {
+        var _a = this.props, editorname = _a.editorname, parent = _a.parent;
+        var nameid = treeRow.nameid, subns = treeRow.subns, customClick = treeRow.customClick;
+        pxt.tickEvent(editorname + ".toolbox.click", undefined, { interactiveConsent: true });
+        var id = subns ? nameid + subns : nameid;
+        if (this.state.selectedItem == id && !force) {
+            this.clearSelection();
+            // Hide flyout
+            this.closeFlyout();
+        }
+        else {
+            var handled = false;
+            if (customClick) {
+                handled = customClick(parent);
+                if (handled)
+                    return;
+            }
+            if (!handled) {
+                this.setState({ selectedItem: id, expandedItem: nameid, focusSearch: false });
+                this.selectedIndex = index;
+                this.selectedTreeRow = treeRow;
+                if (treeRow.advanced && !this.state.showAdvanced)
+                    this.showAdvanced();
+                if (!customClick) {
+                    // Show flyout
+                    this.showFlyout(treeRow);
+                }
+            }
+        }
+    };
+    Toolbox.prototype.focus = function () {
+        if (!this.rootElement)
+            return;
+        if (this.selectedItem && this.selectedItem.getTreeRow()) {
+            // Focus the selected item
+            var selectedItem = this.selectedItem.props.treeRow;
+            var selectedItemIndex = this.items.indexOf(selectedItem);
+            this.setSelection(selectedItem, selectedItemIndex, true);
+        }
+        else {
+            // Focus first item in the toolbox
+            this.selectFirstItem();
+        }
+    };
+    Toolbox.prototype.selectFirstItem = function () {
+        if (this.items[0]) {
+            this.setSelection(this.items[0], 0, true);
+        }
+    };
+    Toolbox.prototype.moveFocusToFlyout = function () {
+        var parent = this.props.parent;
+        parent.moveFocusToFlyout();
+    };
+    Toolbox.prototype.componentDidUpdate = function (prevProps, prevState) {
+        if (prevState.visible != this.state.visible
+            || prevState.loading != this.state.loading
+            || prevState.showAdvanced != this.state.showAdvanced) {
+            this.props.parent.resize();
+        }
+        if (this.state.hasSearch && this.state.searchBlocks != prevState.searchBlocks) {
+            // Referesh search items
+            this.refreshSearchItem();
+        }
+        else if (prevState.hasSearch && !this.state.hasSearch && this.state.selectedItem == 'search') {
+            // No more search
+            this.closeFlyout();
+        }
+    };
+    Toolbox.prototype.componentDidCatch = function (error, info) {
+        // Log what happened
+        var editorname = this.props.editorname;
+        pxt.tickEvent(editorname + ".toolbox.crashed", { error: error });
+        // Update error state
+        this.setState({ hasError: true });
+    };
+    Toolbox.prototype.recoverToolbox = function () {
+        // Recover from above error state
+        this.setState({ hasError: false });
+    };
+    Toolbox.prototype.advancedClicked = function () {
+        var editorname = this.props.editorname;
+        pxt.tickEvent(editorname + ".advanced", undefined, { interactiveConsent: true });
+        this.showAdvanced();
+    };
+    Toolbox.prototype.showAdvanced = function () {
+        var parent = this.props.parent;
+        if (this.selectedItem && this.selectedItem.props.treeRow
+            && this.selectedItem.props.treeRow.advanced) {
+            this.clear();
+            this.closeFlyout();
+        }
+        this.setState({ showAdvanced: !this.state.showAdvanced });
+    };
+    Toolbox.prototype.getSearchBlocks = function () {
+        var parent = this.props.parent;
+        var searchBlocks = this.state.searchBlocks;
+        return searchBlocks.map(function (searchResult) {
+            return {
+                name: searchResult.qName,
+                attributes: {
+                    blockId: searchResult.id
+                },
+                builtinBlock: searchResult.builtinBlock,
+                builtinField: searchResult.field
+            };
+        });
+    };
+    Toolbox.prototype.refreshSelection = function () {
+        var parent = this.props.parent;
+        if (!this.state.selectedItem || !this.selectedTreeRow)
+            return;
+        if (this.selectedTreeRow.customClick) {
+            this.selectedTreeRow.customClick(parent);
+        }
+        else {
+            this.showFlyout(this.selectedTreeRow);
+        }
+    };
+    Toolbox.prototype.refreshSearchItem = function () {
+        var searchTreeRow = ToolboxSearch.getSearchTreeRow();
+        this.showFlyout(searchTreeRow);
+    };
+    Toolbox.prototype.showFlyout = function (treeRow) {
+        var parent = this.props.parent;
+        // const t0 = performance.now();
+        parent.showFlyout(treeRow);
+        // const t1 = performance.now();
+        // pxt.debug("perf: call to showFlyout took " + (t1 - t0) + " milliseconds.");
+    };
+    Toolbox.prototype.closeFlyout = function () {
+        var parent = this.props.parent;
+        parent.closeFlyout();
+    };
+    Toolbox.prototype.hasAdvancedCategories = function () {
+        var categories = this.state.categories;
+        return categories.some(function (category) { return category.advanced; });
+    };
+    Toolbox.prototype.getNonAdvancedCategories = function () {
+        var categories = this.state.categories;
+        return categories.filter(function (category) { return !category.advanced; });
+    };
+    Toolbox.prototype.getAdvancedCategories = function () {
+        var categories = this.state.categories;
+        return categories.filter(function (category) { return category.advanced; });
+    };
+    Toolbox.prototype.getAllCategoriesList = function (visibleOnly) {
+        var _a = this.state, categories = _a.categories, hasSearch = _a.hasSearch, expandedItem = _a.expandedItem;
+        var categoriesList = [];
+        if (hasSearch)
+            categoriesList.push(ToolboxSearch.getSearchTreeRow());
+        categories.forEach(function (category) {
+            categoriesList.push(category);
+            if (category.subcategories &&
+                (!visibleOnly || visibleOnly && category.nameid == expandedItem)) {
+                category.subcategories.forEach(function (subcategory) {
+                    categoriesList.push(subcategory);
+                });
+            }
+        });
+        return categoriesList;
+    };
+    Toolbox.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+        if (this.state != nextState)
+            return true;
+        return false;
+    };
+    Toolbox.prototype.renderCore = function () {
+        var _this = this;
+        var _a = this.props, editorname = _a.editorname, parent = _a.parent;
+        var _b = this.state, showAdvanced = _b.showAdvanced, visible = _b.visible, loading = _b.loading, selectedItem = _b.selectedItem, expandedItem = _b.expandedItem, hasSearch = _b.hasSearch, showSearchBox = _b.showSearchBox, hasError = _b.hasError;
+        if (!visible)
+            return React.createElement("div", { style: { display: 'none' } });
+        if (loading || hasError)
+            return React.createElement("div", null,
+                React.createElement("div", { className: "blocklyTreeRoot" },
+                    React.createElement("div", { className: "blocklyTreeRow", style: { opacity: 0 } })),
+                loading ? React.createElement("div", { className: "ui active dimmer" },
+                    React.createElement("div", { className: "ui loader indeterminate" })) : undefined,
+                hasError ? React.createElement("div", { className: "ui" },
+                    lf("Toolbox crashed.."),
+                    React.createElement(sui.Button, { icon: 'refresh', onClick: this.recoverToolbox, text: lf("Reload"), className: 'fluid' })) : undefined);
+        var hasAdvanced = this.hasAdvancedCategories();
+        var nonAdvancedCategories = this.getNonAdvancedCategories();
+        var advancedCategories = hasAdvanced ? this.getAdvancedCategories() : [];
+        this.items = this.getAllCategoriesList();
+        var searchTreeRow = ToolboxSearch.getSearchTreeRow();
+        var appTheme = pxt.appTarget.appTheme;
+        var classes = sui.cx([
+            'pxtToolbox',
+            appTheme.invertedToolbox ? 'invertedToolbox' : '',
+            appTheme.coloredToolbox ? 'coloredToolbox' : ''
+        ]);
+        var index = 0;
+        return React.createElement("div", { ref: this.handleRootElementRef, className: classes, id: editorname + "EditorToolbox" },
+            React.createElement(ToolboxStyle, { categories: this.items }),
+            showSearchBox ? React.createElement(ToolboxSearch, { ref: "searchbox", parent: parent, toolbox: this, editorname: editorname }) : undefined,
+            React.createElement("div", { className: "blocklyTreeRoot" },
+                React.createElement("div", { role: "tree" },
+                    hasSearch ? React.createElement(CategoryItem, { key: "search", toolbox: this, index: index++, selected: selectedItem == "search", treeRow: searchTreeRow, onCategoryClick: this.setSelection }) : undefined,
+                    nonAdvancedCategories.map(function (treeRow) { return (React.createElement(CategoryItem, { key: treeRow.nameid, toolbox: _this, index: index++, selected: selectedItem == treeRow.nameid, childrenVisible: expandedItem == treeRow.nameid, treeRow: treeRow, onCategoryClick: _this.setSelection }, treeRow.subcategories ? treeRow.subcategories.map(function (subTreeRow) { return (React.createElement(CategoryItem, { key: subTreeRow.nameid, index: index++, toolbox: _this, selected: selectedItem == (subTreeRow.nameid + subTreeRow.subns), treeRow: subTreeRow, onCategoryClick: _this.setSelection })); }) : undefined)); }),
+                    hasAdvanced ? React.createElement(TreeSeparator, { key: "advancedseparator" }) : undefined,
+                    hasAdvanced ? React.createElement(CategoryItem, { toolbox: this, treeRow: { nameid: "", name: pxt.toolbox.advancedTitle(), color: pxt.toolbox.getNamespaceColor('advanced'), icon: pxt.toolbox.getNamespaceIcon(showAdvanced ? 'advancedexpanded' : 'advancedcollapsed') }, onCategoryClick: this.advancedClicked }) : undefined,
+                    showAdvanced ? advancedCategories.map(function (treeRow) { return (React.createElement(CategoryItem, { key: treeRow.nameid, toolbox: _this, index: index++, selected: selectedItem == treeRow.nameid, childrenVisible: expandedItem == treeRow.nameid, treeRow: treeRow, onCategoryClick: _this.setSelection }, treeRow.subcategories ? treeRow.subcategories.map(function (subTreeRow) { return (React.createElement(CategoryItem, { key: subTreeRow.nameid, toolbox: _this, index: index++, selected: selectedItem == (subTreeRow.nameid + subTreeRow.subns), treeRow: subTreeRow, onCategoryClick: _this.setSelection })); }) : undefined)); }) : undefined)));
+    };
+    return Toolbox;
+}(data.Component));
+exports.Toolbox = Toolbox;
+var CategoryItem = /** @class */ (function (_super) {
+    __extends(CategoryItem, _super);
+    function CategoryItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleTreeRowRef = function (c) {
+            _this.treeRowElement = c;
+        };
+        _this.state = {
+            selected: props.selected
+        };
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleKeyDown = _this.handleKeyDown.bind(_this);
+        return _this;
+    }
+    CategoryItem.prototype.getTreeRow = function () {
+        return this.treeRowElement;
+    };
+    CategoryItem.prototype.componentWillReceiveProps = function (nextProps) {
+        var newState = {};
+        if (nextProps.selected != undefined) {
+            newState.selected = nextProps.selected;
+        }
+        if (Object.keys(newState).length > 0)
+            this.setState(newState);
+    };
+    CategoryItem.prototype.componentDidUpdate = function (prevProps, prevState) {
+        var toolbox = this.props.toolbox;
+        if (this.state.selected) {
+            this.props.toolbox.setSelectedItem(this);
+            if (!toolbox.state.focusSearch)
+                this.focusElement();
+        }
+    };
+    CategoryItem.prototype.focusElement = function () {
+        this.treeRowElement.focus();
+    };
+    CategoryItem.prototype.handleClick = function () {
+        var _a = this.props, treeRow = _a.treeRow, onCategoryClick = _a.onCategoryClick, index = _a.index;
+        if (onCategoryClick)
+            onCategoryClick(treeRow, index);
+    };
+    CategoryItem.prototype.handleKeyDown = function (e) {
+        var _a = this.props, toolbox = _a.toolbox, childrenVisible = _a.childrenVisible;
+        var isRtl = Util.isUserLanguageRtl();
+        var charCode = core.keyCodeFromEvent(e);
+        if (charCode == 40) {
+            this.nextItem();
+        }
+        else if (charCode == 38) {
+            this.previousItem();
+        }
+        else if ((charCode == 39 && !isRtl) || (charCode == 37 && isRtl)) {
+            // Focus inside flyout
+            toolbox.moveFocusToFlyout();
+        }
+        else if (charCode == 27) {
+            // Close the flyout
+            toolbox.closeFlyout();
+        }
+        else if (charCode == core.ENTER_KEY || charCode == core.SPACE_KEY) {
+            sui.fireClickOnEnter.call(this, e);
+        }
+        else if (charCode == core.TAB_KEY
+            || charCode == 37 /* Left arrow key */
+            || charCode == 39 /* Left arrow key */
+            || charCode == 17 /* Ctrl Key */
+            || charCode == 16 /* Shift Key */
+            || charCode == 91 /* Cmd Key */) {
+            // Escape tab and shift key
+        }
+        else {
+            toolbox.setSearch();
+        }
+    };
+    CategoryItem.prototype.previousItem = function () {
+        var _a = this.props, toolbox = _a.toolbox, childrenVisible = _a.childrenVisible;
+        var editorname = toolbox.props.editorname;
+        pxt.tickEvent(editorname + ".toolbox.keyboard.prev\"", undefined, { interactiveConsent: true });
+        toolbox.setPreviousItem();
+    };
+    CategoryItem.prototype.nextItem = function () {
+        var _a = this.props, toolbox = _a.toolbox, childrenVisible = _a.childrenVisible;
+        var editorname = toolbox.props.editorname;
+        pxt.tickEvent(editorname + ".toolbox.keyboard.next\"", undefined, { interactiveConsent: true });
+        toolbox.setNextItem();
+    };
+    CategoryItem.prototype.renderCore = function () {
+        var _a = this.props, toolbox = _a.toolbox, childrenVisible = _a.childrenVisible;
+        var selected = this.state.selected;
+        return React.createElement(TreeItem, null,
+            React.createElement(TreeRow, __assign({ ref: this.handleTreeRowRef }, this.props, { selected: selected, onClick: this.handleClick, onKeyDown: this.handleKeyDown })),
+            React.createElement(TreeGroup, { visible: childrenVisible }, this.props.children));
+    };
+    return CategoryItem;
+}(data.Component));
+exports.CategoryItem = CategoryItem;
+var TreeRow = /** @class */ (function (_super) {
+    __extends(TreeRow, _super);
+    function TreeRow(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleTreeRowRef = function (c) {
+            _this.treeRow = c;
+        };
+        _this.state = {};
+        _this.onmouseenter = _this.onmouseenter.bind(_this);
+        _this.onmouseleave = _this.onmouseleave.bind(_this);
+        return _this;
+    }
+    TreeRow.prototype.focus = function () {
+        if (this.treeRow)
+            this.treeRow.focus();
+    };
+    TreeRow.prototype.getProperties = function () {
+        var treeRow = this.props.treeRow;
+        return treeRow;
+    };
+    TreeRow.prototype.onmouseenter = function () {
+        var appTheme = pxt.appTarget.appTheme;
+        var metaColor = this.getMetaColor();
+        var invertedMultipler = appTheme.blocklyOptions
+            && appTheme.blocklyOptions.toolboxOptions
+            && appTheme.blocklyOptions.toolboxOptions.invertedMultiplier || 0.3;
+        if (appTheme.invertedToolbox) {
+            this.treeRow.style.backgroundColor = pxt.toolbox.fadeColor(metaColor || '#ddd', invertedMultipler, false);
+        }
+    };
+    TreeRow.prototype.onmouseleave = function () {
+        var appTheme = pxt.appTarget.appTheme;
+        var metaColor = this.getMetaColor();
+        if (appTheme.invertedToolbox) {
+            this.treeRow.style.backgroundColor = (metaColor || '#ddd');
+        }
+    };
+    TreeRow.prototype.getMetaColor = function () {
+        var color = this.props.treeRow.color;
+        return pxt.toolbox.convertColor(color) || pxt.toolbox.getNamespaceColor('default');
+    };
+    TreeRow.prototype.renderCore = function () {
+        var _a = this.props, selected = _a.selected, onClick = _a.onClick, onKeyDown = _a.onKeyDown;
+        var _b = this.props.treeRow, nameid = _b.nameid, subns = _b.subns, name = _b.name, icon = _b.icon, color = _b.color;
+        var appTheme = pxt.appTarget.appTheme;
+        var metaColor = this.getMetaColor();
+        var invertedMultipler = appTheme.blocklyOptions
+            && appTheme.blocklyOptions.toolboxOptions
+            && appTheme.blocklyOptions.toolboxOptions.invertedMultiplier || 0.3;
+        var treeRowStyle = {
+            paddingLeft: '0px'
+        };
+        var treeRowClass = 'blocklyTreeRow';
+        if (appTheme.coloredToolbox) {
+            // Colored toolbox
+            treeRowStyle.color = "" + metaColor;
+            treeRowStyle.borderLeft = "8px solid " + metaColor;
+        }
+        else if (appTheme.invertedToolbox) {
+            // Inverted toolbox
+            treeRowStyle.backgroundColor = (metaColor || '#ddd');
+            treeRowStyle.color = '#fff';
+        }
+        else {
+            // Standard toolbox
+            treeRowStyle.borderLeft = "8px solid " + metaColor;
+        }
+        // Selected
+        if (selected) {
+            treeRowClass += ' blocklyTreeSelected';
+            if (appTheme.invertedToolbox) {
+                treeRowStyle.backgroundColor = "" + pxt.toolbox.fadeColor(color, invertedMultipler, false);
+            }
+            else {
+                treeRowStyle.backgroundColor = (metaColor || '#ddd');
+            }
+            treeRowStyle.color = '#fff';
+        }
+        // Icon
+        var iconClass = ("blocklyTreeIcon" + (subns ? 'more' : icon ? (nameid || icon).toLowerCase() : 'Default')).replace(/\s/g, '');
+        var iconContent = subns ? pxt.toolbox.getNamespaceIcon('more') : icon || pxt.toolbox.getNamespaceIcon('default');
+        var iconImageStyle;
+        if (iconContent.length > 1) {
+            // It's probably an image icon, and not an icon code
+            iconImageStyle = React.createElement("style", null, ".blocklyTreeIcon." + iconClass + " {\n                    background-image: url(\"" + Util.pathJoin(pxt.webConfig.commitCdnUrl, encodeURI(icon)) + "\")!important;\n                    width: 30px;\n                    height: 100%;\n                    background-size: 20px !important;\n                    background-repeat: no-repeat !important;\n                    background-position: 50% 50% !important;\n                }");
+            iconContent = undefined;
+        }
+        return React.createElement("div", { role: "button", ref: this.handleTreeRowRef, className: treeRowClass, style: treeRowStyle, tabIndex: 0, onMouseEnter: this.onmouseenter, onMouseLeave: this.onmouseleave, onClick: onClick, onKeyDown: onKeyDown ? onKeyDown : sui.fireClickOnEnter },
+            React.createElement("span", { className: "blocklyTreeIcon", role: "presentation" }),
+            iconImageStyle,
+            React.createElement("span", { style: { display: 'inline-block' }, className: "blocklyTreeIcon " + iconClass, role: "presentation" }, iconContent),
+            React.createElement("span", { className: "blocklyTreeLabel" }, name ? name : "" + Util.capitalize(subns || nameid)));
+    };
+    return TreeRow;
+}(data.Component));
+exports.TreeRow = TreeRow;
+var TreeSeparator = /** @class */ (function (_super) {
+    __extends(TreeSeparator, _super);
+    function TreeSeparator() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TreeSeparator.prototype.renderCore = function () {
+        return React.createElement(TreeItem, null,
+            React.createElement("div", { className: "blocklyTreeSeparator" },
+                React.createElement("span", { style: { display: 'inline-block' }, role: "presentation" })));
+    };
+    return TreeSeparator;
+}(data.Component));
+exports.TreeSeparator = TreeSeparator;
+var TreeItem = /** @class */ (function (_super) {
+    __extends(TreeItem, _super);
+    function TreeItem() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TreeItem.prototype.renderCore = function () {
+        var selected = this.props.selected;
+        return React.createElement("div", { role: "treeitem", "aria-selected": selected }, this.props.children);
+    };
+    return TreeItem;
+}(data.Component));
+exports.TreeItem = TreeItem;
+var TreeGroup = /** @class */ (function (_super) {
+    __extends(TreeGroup, _super);
+    function TreeGroup() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TreeGroup.prototype.renderCore = function () {
+        var visible = this.props.visible;
+        return React.createElement("div", { role: "group", style: { backgroundPosition: '0px 0px', 'display': visible ? '' : 'none' } }, this.props.children);
+    };
+    return TreeGroup;
+}(data.Component));
+exports.TreeGroup = TreeGroup;
+var ToolboxSearch = /** @class */ (function (_super) {
+    __extends(ToolboxSearch, _super);
+    function ToolboxSearch(props) {
+        var _this = _super.call(this, props) || this;
+        _this.search = Util.debounce(function () {
+            _this.searchImmediate();
+        }, 300, false);
+        _this.state = {};
+        _this.searchImmediate = _this.searchImmediate.bind(_this);
+        _this.handleKeyDown = _this.handleKeyDown.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
+        return _this;
+    }
+    ToolboxSearch.getSearchTreeRow = function () {
+        return {
+            nameid: 'search',
+            name: lf("{id:category}Search"),
+            color: pxt.toolbox.getNamespaceColor('search'),
+            icon: pxt.toolbox.getNamespaceIcon('search')
+        };
+    };
+    ToolboxSearch.prototype.handleChange = function () {
+        this.search();
+    };
+    ToolboxSearch.prototype.handleKeyDown = function (e) {
+        var toolbox = this.props.toolbox;
+        var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+        if (charCode === 40 /* Down Key */) {
+            // Select first item in the toolbox
+            toolbox.selectFirstItem();
+        }
+    };
+    ToolboxSearch.prototype.focus = function () {
+        this.refs.searchInput.focus();
+    };
+    ToolboxSearch.prototype.searchImmediate = function () {
+        var _this = this;
+        var _a = this.props, parent = _a.parent, toolbox = _a.toolbox, editorname = _a.editorname;
+        var searchTerm = this.refs.searchInput.value;
+        var searchAccessibilityLabel = '';
+        var hasSearch = false;
+        pxt.tickEvent(editorname + ".search", undefined, { interactiveConsent: true });
+        // Execute search
+        parent.searchAsync(searchTerm)
+            .done(function (blocks) {
+            if (blocks.length == 0) {
+                searchAccessibilityLabel = lf("No search results...");
+            }
+            else {
+                searchAccessibilityLabel = lf("{0} result matching '{1}'", blocks.length, searchTerm.toLowerCase());
+            }
+            hasSearch = searchTerm != '';
+            var newState = {};
+            newState.hasSearch = hasSearch;
+            newState.searchBlocks = blocks;
+            newState.focusSearch = true;
+            if (hasSearch)
+                newState.selectedItem = 'search';
+            toolbox.setState(newState);
+            _this.setState({ searchAccessibilityLabel: searchAccessibilityLabel });
+        });
+    };
+    ToolboxSearch.prototype.renderCore = function () {
+        var searchAccessibilityLabel = this.state.searchAccessibilityLabel;
+        return React.createElement("div", { id: "blocklySearchArea" },
+            React.createElement("div", { id: "blocklySearchInput", className: "ui fluid icon input", role: "search" },
+                React.createElement("input", { ref: "searchInput", type: "text", placeholder: "Search...", autoComplete: "off", onFocus: this.searchImmediate, onKeyDown: this.handleKeyDown, onChange: this.handleChange, id: "blocklySearchInputField", className: "blocklySearchInputField" }),
+                React.createElement("i", { className: "search icon", role: "presentation", "aria-hidden": "true" }),
+                React.createElement("div", { className: "accessible-hidden", id: "blocklySearchLabel", "aria-live": "polite" },
+                    " ",
+                    searchAccessibilityLabel,
+                    " ")));
+    };
+    return ToolboxSearch;
+}(data.Component));
+exports.ToolboxSearch = ToolboxSearch;
+var ToolboxTrashIcon = /** @class */ (function (_super) {
+    __extends(ToolboxTrashIcon, _super);
+    function ToolboxTrashIcon() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ToolboxTrashIcon.prototype.renderCore = function () {
+        return React.createElement("div", { id: "blocklyTrashIcon", style: { opacity: 0, display: 'none' } },
+            React.createElement("i", { className: "trash icon", "aria-hidden": "true" }));
+    };
+    return ToolboxTrashIcon;
+}(data.Component));
+exports.ToolboxTrashIcon = ToolboxTrashIcon;
+var ToolboxStyle = /** @class */ (function (_super) {
+    __extends(ToolboxStyle, _super);
+    function ToolboxStyle() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ToolboxStyle.prototype.renderCore = function () {
+        var categories = this.props.categories;
+        // Add inline CSS for each category used so that the tutorial engine is able to render blocks
+        // and assosiate them with a specific category
+        return React.createElement("style", null, categories.filter(function (c) { return !!c.color; }).map(function (category) {
+            return "span.docs.inlineblock." + category.nameid + " {\n                    background-color: " + category.color + ";\n                    border-color: " + pxt.toolbox.fadeColor(category.color, 0.1, false) + ";\n                }";
+        }));
+    };
+    return ToolboxStyle;
+}(data.Component));
+exports.ToolboxStyle = ToolboxStyle;
 
-},{"./compiler":11,"./package":35}],49:[function(require,module,exports){
+},{"./core":13,"./data":15,"./sui":48,"react":157}],50:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var srceditor = require("./srceditor");
+var compiler = require("./compiler");
+var ToolboxEditor = /** @class */ (function (_super) {
+    __extends(ToolboxEditor, _super);
+    function ToolboxEditor() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.extensionsMap = {};
+        _this.subcategoryMap = {};
+        return _this;
+    }
+    ToolboxEditor.prototype.shouldShowBlock = function (blockId, ns) {
+        var filters = this.parent.state.editorState && this.parent.state.editorState.filters;
+        if (filters) {
+            var blockFilter = filters.blocks && filters.blocks[blockId];
+            var categoryFilter = filters.namespaces && filters.namespaces[ns];
+            // First try block filters
+            if (blockFilter != undefined && blockFilter == pxt.editor.FilterState.Hidden)
+                return false;
+            if (blockFilter != undefined)
+                return true;
+            // Check if category is hidden
+            if (categoryFilter != undefined && categoryFilter == pxt.editor.FilterState.Hidden)
+                return false;
+            if (categoryFilter != undefined)
+                return true;
+            // Check default filter state
+            if (filters.defaultState != undefined && filters.defaultState == pxt.editor.FilterState.Hidden)
+                return false;
+        }
+        return true;
+    };
+    ToolboxEditor.prototype.shouldShowCustomCategory = function (ns) {
+        var filters = this.parent.state.editorState && this.parent.state.editorState.filters;
+        if (filters) {
+            // These categories are special and won't have any children so we need to check the filters manually
+            if (ns === "variables" && (!filters.blocks ||
+                filters.blocks["variables_set"] ||
+                filters.blocks["variables_get"] ||
+                filters.blocks["variables_change"]) &&
+                (!filters.namespaces || filters.namespaces["variables"] !== pxt.editor.FilterState.Disabled)) {
+                return true;
+            }
+            else if (ns === "functions" && (!filters.blocks ||
+                filters.blocks["procedures_defnoreturn"] ||
+                filters.blocks["procedures_callnoreturn"]) &&
+                (!filters.namespaces || filters.namespaces["functions"] !== pxt.editor.FilterState.Disabled)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    };
+    ToolboxEditor.prototype.getSearchSubset = function () {
+        var _this = this;
+        if (!this.searchSubset && this.blockInfo) {
+            this.searchSubset = {};
+            var searchSubset_1 = this.searchSubset;
+            // Go through all built in blocks
+            var blockDefinitions = pxt.blocks.blockDefinitions();
+            for (var id in blockDefinitions) {
+                var blockDef = blockDefinitions[id];
+                if (this.shouldShowBlock(id, blockDef.category)) {
+                    // Add to search subset
+                    searchSubset_1[id] = true;
+                }
+            }
+            // Go through all blocks and apply filter
+            this.blockInfo.blocks.forEach(function (fn) {
+                var ns = (fn.attributes.blockNamespace || fn.namespace).split('.')[0];
+                ns = ns.toLowerCase();
+                if (fn.attributes.debug && !pxt.options.debug)
+                    return;
+                if (fn.attributes.deprecated || fn.attributes.blockHidden)
+                    return;
+                if (_this.shouldShowBlock(fn.attributes.blockId, ns)) {
+                    // Add to search subset
+                    searchSubset_1[fn.attributes.blockId] = true;
+                }
+            });
+        }
+        return this.searchSubset;
+    };
+    ToolboxEditor.prototype.searchAsync = function (searchTerm) {
+        var searchOptions = {
+            term: searchTerm,
+            subset: this.getSearchSubset()
+        };
+        return compiler.apiSearchAsync(searchOptions)
+            .then(function (fns) { return fns; })
+            .then(function (searchResults) {
+            pxt.debug("searching for: " + searchTerm);
+            return searchResults;
+        });
+    };
+    ToolboxEditor.prototype.clearCaches = function () {
+        this.searchSubset = undefined;
+    };
+    ToolboxEditor.prototype.getAllCategories = function () {
+        return this.getToolboxCategories(false).concat(this.getToolboxCategories(true));
+    };
+    ToolboxEditor.prototype.getToolboxCategories = function (isAdvanced) {
+        if (!this.blockInfo)
+            return [];
+        var that = this;
+        function filterNamespaces(namespaces) {
+            return namespaces.filter(function (_a) {
+                var md = _a[1];
+                return !md.deprecated && (isAdvanced ? md.advanced : !md.advanced);
+            });
+        }
+        var namespaces = filterNamespaces(this.getNamespaces()
+            .map(function (ns) { return [ns, that.getNamespaceAttrs(ns)]; }));
+        function createSubCategories(parent, names, isAdvanced) {
+            return names.map(function (subns) {
+                var ns = parent[0];
+                var md = parent[1];
+                // Don't show subcategory if there are no blocks to show
+                var blocks = that.getBlocksForCategory(ns, subns).filter(function (block) { return that.shouldShowBlock(block.attributes.blockId, ns); });
+                if (!blocks.length)
+                    return undefined;
+                return {
+                    nameid: ns,
+                    subns: subns,
+                    color: md.color,
+                    icon: md.icon,
+                    groups: md.groups,
+                    groupIcons: md.groupIcons,
+                    labelLineWidth: md.labelLineWidth,
+                    blocks: blocks,
+                    advanced: isAdvanced
+                };
+            }).filter(function (subns) { return !!subns; });
+        }
+        function createCategories(names, isAdvanced) {
+            return names
+                .sort(function (_a, _b) {
+                var md1 = _a[1];
+                var md2 = _b[1];
+                // sort by fn weight
+                var w2 = (md2 ? md2.weight || 50 : 50);
+                var w1 = (md1 ? md1.weight || 50 : 50);
+                return w2 >= w1 ? 1 : -1;
+            }).map(function (_a) {
+                var ns = _a[0], md = _a[1];
+                var isBuiltIn = that.isBuiltIn(ns);
+                var builtInCategory = isBuiltIn ? that.getBuiltinCategory(ns) : undefined;
+                // We need the blocks to figure out if all blocks are hidden
+                var blocks = that.getBlocksForCategory(ns).filter(function (block) { return that.shouldShowBlock(block.attributes.blockId, ns); });
+                var hasExtensionButtons = that.extensionsMap[ns];
+                var hasCustomClick = builtInCategory && builtInCategory.customClick;
+                var hasBlocks = blocks.length || hasExtensionButtons || hasCustomClick;
+                // Don't show the category if there are no blocks in it
+                if (!hasBlocks)
+                    return undefined;
+                if (hasCustomClick) {
+                    // Ensure that we need to show this custom category
+                    if (!that.shouldShowCustomCategory(ns))
+                        return undefined;
+                }
+                // Prepare the category
+                var category = {
+                    nameid: ns,
+                    name: md.block ? md.block : undefined,
+                    color: md.color,
+                    icon: md.icon,
+                    groups: md.groups,
+                    groupIcons: md.groupIcons,
+                    labelLineWidth: md.labelLineWidth,
+                    blocks: blocks,
+                    subcategories: md.subcategories || that.subcategoryMap[ns] ?
+                        createSubCategories([ns, md], md.subcategories || Object.keys(that.subcategoryMap[ns]), isAdvanced) : undefined,
+                    advanced: isAdvanced
+                };
+                // Apply specific builtin customizations
+                if (isBuiltIn) {
+                    category.name = builtInCategory.name;
+                    category.icon = md.icon ? pxt.toolbox.getNamespaceIcon(md.icon)
+                        || md.icon : pxt.toolbox.getNamespaceIcon(ns);
+                    category.groups = builtInCategory.groups || md.groups;
+                    category.customClick = builtInCategory.customClick;
+                }
+                return category;
+            }).filter(function (cat) { return !!cat; });
+        }
+        return createCategories(namespaces, isAdvanced);
+    };
+    ToolboxEditor.prototype.moveFocusToFlyout = function () { };
+    ToolboxEditor.prototype.abstractShowFlyout = function (treeRow) {
+        var _this = this;
+        var ns = treeRow.nameid, subns = treeRow.subns, icon = treeRow.icon, color = treeRow.color, groups = treeRow.groups, groupIcons = treeRow.groupIcons, labelLineWidth = treeRow.labelLineWidth, blocks = treeRow.blocks;
+        var fns = blocks;
+        if (!fns || !fns.length)
+            return false;
+        if (!pxt.appTarget.appTheme.hideFlyoutHeadings) {
+            // Add the Heading label
+            this.showFlyoutHeadingLabel(ns, subns, icon, color);
+        }
+        // Organize and rearrange methods into groups
+        var blockGroups = {};
+        var sortedGroups = [];
+        if (groups)
+            sortedGroups = groups;
+        // Create a dict of group icon pairs
+        var groupIconsDict = {};
+        if (groups && groupIcons) {
+            var groupIconsList = groupIcons;
+            for (var i = 0; i < sortedGroups.length; i++) {
+                var icon_1 = groupIconsList[i];
+                groupIconsDict[sortedGroups[i]] = icon_1 || '';
+            }
+        }
+        // Organize the blocks into the different groups
+        for (var bi = 0; bi < fns.length; ++bi) {
+            var blk = fns[bi];
+            var group = blk.attributes.group || 'other';
+            if (!blockGroups[group])
+                blockGroups[group] = [];
+            blockGroups[group].push(blk);
+        }
+        var groupLength = Object.keys(blockGroups).length;
+        if (groupLength > 1) {
+            // Add any missing groups to the sorted groups list
+            Object.keys(blockGroups).sort().forEach(function (group) {
+                if (sortedGroups.indexOf(group) == -1) {
+                    sortedGroups.push(group);
+                }
+            });
+            // Add labels and insert the blocks into the flyout
+            for (var bg = 0; bg < sortedGroups.length; ++bg) {
+                var group = sortedGroups[bg];
+                // Check if there are any blocks in that group
+                if (!blockGroups[group] || !blockGroups[group].length)
+                    continue;
+                // Add the group label
+                if (group != 'other') {
+                    this.showFlyoutGroupLabel(group, groupIconsDict[group], labelLineWidth);
+                }
+                // Add the blocks in that group
+                if (blockGroups[group]) {
+                    this.showFlyoutBlocks(ns, color, blockGroups[group]);
+                }
+            }
+        }
+        else if (groupLength == 1) {
+            Object.keys(blockGroups).forEach(function (blockGroup) {
+                _this.showFlyoutBlocks(ns, color, blockGroups[blockGroup]);
+            });
+        }
+        return true;
+    };
+    // To be extended by editor
+    ToolboxEditor.prototype.getNamespaceAttrs = function (ns) {
+        var info = this.blockInfo.apis.byQName[ns];
+        if (info) {
+            return info.attributes;
+        }
+        if (this.extensionsMap[ns]) {
+            var config = this.extensionsMap[ns];
+            return {
+                weight: 0,
+                blockId: config.name,
+                color: config.extension.color || '#7f8c8d',
+                advanced: config.extension.advanced || false,
+                callingConvention: ts.pxtc.ir.CallingConvention.Plain,
+                paramDefl: {}
+            };
+        }
+        return undefined;
+    };
+    // To be extended by editor
+    ToolboxEditor.prototype.getNamespaces = function () {
+        var _this = this;
+        var namespaces = [];
+        // Add extension namespaces if not already in
+        this.extensions.forEach(function (config) {
+            var name = config.name;
+            var namespace = config.extension.namespace || name;
+            if (!_this.extensionsMap[namespace])
+                _this.extensionsMap[namespace] = config;
+            if (!namespaces.filter(function (ns) { return ns == namespace; })) {
+                namespaces.push(name);
+            }
+        });
+        return namespaces;
+    };
+    return ToolboxEditor;
+}(srceditor.Editor));
+exports.ToolboxEditor = ToolboxEditor;
+
+},{"./compiler":11,"./srceditor":47}],51:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 var __extends = (this && this.__extends) || (function () {
@@ -13934,10 +17195,47 @@ var data = require("./data");
 var sui = require("./sui");
 var sounds = require("./sounds");
 var core = require("./core");
+var md = require("./marked");
+var compiler = require("./compiler");
+/**
+ * We'll run this step when we first start the tutorial to figure out what blocks are used so we can
+ * filter the toolbox.
+ */
+function getUsedBlocksAsync(tutorialId, tutorialmd) {
+    var code = pxt.tutorial.bundleTutorialCode(tutorialmd);
+    return Promise.resolve()
+        .then(function () {
+        var usedBlocks = {};
+        if (code == '')
+            return Promise.resolve({});
+        return compiler.getBlocksAsync()
+            .then(function (blocksInfo) { return compiler.decompileSnippetAsync(code, blocksInfo); })
+            .then(function (blocksXml) {
+            if (blocksXml) {
+                var headless = pxt.blocks.loadWorkspaceXml(blocksXml);
+                var allblocks = headless.getAllBlocks();
+                for (var bi = 0; bi < allblocks.length; ++bi) {
+                    var blk = allblocks[bi];
+                    usedBlocks[blk.type] = 1;
+                }
+                return usedBlocks;
+            }
+            else {
+                throw new Error("Empty blocksXml, failed to decompile");
+            }
+        }).catch(function () {
+            pxt.log("Failed to decompile tutorial: " + tutorialId);
+            throw new Error("Failed to decompile tutorial: " + tutorialId);
+        });
+    });
+}
+exports.getUsedBlocksAsync = getUsedBlocksAsync;
 var TutorialMenuItem = /** @class */ (function (_super) {
     __extends(TutorialMenuItem, _super);
     function TutorialMenuItem(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.openTutorialStep = _this.openTutorialStep.bind(_this);
+        return _this;
     }
     TutorialMenuItem.prototype.openTutorialStep = function (step) {
         var options = this.props.parent.state.tutorialOptions;
@@ -13955,55 +17253,30 @@ var TutorialMenuItem = /** @class */ (function (_super) {
             React.createElement("div", { className: "ui item tutorial-menuitem", role: "menubar" }, tutorialStepInfo.map(function (step, index) {
                 return (index == currentStep) ?
                     React.createElement("span", { className: "step-label", key: 'tutorialStep' + index },
-                        React.createElement("a", { className: "ui circular label " + (currentStep == index ? 'blue selected' : 'inverted') + " " + (!tutorialReady ? 'disabled' : ''), role: "menuitem", "aria-label": lf("Tutorial step {0}. This is the current step", index + 1), tabIndex: 0, onClick: function () { return _this.openTutorialStep(index); }, onKeyDown: sui.fireClickOnEnter }, index + 1)) :
+                        React.createElement(TutorialMenuItemLink, { index: index, className: "ui circular label " + (currentStep == index ? 'blue selected' : 'inverted') + " " + (!tutorialReady ? 'disabled' : ''), ariaLabel: lf("Tutorial step {0}. This is the current step", index + 1), onClick: _this.openTutorialStep }, index + 1)) :
                     React.createElement("span", { className: "step-label", key: 'tutorialStep' + index, "data-tooltip": "" + (index + 1), "data-inverted": "", "data-position": "bottom center" },
-                        React.createElement("a", { className: "ui empty circular label " + (!tutorialReady ? 'disabled' : '') + " clear", role: "menuitem", "aria-label": lf("Tutorial step {0}", index + 1), tabIndex: 0, onClick: function () { return _this.openTutorialStep(index); }, onKeyDown: sui.fireClickOnEnter }));
+                        React.createElement(TutorialMenuItemLink, { index: index, className: "ui empty circular label " + (!tutorialReady ? 'disabled' : '') + " clear", ariaLabel: lf("Tutorial step {0}", index + 1), onClick: _this.openTutorialStep }));
             })));
     };
     return TutorialMenuItem;
 }(data.Component));
 exports.TutorialMenuItem = TutorialMenuItem;
-var TutorialContent = /** @class */ (function (_super) {
-    __extends(TutorialContent, _super);
-    function TutorialContent(props) {
-        return _super.call(this, props) || this;
+var TutorialMenuItemLink = /** @class */ (function (_super) {
+    __extends(TutorialMenuItemLink, _super);
+    function TutorialMenuItemLink() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.handleClick = function () {
+            _this.props.onClick(_this.props.index);
+        };
+        return _this;
     }
-    TutorialContent.notify = function (message) {
-        var tc = document.getElementById("tutorialcontent");
-        if (tc && tc.contentWindow)
-            tc.contentWindow.postMessage(message, "*");
+    TutorialMenuItemLink.prototype.renderCore = function () {
+        var _a = this.props, className = _a.className, ariaLabel = _a.ariaLabel, index = _a.index;
+        return React.createElement("a", { className: className, role: "menuitem", "aria-label": ariaLabel, tabIndex: 0, onClick: this.handleClick, onKeyDown: sui.fireClickOnEnter }, this.props.children);
     };
-    TutorialContent.prototype.setPath = function (path) {
-        var docsUrl = pxt.webConfig.docsUrl || '/--docs';
-        var mode = this.props.parent.isBlocksEditor() ? "blocks" : "js";
-        var url = docsUrl + "#tutorial:" + path + ":" + mode + ":" + pxt.Util.localeInfo();
-        this.setUrl(url);
-    };
-    TutorialContent.prototype.setUrl = function (url) {
-        var el = document.getElementById("tutorialcontent");
-        if (el)
-            el.src = url;
-        else
-            this.setState({ tutorialUrl: url });
-    };
-    TutorialContent.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
-        return this.state.tutorialUrl != nextState.tutorialUrl;
-    };
-    TutorialContent.refresh = function () {
-        sounds.tutorialStep();
-        var okButton = document.getElementById('tutorialOkButton');
-        if (okButton)
-            okButton.focus();
-    };
-    TutorialContent.prototype.renderCore = function () {
-        var tutorialUrl = this.state.tutorialUrl;
-        if (!tutorialUrl)
-            return null;
-        return React.createElement("iframe", { id: "tutorialcontent", style: { "width": "1px", "height": "1px" }, src: tutorialUrl, role: "complementary", sandbox: "allow-scripts allow-same-origin allow-popups allow-forms" });
-    };
-    return TutorialContent;
+    return TutorialMenuItemLink;
 }(data.Component));
-exports.TutorialContent = TutorialContent;
+exports.TutorialMenuItemLink = TutorialMenuItemLink;
 var TutorialHint = /** @class */ (function (_super) {
     __extends(TutorialHint, _super);
     function TutorialHint(props) {
@@ -14020,30 +17293,27 @@ var TutorialHint = /** @class */ (function (_super) {
         if (!tutorialReady)
             return React.createElement("div", null);
         var step = tutorialStepInfo[tutorialStep];
-        var tutorialHint = step.content;
+        var tutorialHint = step.contentMd;
         var tutorialFullscreen = step.fullscreen;
         var tutorialUnplugged = !!step.unplugged && tutorialStep < tutorialStepInfo.length - 1;
-        var header = tutorialFullscreen ? (step.titleContent || tutorialName) : lf("Hint");
+        var header = tutorialFullscreen ? tutorialName : lf("Hint");
         var hide = function () { return _this.setState({ visible: false }); };
         var next = function () {
+            hide();
             var nextStep = tutorialStep + 1;
             options.tutorialStep = nextStep;
             pxt.tickEvent("tutorial.hint.next", { tutorial: options.tutorial, step: nextStep });
             _this.props.parent.setTutorialStep(nextStep);
         };
-        var actions = [tutorialUnplugged ? {
-                label: lf("Next"),
-                onclick: next,
-                icon: 'check',
-                className: 'green'
-            } : {
+        var isRtl = pxt.Util.isUserLanguageRtl();
+        var actions = [{
                 label: lf("Ok"),
-                onclick: hide,
+                onclick: tutorialUnplugged ? next : hide,
                 icon: 'check',
                 className: 'green'
             }];
-        return React.createElement(sui.Modal, { isOpen: visible, className: "hintdialog", closeIcon: true, header: header, buttons: actions, onClose: hide, dimmer: true, longer: true, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
-            React.createElement("div", { dangerouslySetInnerHTML: { __html: tutorialHint } }));
+        return React.createElement(sui.Modal, { isOpen: visible, className: "hintdialog", closeIcon: true, header: header, buttons: actions, onClose: tutorialUnplugged ? next : hide, dimmer: true, longer: true, closeOnDimmerClick: true, closeOnDocumentClick: true, closeOnEscape: true },
+            React.createElement(md.MarkedContent, { markdown: tutorialHint, parent: this.props.parent }));
     };
     return TutorialHint;
 }(data.Component));
@@ -14059,8 +17329,13 @@ var TutorialCard = /** @class */ (function (_super) {
             }
         };
         _this.state = {};
+        _this.showHint = _this.showHint.bind(_this);
+        _this.closeLightbox = _this.closeLightbox.bind(_this);
         _this.tutorialCardKeyDown = _this.tutorialCardKeyDown.bind(_this);
         _this.okButtonKeyDown = _this.okButtonKeyDown.bind(_this);
+        _this.previousTutorialStep = _this.previousTutorialStep.bind(_this);
+        _this.nextTutorialStep = _this.nextTutorialStep.bind(_this);
+        _this.finishTutorial = _this.finishTutorial.bind(_this);
         return _this;
     }
     TutorialCard.prototype.previousTutorialStep = function () {
@@ -14130,43 +17405,58 @@ var TutorialCard = /** @class */ (function (_super) {
             tutorialCard.focus();
         }
     };
+    TutorialCard.prototype.componentWillUnmount = function () {
+        // Clear the markdown cache when we unmount
+        md.MarkedContent.clearBlockSnippetCache();
+    };
+    TutorialCard.prototype.hasHint = function () {
+        var options = this.props.parent.state.tutorialOptions;
+        var tutorialReady = options.tutorialReady, tutorialStepInfo = options.tutorialStepInfo, tutorialStep = options.tutorialStep;
+        if (!tutorialReady)
+            return false;
+        return tutorialStepInfo[tutorialStep].hasHint;
+    };
     TutorialCard.prototype.showHint = function () {
+        if (!this.hasHint())
+            return;
         this.closeLightbox();
         this.props.parent.showTutorialHint();
     };
     TutorialCard.prototype.renderCore = function () {
-        var _this = this;
         var options = this.props.parent.state.tutorialOptions;
         var tutorialReady = options.tutorialReady, tutorialStepInfo = options.tutorialStepInfo, tutorialStep = options.tutorialStep;
         if (!tutorialReady)
             return React.createElement("div", null);
-        var tutorialHeaderContent = tutorialStepInfo[tutorialStep].headerContent;
-        var tutorialAriaLabel = tutorialStepInfo[tutorialStep].ariaLabel;
+        var tutorialCardContent = tutorialStepInfo[tutorialStep].headerContentMd;
+        var tutorialAriaLabel = '';
         var currentStep = tutorialStep;
         var maxSteps = tutorialStepInfo.length;
+        var hasPrevious = tutorialReady && currentStep != 0;
         var hasNext = tutorialReady && currentStep != maxSteps - 1;
         var hasFinish = currentStep == maxSteps - 1;
-        var hasHint = tutorialStepInfo[tutorialStep].hasHint;
+        var hasHint = this.hasHint();
         if (hasHint) {
             tutorialAriaLabel += lf("Press Space or Enter to show a hint.");
         }
+        var isRtl = pxt.Util.isUserLanguageRtl();
         return React.createElement("div", { id: "tutorialcard", className: "ui " + (tutorialReady ? 'tutorialReady' : '') },
             React.createElement("div", { className: 'ui buttons' },
+                hasPrevious ? React.createElement(sui.Button, { icon: (isRtl ? 'right' : 'left') + " chevron", className: "prevbutton left attached green " + (!hasPrevious ? 'disabled' : ''), text: lf("Back"), textClass: "landscape only", ariaLabel: lf("Go to the previous step of the tutorial."), onClick: this.previousTutorialStep, onKeyDown: sui.fireClickOnEnter }) : undefined,
                 React.createElement("div", { className: "ui segment attached tutorialsegment" },
-                    React.createElement("div", { className: 'avatar-image', onClick: function () { return _this.showHint(); }, onKeyDown: sui.fireClickOnEnter }),
-                    hasHint ? React.createElement(sui.Button, { className: "mini blue hintbutton hidelightbox", text: lf("Hint"), tabIndex: -1, onClick: function () { return _this.showHint(); }, onKeyDown: sui.fireClickOnEnter }) : undefined,
-                    React.createElement("div", { ref: "tutorialmessage", className: "tutorialmessage", role: "alert", "aria-label": tutorialAriaLabel, tabIndex: hasHint ? 0 : -1, onClick: function () { if (hasHint)
-                            _this.showHint(); }, onKeyDown: sui.fireClickOnEnter },
-                        React.createElement("div", { className: "content", dangerouslySetInnerHTML: { __html: tutorialHeaderContent } })),
-                    React.createElement(sui.Button, { ref: "tutorialok", id: "tutorialOkButton", className: "large green okbutton showlightbox", text: lf("Ok"), onClick: function () { return _this.closeLightbox(); }, onKeyDown: sui.fireClickOnEnter })),
-                hasNext ? React.createElement(sui.Button, { icon: "right chevron", rightIcon: true, className: "nextbutton right attached green " + (!hasNext ? 'disabled' : ''), text: lf("Next"), ariaLabel: lf("Go to the next step of the tutorial."), onClick: function () { return _this.nextTutorialStep(); }, onKeyDown: sui.fireClickOnEnter }) : undefined,
-                hasFinish ? React.createElement(sui.Button, { icon: "left checkmark", className: "orange right attached " + (!tutorialReady ? 'disabled' : ''), text: lf("Finish"), ariaLabel: lf("Finish the tutorial."), onClick: function () { return _this.finishTutorial(); }, onKeyDown: sui.fireClickOnEnter }) : undefined));
+                    React.createElement("div", { role: "button", className: 'avatar-image', onClick: this.showHint, onKeyDown: sui.fireClickOnEnter }),
+                    hasHint ? React.createElement(sui.Button, { className: "mini blue hintbutton hidelightbox", text: lf("Hint"), tabIndex: -1, onClick: this.showHint, onKeyDown: sui.fireClickOnEnter }) : undefined,
+                    React.createElement("div", { ref: "tutorialmessage", className: "tutorialmessage", role: "alert", "aria-label": tutorialAriaLabel, tabIndex: hasHint ? 0 : -1, onClick: this.showHint, onKeyDown: sui.fireClickOnEnter },
+                        React.createElement("div", { className: "content" },
+                            React.createElement(md.MarkedContent, { markdown: tutorialCardContent, parent: this.props.parent }))),
+                    React.createElement(sui.Button, { ref: "tutorialok", id: "tutorialOkButton", className: "large green okbutton showlightbox", text: lf("Ok"), onClick: this.closeLightbox, onKeyDown: sui.fireClickOnEnter })),
+                hasNext ? React.createElement(sui.Button, { icon: (isRtl ? 'left' : 'right') + " chevron", rightIcon: true, className: "nextbutton right attached green " + (!hasNext ? 'disabled' : ''), text: lf("Next"), textClass: "landscape only", ariaLabel: lf("Go to the next step of the tutorial."), onClick: this.nextTutorialStep, onKeyDown: sui.fireClickOnEnter }) : undefined,
+                hasFinish ? React.createElement(sui.Button, { icon: "left checkmark", className: "orange right attached " + (!tutorialReady ? 'disabled' : ''), text: lf("Finish"), ariaLabel: lf("Finish the tutorial."), onClick: this.finishTutorial, onKeyDown: sui.fireClickOnEnter }) : undefined));
     };
     return TutorialCard;
 }(data.Component));
 exports.TutorialCard = TutorialCard;
 
-},{"./core":13,"./data":15,"./sounds":45,"./sui":47,"react":155,"react-dom":143}],50:[function(require,module,exports){
+},{"./compiler":11,"./core":13,"./data":15,"./marked":31,"./sounds":46,"./sui":48,"react":157,"react-dom":145}],52:[function(require,module,exports){
 "use strict";
 /// <reference path="../../built/pxtlib.d.ts" />
 /// <reference path="../../built/pxteditor.d.ts" />
@@ -14243,7 +17533,7 @@ function initAsync() {
     sessionID = ts.pxtc.Util.guidGen();
     pxt.storage.setLocal('pxt_workspace_session_id', sessionID);
     pxt.debug("workspace session: " + sessionID);
-    return impl.initAsync(pxt.appTarget.id);
+    return impl.initAsync(pxt.appTarget.id, pxt.appTarget.versions.target);
 }
 exports.initAsync = initAsync;
 function getTextAsync(id) {
@@ -14259,6 +17549,7 @@ function anonymousPublishAsync(h, text, meta) {
     var scrReq = {
         name: h.name,
         target: h.target,
+        targetVersion: h.targetVersion,
         description: meta.description,
         editor: h.editor,
         text: text,
@@ -14269,7 +17560,7 @@ function anonymousPublishAsync(h, text, meta) {
         }
     };
     pxt.debug("publishing script; " + stext.length + " bytes");
-    return Cloud.privatePostAsync("scripts", scrReq)
+    return Cloud.privatePostAsync("scripts", scrReq, /* forceLiveEndpoint */ true)
         .then(function (inf) {
         if (inf.shortid)
             inf.id = inf.shortid;
@@ -14284,17 +17575,21 @@ function anonymousPublishAsync(h, text, meta) {
 exports.anonymousPublishAsync = anonymousPublishAsync;
 function saveAsync(h, text) {
     checkSession();
+    U.assert(h.target == pxt.appTarget.id);
     if (text || h.isDeleted) {
         h.pubCurrent = false;
         h.blobCurrent = false;
         h.modificationTime = U.nowSeconds();
     }
     h.recentUse = U.nowSeconds();
+    // update version on save    
+    h.targetVersion = pxt.appTarget.versions.target;
     return impl.saveAsync(h, text);
 }
 exports.saveAsync = saveAsync;
 function installAsync(h0, text) {
     checkSession();
+    U.assert(h0.target == pxt.appTarget.id);
     return impl.installAsync(h0, text);
 }
 exports.installAsync = installAsync;
@@ -14308,12 +17603,12 @@ exports.saveScreenshotAsync = saveScreenshotAsync;
 function fixupFileNames(txt) {
     if (!txt)
         return txt;
-    for (var oldName in ["kind.json", "yelm.json"]) {
+    ["kind.json", "yelm.json"].forEach(function (oldName) {
         if (!txt[pxt.CONFIG_NAME] && txt[oldName]) {
             txt[pxt.CONFIG_NAME] = txt[oldName];
             delete txt[oldName];
         }
-    }
+    });
     return txt;
 }
 exports.fixupFileNames = fixupFileNames;
@@ -14342,7 +17637,7 @@ function getPublishedScriptAsync(id) {
 }
 exports.getPublishedScriptAsync = getPublishedScriptAsync;
 function installByIdAsync(id) {
-    return Cloud.privateGetAsync(id)
+    return Cloud.privateGetAsync(id, /* forceLiveEndpoint */ true)
         .then(function (scr) {
         return getPublishedScriptAsync(scr.id)
             .then(function (files) { return installAsync({
@@ -14352,6 +17647,7 @@ function installByIdAsync(id) {
             meta: scr.meta,
             editor: scr.editor,
             target: scr.target,
+            targetVersion: scr.targetVersion
         }, files); });
     });
 }
@@ -14376,6 +17672,19 @@ function loadedAsync() {
     return impl.loadedAsync();
 }
 exports.loadedAsync = loadedAsync;
+function saveAssetAsync(id, filename, data) {
+    if (impl.saveAssetAsync)
+        return impl.saveAssetAsync(id, filename, data);
+    else
+        return Promise.reject(new Error(lf("Assets not supported here.")));
+}
+exports.saveAssetAsync = saveAssetAsync;
+function listAssetsAsync(id) {
+    if (impl.listAssetsAsync)
+        return impl.listAssetsAsync(id);
+    return Promise.resolve([]);
+}
+exports.listAssetsAsync = listAssetsAsync;
 /*
     header:<guid>   - one header
     header:*        - all headers
@@ -14405,7 +17714,7 @@ data.mountVirtualApi("text", {
     },
 });
 
-},{"./cloudworkspace":8,"./core":13,"./data":15,"./db":16,"./fileworkspace":24,"./iframeworkspace":27,"./memoryworkspace":31}],51:[function(require,module,exports){
+},{"./cloudworkspace":8,"./core":13,"./data":15,"./db":16,"./fileworkspace":25,"./iframeworkspace":28,"./memoryworkspace":32}],53:[function(require,module,exports){
 'use strict';
 
 module.exports = argsArray;
@@ -14425,7 +17734,7 @@ function argsArray(fun) {
     }
   };
 }
-},{}],52:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -14447,65 +17756,97 @@ for (var i = 0, len = code.length; i < len; ++i) {
 revLookup['-'.charCodeAt(0)] = 62
 revLookup['_'.charCodeAt(0)] = 63
 
-function placeHoldersCount (b64) {
+function getLens (b64) {
   var len = b64.length
+
   if (len % 4 > 0) {
     throw new Error('Invalid string. Length must be a multiple of 4')
   }
 
-  // the number of equal signs (place holders)
-  // if there are two placeholders, than the two characters before it
-  // represent one byte
-  // if there is only one, then the three characters before it represent 2 bytes
-  // this is just a cheap hack to not do indexOf twice
-  return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+  // Trim off extra bytes after placeholder bytes are found
+  // See: https://github.com/beatgammit/base64-js/issues/42
+  var validLen = b64.indexOf('=')
+  if (validLen === -1) validLen = len
+
+  var placeHoldersLen = validLen === len
+    ? 0
+    : 4 - (validLen % 4)
+
+  return [validLen, placeHoldersLen]
 }
 
+// base64 is 4/3 + up to two characters of the original data
 function byteLength (b64) {
-  // base64 is 4/3 + up to two characters of the original data
-  return (b64.length * 3 / 4) - placeHoldersCount(b64)
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function _byteLength (b64, validLen, placeHoldersLen) {
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
 }
 
 function toByteArray (b64) {
-  var i, l, tmp, placeHolders, arr
-  var len = b64.length
-  placeHolders = placeHoldersCount(b64)
+  var tmp
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
 
-  arr = new Arr((len * 3 / 4) - placeHolders)
+  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen))
+
+  var curByte = 0
 
   // if there are placeholders, only get up to the last complete 4 chars
-  l = placeHolders > 0 ? len - 4 : len
+  var len = placeHoldersLen > 0
+    ? validLen - 4
+    : validLen
 
-  var L = 0
-
-  for (i = 0; i < l; i += 4) {
-    tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)]
-    arr[L++] = (tmp >> 16) & 0xFF
-    arr[L++] = (tmp >> 8) & 0xFF
-    arr[L++] = tmp & 0xFF
+  for (var i = 0; i < len; i += 4) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 18) |
+      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+      revLookup[b64.charCodeAt(i + 3)]
+    arr[curByte++] = (tmp >> 16) & 0xFF
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
   }
 
-  if (placeHolders === 2) {
-    tmp = (revLookup[b64.charCodeAt(i)] << 2) | (revLookup[b64.charCodeAt(i + 1)] >> 4)
-    arr[L++] = tmp & 0xFF
-  } else if (placeHolders === 1) {
-    tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2)
-    arr[L++] = (tmp >> 8) & 0xFF
-    arr[L++] = tmp & 0xFF
+  if (placeHoldersLen === 2) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 2) |
+      (revLookup[b64.charCodeAt(i + 1)] >> 4)
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  if (placeHoldersLen === 1) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 10) |
+      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+      (revLookup[b64.charCodeAt(i + 2)] >> 2)
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
   }
 
   return arr
 }
 
 function tripletToBase64 (num) {
-  return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F]
+  return lookup[num >> 18 & 0x3F] +
+    lookup[num >> 12 & 0x3F] +
+    lookup[num >> 6 & 0x3F] +
+    lookup[num & 0x3F]
 }
 
 function encodeChunk (uint8, start, end) {
   var tmp
   var output = []
   for (var i = start; i < end; i += 3) {
-    tmp = ((uint8[i] << 16) & 0xFF0000) + ((uint8[i + 1] << 8) & 0xFF00) + (uint8[i + 2] & 0xFF)
+    tmp =
+      ((uint8[i] << 16) & 0xFF0000) +
+      ((uint8[i + 1] << 8) & 0xFF00) +
+      (uint8[i + 2] & 0xFF)
     output.push(tripletToBase64(tmp))
   }
   return output.join('')
@@ -14515,35 +17856,38 @@ function fromByteArray (uint8) {
   var tmp
   var len = uint8.length
   var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
-  var output = ''
   var parts = []
   var maxChunkLength = 16383 // must be multiple of 3
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
+    parts.push(encodeChunk(
+      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
+    ))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
   if (extraBytes === 1) {
     tmp = uint8[len - 1]
-    output += lookup[tmp >> 2]
-    output += lookup[(tmp << 4) & 0x3F]
-    output += '=='
+    parts.push(
+      lookup[tmp >> 2] +
+      lookup[(tmp << 4) & 0x3F] +
+      '=='
+    )
   } else if (extraBytes === 2) {
-    tmp = (uint8[len - 2] << 8) + (uint8[len - 1])
-    output += lookup[tmp >> 10]
-    output += lookup[(tmp >> 4) & 0x3F]
-    output += lookup[(tmp << 2) & 0x3F]
-    output += '='
+    tmp = (uint8[len - 2] << 8) + uint8[len - 1]
+    parts.push(
+      lookup[tmp >> 10] +
+      lookup[(tmp >> 4) & 0x3F] +
+      lookup[(tmp << 2) & 0x3F] +
+      '='
+    )
   }
-
-  parts.push(output)
 
   return parts.join('')
 }
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 (function (process,global){
 /* @preserve
  * The MIT License (MIT)
@@ -20169,9 +23513,9 @@ module.exports = ret;
 },{"./es5":13}]},{},[4])(4)
 });                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":134}],54:[function(require,module,exports){
+},{"_process":136}],56:[function(require,module,exports){
 
-},{}],55:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -21909,7 +25253,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":52,"ieee754":85}],56:[function(require,module,exports){
+},{"base64-js":54,"ieee754":87}],58:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -22020,7 +25364,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":88}],57:[function(require,module,exports){
+},{"../../is-buffer/index.js":90}],59:[function(require,module,exports){
 var util = require('util')
   , AbstractIterator = require('abstract-leveldown').AbstractIterator
 
@@ -22056,7 +25400,7 @@ DeferredIterator.prototype._operation = function (method, args) {
 
 module.exports = DeferredIterator;
 
-},{"abstract-leveldown":62,"util":195}],58:[function(require,module,exports){
+},{"abstract-leveldown":64,"util":197}],60:[function(require,module,exports){
 (function (Buffer,process){
 var util              = require('util')
   , AbstractLevelDOWN = require('abstract-leveldown').AbstractLevelDOWN
@@ -22116,7 +25460,7 @@ module.exports                  = DeferredLevelDOWN
 module.exports.DeferredIterator = DeferredIterator
 
 }).call(this,{"isBuffer":require("../is-buffer/index.js")},require('_process'))
-},{"../is-buffer/index.js":88,"./deferred-iterator":57,"_process":134,"abstract-leveldown":62,"util":195}],59:[function(require,module,exports){
+},{"../is-buffer/index.js":90,"./deferred-iterator":59,"_process":136,"abstract-leveldown":64,"util":197}],61:[function(require,module,exports){
 (function (process){
 /* Copyright (c) 2017 Rod Vagg, MIT License */
 
@@ -22208,7 +25552,7 @@ AbstractChainedBatch.prototype.write = function (options, callback) {
 module.exports = AbstractChainedBatch
 
 }).call(this,require('_process'))
-},{"_process":134}],60:[function(require,module,exports){
+},{"_process":136}],62:[function(require,module,exports){
 (function (process){
 /* Copyright (c) 2017 Rod Vagg, MIT License */
 
@@ -22261,7 +25605,7 @@ AbstractIterator.prototype.end = function (callback) {
 module.exports = AbstractIterator
 
 }).call(this,require('_process'))
-},{"_process":134}],61:[function(require,module,exports){
+},{"_process":136}],63:[function(require,module,exports){
 (function (Buffer,process){
 /* Copyright (c) 2017 Rod Vagg, MIT License */
 
@@ -22536,13 +25880,13 @@ AbstractLevelDOWN.prototype._checkKey = function (obj, type) {
 module.exports = AbstractLevelDOWN
 
 }).call(this,{"isBuffer":require("../../../is-buffer/index.js")},require('_process'))
-},{"../../../is-buffer/index.js":88,"./abstract-chained-batch":59,"./abstract-iterator":60,"_process":134,"xtend":198}],62:[function(require,module,exports){
+},{"../../../is-buffer/index.js":90,"./abstract-chained-batch":61,"./abstract-iterator":62,"_process":136,"xtend":200}],64:[function(require,module,exports){
 exports.AbstractLevelDOWN    = require('./abstract-leveldown')
 exports.AbstractIterator     = require('./abstract-iterator')
 exports.AbstractChainedBatch = require('./abstract-chained-batch')
 exports.isLevelDOWN          = require('./is-leveldown')
 
-},{"./abstract-chained-batch":59,"./abstract-iterator":60,"./abstract-leveldown":61,"./is-leveldown":63}],63:[function(require,module,exports){
+},{"./abstract-chained-batch":61,"./abstract-iterator":62,"./abstract-leveldown":63,"./is-leveldown":65}],65:[function(require,module,exports){
 var AbstractLevelDOWN = require('./abstract-leveldown')
 
 function isLevelDOWN (db) {
@@ -22558,7 +25902,7 @@ function isLevelDOWN (db) {
 
 module.exports = isLevelDOWN
 
-},{"./abstract-leveldown":61}],64:[function(require,module,exports){
+},{"./abstract-leveldown":63}],66:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -22847,7 +26191,7 @@ function getCapacity(capacity) {
 
 module.exports = Deque;
 
-},{}],65:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 var prr = require('prr')
 
 function init (type, message, cause) {
@@ -22906,7 +26250,7 @@ module.exports = function (errno) {
   }
 }
 
-},{"prr":140}],66:[function(require,module,exports){
+},{"prr":142}],68:[function(require,module,exports){
 var all = module.exports.all = [
   {
     errno: -2,
@@ -23221,7 +26565,7 @@ all.forEach(function (error) {
 module.exports.custom = require('./custom')(module.exports)
 module.exports.create = module.exports.custom.createError
 
-},{"./custom":65}],67:[function(require,module,exports){
+},{"./custom":67}],69:[function(require,module,exports){
 (function (root, factory) {
   /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
@@ -23439,7 +26783,7 @@ module.exports.create = module.exports.custom.createError
   return PromisePool
 })
 
-},{}],68:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -23960,7 +27304,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],69:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Based on code that is Copyright 2013-2015, Facebook, Inc.
@@ -24002,7 +27346,7 @@ function functionBindPolyfill(context) {
 
 }());
 
-},{}],70:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24036,7 +27380,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 "use strict";
 
 /**
@@ -24066,7 +27410,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],72:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24104,7 +27448,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":71}],73:[function(require,module,exports){
+},{"./camelize":73}],75:[function(require,module,exports){
 'use strict';
 
 /**
@@ -24142,7 +27486,7 @@ function containsNode(outerNode, innerNode) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":81}],74:[function(require,module,exports){
+},{"./isTextNode":83}],76:[function(require,module,exports){
 "use strict";
 
 /**
@@ -24179,7 +27523,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],75:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -24199,7 +27543,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":134}],76:[function(require,module,exports){
+},{"_process":136}],78:[function(require,module,exports){
 'use strict';
 
 /**
@@ -24236,7 +27580,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],77:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 /**
@@ -24267,7 +27611,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],78:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24304,7 +27648,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":77}],79:[function(require,module,exports){
+},{"./hyphenate":79}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -24360,7 +27704,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":134}],80:[function(require,module,exports){
+},{"_process":136}],82:[function(require,module,exports){
 'use strict';
 
 /**
@@ -24383,7 +27727,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],81:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 /**
@@ -24406,7 +27750,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":80}],82:[function(require,module,exports){
+},{"./isNode":82}],84:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24472,7 +27816,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],83:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -24537,7 +27881,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":74,"_process":134}],84:[function(require,module,exports){
+},{"./emptyFunction":76,"_process":136}],86:[function(require,module,exports){
 "use strict"
 
 module.exports = createRBTree
@@ -25534,7 +28878,7 @@ function defaultCompare(a, b) {
 function createRBTree(compare) {
   return new RedBlackTree(compare || defaultCompare, null)
 }
-},{}],85:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -25620,7 +28964,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],86:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (global){
 'use strict';
 var Mutation = global.MutationObserver || global.WebKitMutationObserver;
@@ -25693,7 +29037,7 @@ function immediate(task) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],87:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -25718,7 +29062,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],88:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -25741,14 +29085,14 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],89:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],90:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 (function() { 
 
   var slice   = Array.prototype.slice,
@@ -25777,7 +29121,7 @@ module.exports = Array.isArray || function (arr) {
   this.extend = extend;
 
 }).call(this);
-},{}],91:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 var encodings = require('./lib/encodings');
 
 module.exports = Codec;
@@ -25885,7 +29229,7 @@ Codec.prototype.valueAsBuffer = function(opts){
 };
 
 
-},{"./lib/encodings":92}],92:[function(require,module,exports){
+},{"./lib/encodings":94}],94:[function(require,module,exports){
 (function (Buffer){
 
 exports.utf8 = exports['utf-8'] = {
@@ -25965,7 +29309,7 @@ function isBinary(data){
 
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":55}],93:[function(require,module,exports){
+},{"buffer":57}],95:[function(require,module,exports){
 /* Copyright (c) 2012-2017 LevelUP contributors
  * See list at <https://github.com/rvagg/node-levelup#contributing>
  * MIT License
@@ -25989,7 +29333,7 @@ module.exports = {
   , EncodingError       : createError('EncodingError', LevelUPError)
 }
 
-},{"errno":66}],94:[function(require,module,exports){
+},{"errno":68}],96:[function(require,module,exports){
 var inherits = require('inherits');
 var Readable = require('readable-stream').Readable;
 var extend = require('xtend');
@@ -26047,12 +29391,12 @@ ReadStream.prototype._cleanup = function(){
 };
 
 
-},{"inherits":87,"level-errors":93,"readable-stream":101,"xtend":198}],95:[function(require,module,exports){
+},{"inherits":89,"level-errors":95,"readable-stream":103,"xtend":200}],97:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],96:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -26145,7 +29489,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":98,"./_stream_writable":100,"_process":134,"core-util-is":56,"inherits":87}],97:[function(require,module,exports){
+},{"./_stream_readable":100,"./_stream_writable":102,"_process":136,"core-util-is":58,"inherits":89}],99:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26193,7 +29537,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":99,"core-util-is":56,"inherits":87}],98:[function(require,module,exports){
+},{"./_stream_transform":101,"core-util-is":58,"inherits":89}],100:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -27148,7 +30492,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":96,"_process":134,"buffer":55,"core-util-is":56,"events":68,"inherits":87,"isarray":95,"stream":173,"string_decoder/":174,"util":54}],99:[function(require,module,exports){
+},{"./_stream_duplex":98,"_process":136,"buffer":57,"core-util-is":58,"events":70,"inherits":89,"isarray":97,"stream":175,"string_decoder/":176,"util":56}],101:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -27359,7 +30703,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":96,"core-util-is":56,"inherits":87}],100:[function(require,module,exports){
+},{"./_stream_duplex":98,"core-util-is":58,"inherits":89}],102:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -27840,7 +31184,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":96,"_process":134,"buffer":55,"core-util-is":56,"inherits":87,"stream":173}],101:[function(require,module,exports){
+},{"./_stream_duplex":98,"_process":136,"buffer":57,"core-util-is":58,"inherits":89,"stream":175}],103:[function(require,module,exports){
 (function (process){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = require('stream');
@@ -27854,7 +31198,7 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable') {
 }
 
 }).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":96,"./lib/_stream_passthrough.js":97,"./lib/_stream_readable.js":98,"./lib/_stream_transform.js":99,"./lib/_stream_writable.js":100,"_process":134,"stream":173}],102:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":98,"./lib/_stream_passthrough.js":99,"./lib/_stream_readable.js":100,"./lib/_stream_transform.js":101,"./lib/_stream_writable.js":102,"_process":136,"stream":175}],104:[function(require,module,exports){
 /* Copyright (c) 2012-2016 LevelUP contributors
  * See list at <https://github.com/level/levelup#contributing>
  * MIT License
@@ -27939,7 +31283,7 @@ Batch.prototype.write = function (callback) {
 
 module.exports = Batch
 
-},{"./util":104,"level-errors":93}],103:[function(require,module,exports){
+},{"./util":106,"level-errors":95}],105:[function(require,module,exports){
 (function (process){
 /* Copyright (c) 2012-2016 LevelUP contributors
  * See list at <https://github.com/level/levelup#contributing>
@@ -28342,7 +31686,7 @@ module.exports.repair  = deprecate(
 
 
 }).call(this,require('_process'))
-},{"./batch":102,"./util":104,"_process":134,"deferred-leveldown":58,"events":68,"level-codec":91,"level-errors":93,"level-iterator-stream":94,"prr":140,"util":195,"xtend":198}],104:[function(require,module,exports){
+},{"./batch":104,"./util":106,"_process":136,"deferred-leveldown":60,"events":70,"level-codec":93,"level-errors":95,"level-iterator-stream":96,"prr":142,"util":197,"xtend":200}],106:[function(require,module,exports){
 /* Copyright (c) 2012-2016 LevelUP contributors
  * See list at <https://github.com/level/levelup#contributing>
  * MIT License
@@ -28421,7 +31765,7 @@ module.exports = {
   , isDefined       : isDefined
 }
 
-},{"../package.json":105,"level-errors":93,"leveldown":54,"leveldown/package":54,"semver":54,"util":195,"xtend":198}],105:[function(require,module,exports){
+},{"../package.json":107,"level-errors":95,"leveldown":56,"leveldown/package":56,"semver":56,"util":197,"xtend":200}],107:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -28579,7 +31923,7 @@ module.exports={
   "version": "1.3.2"
 }
 
-},{}],106:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 var immediate = require('immediate');
 
@@ -28834,7 +32178,7 @@ function race(iterable) {
   }
 }
 
-},{"immediate":86}],107:[function(require,module,exports){
+},{"immediate":88}],109:[function(require,module,exports){
 (function (Buffer){
 
 exports.compare = function (a, b) {
@@ -28933,7 +32277,7 @@ exports.filter = function (range, compare) {
 }
 
 }).call(this,{"isBuffer":require("../is-buffer/index.js")})
-},{"../is-buffer/index.js":88}],108:[function(require,module,exports){
+},{"../is-buffer/index.js":90}],110:[function(require,module,exports){
 (function (global){
 /**
  * marked - a markdown parser
@@ -30325,7 +33669,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 })(this || (typeof window !== 'undefined' ? window : global));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],109:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 (function (process,global,Buffer){
 var inherits          = require('inherits')
   , AbstractLevelDOWN = require('abstract-leveldown').AbstractLevelDOWN
@@ -30569,17 +33913,17 @@ MemDOWN.destroy = function (name, callback) {
 module.exports = MemDOWN
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"_process":134,"abstract-leveldown":113,"buffer":55,"functional-red-black-tree":84,"inherits":87,"ltgt":107}],110:[function(require,module,exports){
-arguments[4][59][0].apply(exports,arguments)
-},{"_process":134,"dup":59}],111:[function(require,module,exports){
-arguments[4][60][0].apply(exports,arguments)
-},{"_process":134,"dup":60}],112:[function(require,module,exports){
+},{"_process":136,"abstract-leveldown":115,"buffer":57,"functional-red-black-tree":86,"inherits":89,"ltgt":109}],112:[function(require,module,exports){
 arguments[4][61][0].apply(exports,arguments)
-},{"../../../is-buffer/index.js":88,"./abstract-chained-batch":110,"./abstract-iterator":111,"_process":134,"dup":61,"xtend":198}],113:[function(require,module,exports){
+},{"_process":136,"dup":61}],113:[function(require,module,exports){
 arguments[4][62][0].apply(exports,arguments)
-},{"./abstract-chained-batch":110,"./abstract-iterator":111,"./abstract-leveldown":112,"./is-leveldown":114,"dup":62}],114:[function(require,module,exports){
+},{"_process":136,"dup":62}],114:[function(require,module,exports){
 arguments[4][63][0].apply(exports,arguments)
-},{"./abstract-leveldown":112,"dup":63}],115:[function(require,module,exports){
+},{"../../../is-buffer/index.js":90,"./abstract-chained-batch":112,"./abstract-iterator":113,"_process":136,"dup":63,"xtend":200}],115:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"./abstract-chained-batch":112,"./abstract-iterator":113,"./abstract-leveldown":114,"./is-leveldown":116,"dup":64}],116:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"./abstract-leveldown":114,"dup":65}],117:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -30671,7 +34015,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],116:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 'use strict';
 
 var MIN_MAGNITUDE = -324; // verified by -Number.MIN_VALUE
@@ -31026,7 +34370,7 @@ function numToIndexableString(num) {
   return result;
 }
 
-},{"./utils":117}],117:[function(require,module,exports){
+},{"./utils":119}],119:[function(require,module,exports){
 'use strict';
 
 function pad(str, padWith, upToLength) {
@@ -31097,7 +34441,7 @@ exports.intToDecimalForm = function (int) {
 
   return result;
 };
-},{}],118:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 'use strict';
 exports.Map = LazyMap; // TODO: use ES6 map
 exports.Set = LazySet; // TODO: use ES6 set
@@ -31168,9 +34512,9 @@ LazySet.prototype.delete = function (key) {
   return this.store.delete(key);
 };
 
-},{}],119:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 module.exports = require('../lib/extras/memory');
-},{"../lib/extras/memory":120}],120:[function(require,module,exports){
+},{"../lib/extras/memory":122}],122:[function(require,module,exports){
 (function (process,global,Buffer){
 'use strict';
 
@@ -34245,7 +37589,7 @@ if (!PDB) {
   MemoryPouchPlugin(PDB);
 }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"_process":134,"argsarray":51,"buffer":55,"debug":122,"double-ended-queue":64,"events":68,"inherits":124,"js-extend":90,"levelup":103,"lie":106,"memdown":109,"pouchdb":121,"pouchdb-collections":118,"spark-md5":172,"sublevel-pouchdb":177,"through2":132,"vuvuzela":196}],121:[function(require,module,exports){
+},{"_process":136,"argsarray":53,"buffer":57,"debug":124,"double-ended-queue":66,"events":70,"inherits":126,"js-extend":92,"levelup":105,"lie":108,"memdown":111,"pouchdb":123,"pouchdb-collections":120,"spark-md5":174,"sublevel-pouchdb":179,"through2":134,"vuvuzela":198}],123:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -44936,7 +48280,7 @@ PouchDB.plugin(IDBPouch)
 
 module.exports = PouchDB;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":134,"argsarray":51,"debug":122,"es6-promise-pool":67,"events":68,"inherits":124,"js-extend":90,"lie":106,"pouchdb-collate":116,"pouchdb-collections":118,"scope-eval":171,"spark-md5":172,"vuvuzela":196}],122:[function(require,module,exports){
+},{"_process":136,"argsarray":53,"debug":124,"es6-promise-pool":69,"events":70,"inherits":126,"js-extend":92,"lie":108,"pouchdb-collate":118,"pouchdb-collections":120,"scope-eval":173,"spark-md5":174,"vuvuzela":198}],124:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -45106,7 +48450,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":123}],123:[function(require,module,exports){
+},{"./debug":125}],125:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -45305,9 +48649,9 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":125}],124:[function(require,module,exports){
-arguments[4][87][0].apply(exports,arguments)
-},{"dup":87}],125:[function(require,module,exports){
+},{"ms":127}],126:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"dup":89}],127:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -45434,7 +48778,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],126:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -45481,7 +48825,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":134}],127:[function(require,module,exports){
+},{"_process":136}],129:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -45557,7 +48901,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":128,"./_stream_writable":130,"core-util-is":56,"inherits":124,"process-nextick-args":126}],128:[function(require,module,exports){
+},{"./_stream_readable":130,"./_stream_writable":132,"core-util-is":58,"inherits":126,"process-nextick-args":128}],130:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -46440,7 +49784,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":127,"_process":134,"buffer":55,"core-util-is":56,"events":68,"inherits":124,"isarray":89,"process-nextick-args":126,"string_decoder/":174,"util":54}],129:[function(require,module,exports){
+},{"./_stream_duplex":129,"_process":136,"buffer":57,"core-util-is":58,"events":70,"inherits":126,"isarray":91,"process-nextick-args":128,"string_decoder/":176,"util":56}],131:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -46621,7 +49965,7 @@ function done(stream, er) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":127,"core-util-is":56,"inherits":124}],130:[function(require,module,exports){
+},{"./_stream_duplex":129,"core-util-is":58,"inherits":126}],132:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -47140,10 +50484,10 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":127,"_process":134,"buffer":55,"core-util-is":56,"events":68,"inherits":124,"process-nextick-args":126,"util-deprecate":192}],131:[function(require,module,exports){
+},{"./_stream_duplex":129,"_process":136,"buffer":57,"core-util-is":58,"events":70,"inherits":126,"process-nextick-args":128,"util-deprecate":194}],133:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":129}],132:[function(require,module,exports){
+},{"./lib/_stream_transform.js":131}],134:[function(require,module,exports){
 (function (process){
 var Transform = require('readable-stream/transform')
   , inherits  = require('util').inherits
@@ -47243,7 +50587,7 @@ module.exports.obj = through2(function (options, transform, flush) {
 })
 
 }).call(this,require('_process'))
-},{"_process":134,"readable-stream/transform":131,"util":195,"xtend":198}],133:[function(require,module,exports){
+},{"_process":136,"readable-stream/transform":133,"util":197,"xtend":200}],135:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -47291,7 +50635,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 
 
 }).call(this,require('_process'))
-},{"_process":134}],134:[function(require,module,exports){
+},{"_process":136}],136:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -47477,7 +50821,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],135:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -47540,7 +50884,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":139,"_process":134,"fbjs/lib/invariant":79,"fbjs/lib/warning":83}],136:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":141,"_process":136,"fbjs/lib/invariant":81,"fbjs/lib/warning":85}],138:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -47600,7 +50944,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":139,"fbjs/lib/emptyFunction":74,"fbjs/lib/invariant":79}],137:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":141,"fbjs/lib/emptyFunction":76,"fbjs/lib/invariant":81}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -48146,7 +51490,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":135,"./lib/ReactPropTypesSecret":139,"_process":134,"fbjs/lib/emptyFunction":74,"fbjs/lib/invariant":79,"fbjs/lib/warning":83,"object-assign":115}],138:[function(require,module,exports){
+},{"./checkPropTypes":137,"./lib/ReactPropTypesSecret":141,"_process":136,"fbjs/lib/emptyFunction":76,"fbjs/lib/invariant":81,"fbjs/lib/warning":85,"object-assign":117}],140:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -48178,7 +51522,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":136,"./factoryWithTypeCheckers":137,"_process":134}],139:[function(require,module,exports){
+},{"./factoryWithThrowingShims":138,"./factoryWithTypeCheckers":139,"_process":136}],141:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -48192,7 +51536,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],140:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
 /*!
   * prr
   * (c) 2013 Rod Vagg <rod@vagg.org>
@@ -48256,7 +51600,7 @@ module.exports = ReactPropTypesSecret;
 
   return prr
 })
-},{}],141:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.1
  * react-dom.development.js
@@ -64884,7 +68228,7 @@ module.exports = reactDom;
 }
 
 }).call(this,require('_process'))
-},{"_process":134,"fbjs/lib/ExecutionEnvironment":70,"fbjs/lib/camelizeStyleName":72,"fbjs/lib/containsNode":73,"fbjs/lib/emptyFunction":74,"fbjs/lib/emptyObject":75,"fbjs/lib/getActiveElement":76,"fbjs/lib/hyphenateStyleName":78,"fbjs/lib/invariant":79,"fbjs/lib/shallowEqual":82,"fbjs/lib/warning":83,"object-assign":115,"prop-types/checkPropTypes":135,"react":155}],142:[function(require,module,exports){
+},{"_process":136,"fbjs/lib/ExecutionEnvironment":72,"fbjs/lib/camelizeStyleName":74,"fbjs/lib/containsNode":75,"fbjs/lib/emptyFunction":76,"fbjs/lib/emptyObject":77,"fbjs/lib/getActiveElement":78,"fbjs/lib/hyphenateStyleName":80,"fbjs/lib/invariant":81,"fbjs/lib/shallowEqual":84,"fbjs/lib/warning":85,"object-assign":117,"prop-types/checkPropTypes":137,"react":157}],144:[function(require,module,exports){
 /** @license React v16.3.1
  * react-dom.production.min.js
  *
@@ -65131,7 +68475,7 @@ var Gg={createPortal:Fg,findDOMNode:function(a){if(null==a)return null;if(1===a.
 D("40");return a._reactRootContainer?(X.unbatchedUpdates(function(){Eg(null,null,a,!1,function(){a._reactRootContainer=null})}),!0):!1},unstable_createPortal:function(){return Fg.apply(void 0,arguments)},unstable_batchedUpdates:X.batchedUpdates,unstable_deferredUpdates:X.deferredUpdates,flushSync:X.flushSync,unstable_flushControlled:X.flushControlled,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{EventPluginHub:Qa,EventPluginRegistry:xa,EventPropagators:jb,ReactControlledComponent:Zb,ReactDOMComponentTree:Xa,
 ReactDOMEventListener:Zd},unstable_createRoot:function(a,b){return new sg(a,!0,null!=b&&!0===b.hydrate)}};X.injectIntoDevTools({findFiberByHostInstance:Ta,bundleType:0,version:"16.3.1",rendererPackageName:"react-dom"});var Hg=Object.freeze({default:Gg}),Ig=Hg&&Gg||Hg;module.exports=Ig["default"]?Ig["default"]:Ig;
 
-},{"fbjs/lib/ExecutionEnvironment":70,"fbjs/lib/containsNode":73,"fbjs/lib/emptyFunction":74,"fbjs/lib/emptyObject":75,"fbjs/lib/getActiveElement":76,"fbjs/lib/shallowEqual":82,"object-assign":115,"react":155}],143:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":72,"fbjs/lib/containsNode":75,"fbjs/lib/emptyFunction":76,"fbjs/lib/emptyObject":77,"fbjs/lib/getActiveElement":78,"fbjs/lib/shallowEqual":84,"object-assign":117,"react":157}],145:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -65173,7 +68517,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":141,"./cjs/react-dom.production.min.js":142,"_process":134}],144:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":143,"./cjs/react-dom.production.min.js":144,"_process":136}],146:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65421,7 +68765,7 @@ Modal.defaultStyles = {
   }
 };
 exports.default = Modal;
-},{"../helpers/ariaAppHider":146,"../helpers/safeHTMLElement":149,"./ModalPortal":145,"prop-types":138,"react":155,"react-dom":143}],145:[function(require,module,exports){
+},{"../helpers/ariaAppHider":148,"../helpers/safeHTMLElement":151,"./ModalPortal":147,"prop-types":140,"react":157,"react-dom":145}],147:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -65843,7 +69187,7 @@ ModalPortal.propTypes = {
 exports.default = ModalPortal;
 module.exports = exports["default"];
 }).call(this,require('_process'))
-},{"../helpers/ariaAppHider":146,"../helpers/classList":147,"../helpers/focusManager":148,"../helpers/safeHTMLElement":149,"../helpers/scopeTab":150,"_process":134,"prop-types":138,"react":155}],146:[function(require,module,exports){
+},{"../helpers/ariaAppHider":148,"../helpers/classList":149,"../helpers/focusManager":150,"../helpers/safeHTMLElement":151,"../helpers/scopeTab":152,"_process":136,"prop-types":140,"react":157}],148:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65911,7 +69255,7 @@ function documentNotReadyOrSSRTesting() {
 function resetForTesting() {
   globalElement = null;
 }
-},{"warning":197}],147:[function(require,module,exports){
+},{"warning":199}],149:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -66021,7 +69365,7 @@ var remove = exports.remove = function remove(element, classString) {
   return untrackClass(element.classList, element.nodeName.toLowerCase() == "html" ? htmlClassList : docBodyClassList, classString.split(" "));
 };
 }).call(this,require('_process'))
-},{"_process":134}],148:[function(require,module,exports){
+},{"_process":136}],150:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66116,7 +69460,7 @@ function teardownScopedFocus() {
     document.detachEvent("onFocus", handleFocus);
   }
 }
-},{"../helpers/tabbable":151}],149:[function(require,module,exports){
+},{"../helpers/tabbable":153}],151:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66137,7 +69481,7 @@ var SafeHTMLElement = EE.canUseDOM ? window.HTMLElement : {};
 var canUseDOM = exports.canUseDOM = EE.canUseDOM;
 
 exports.default = SafeHTMLElement;
-},{"exenv":69}],150:[function(require,module,exports){
+},{"exenv":71}],152:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66215,7 +69559,7 @@ function scopeTab(node, event) {
   tabbable[x].focus();
 }
 module.exports = exports["default"];
-},{"./tabbable":151}],151:[function(require,module,exports){
+},{"./tabbable":153}],153:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66274,7 +69618,7 @@ function findTabbableDescendants(element) {
   return [].slice.call(element.querySelectorAll("*"), 0).filter(tabbable);
 }
 module.exports = exports["default"];
-},{}],152:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66289,7 +69633,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = _Modal2.default;
 module.exports = exports["default"];
-},{"./components/Modal":144}],153:[function(require,module,exports){
+},{"./components/Modal":146}],155:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.1
  * react.development.js
@@ -67702,7 +71046,7 @@ module.exports = react;
 }
 
 }).call(this,require('_process'))
-},{"_process":134,"fbjs/lib/emptyFunction":74,"fbjs/lib/emptyObject":75,"fbjs/lib/invariant":79,"fbjs/lib/warning":83,"object-assign":115,"prop-types/checkPropTypes":135}],154:[function(require,module,exports){
+},{"_process":136,"fbjs/lib/emptyFunction":76,"fbjs/lib/emptyObject":77,"fbjs/lib/invariant":81,"fbjs/lib/warning":85,"object-assign":117,"prop-types/checkPropTypes":137}],156:[function(require,module,exports){
 /** @license React v16.3.1
  * react.production.min.js
  *
@@ -67726,7 +71070,7 @@ _calculateChangedBits:b,_defaultValue:a,_currentValue:a,_changedBits:0,Provider:
 c)&&!J.hasOwnProperty(c)&&(d[c]=void 0===b[c]&&void 0!==k?k[c]:b[c])}c=arguments.length-2;if(1===c)d.children=e;else if(1<c){k=Array(c);for(var l=0;l<c;l++)k[l]=arguments[l+2];d.children=k}return{$$typeof:r,type:a.type,key:g,ref:h,props:d,_owner:f}},createFactory:function(a){var b=K.bind(null,a);b.type=a;return b},isValidElement:L,version:"16.3.1",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:H,assign:m}},W=Object.freeze({default:V}),X=W&&V||W;
 module.exports=X["default"]?X["default"]:X;
 
-},{"fbjs/lib/emptyFunction":74,"fbjs/lib/emptyObject":75,"object-assign":115}],155:[function(require,module,exports){
+},{"fbjs/lib/emptyFunction":76,"fbjs/lib/emptyObject":77,"object-assign":117}],157:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -67737,10 +71081,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":153,"./cjs/react.production.min.js":154,"_process":134}],156:[function(require,module,exports){
+},{"./cjs/react.development.js":155,"./cjs/react.production.min.js":156,"_process":136}],158:[function(require,module,exports){
 module.exports = require('./lib/_stream_duplex.js');
 
-},{"./lib/_stream_duplex.js":157}],157:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":159}],159:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -67872,7 +71216,7 @@ Duplex.prototype._destroy = function (err, cb) {
 
   pna.nextTick(cb, err);
 };
-},{"./_stream_readable":159,"./_stream_writable":161,"core-util-is":56,"inherits":87,"process-nextick-args":133}],158:[function(require,module,exports){
+},{"./_stream_readable":161,"./_stream_writable":163,"core-util-is":58,"inherits":89,"process-nextick-args":135}],160:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -67920,7 +71264,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":160,"core-util-is":56,"inherits":87}],159:[function(require,module,exports){
+},{"./_stream_transform":162,"core-util-is":58,"inherits":89}],161:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -68942,7 +72286,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":157,"./internal/streams/BufferList":162,"./internal/streams/destroy":163,"./internal/streams/stream":164,"_process":134,"core-util-is":56,"events":68,"inherits":87,"isarray":89,"process-nextick-args":133,"safe-buffer":170,"string_decoder/":165,"util":54}],160:[function(require,module,exports){
+},{"./_stream_duplex":159,"./internal/streams/BufferList":164,"./internal/streams/destroy":165,"./internal/streams/stream":166,"_process":136,"core-util-is":58,"events":70,"inherits":89,"isarray":91,"process-nextick-args":135,"safe-buffer":172,"string_decoder/":167,"util":56}],162:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -69157,7 +72501,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":157,"core-util-is":56,"inherits":87}],161:[function(require,module,exports){
+},{"./_stream_duplex":159,"core-util-is":58,"inherits":89}],163:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -69847,7 +73191,7 @@ Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":157,"./internal/streams/destroy":163,"./internal/streams/stream":164,"_process":134,"core-util-is":56,"inherits":87,"process-nextick-args":133,"safe-buffer":170,"util-deprecate":192}],162:[function(require,module,exports){
+},{"./_stream_duplex":159,"./internal/streams/destroy":165,"./internal/streams/stream":166,"_process":136,"core-util-is":58,"inherits":89,"process-nextick-args":135,"safe-buffer":172,"util-deprecate":194}],164:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69927,7 +73271,7 @@ if (util && util.inspect && util.inspect.custom) {
     return this.constructor.name + ' ' + obj;
   };
 }
-},{"safe-buffer":170,"util":54}],163:[function(require,module,exports){
+},{"safe-buffer":172,"util":56}],165:[function(require,module,exports){
 'use strict';
 
 /*<replacement>*/
@@ -70002,10 +73346,10 @@ module.exports = {
   destroy: destroy,
   undestroy: undestroy
 };
-},{"process-nextick-args":133}],164:[function(require,module,exports){
+},{"process-nextick-args":135}],166:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":68}],165:[function(require,module,exports){
+},{"events":70}],167:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -70302,10 +73646,10 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"safe-buffer":170}],166:[function(require,module,exports){
+},{"safe-buffer":172}],168:[function(require,module,exports){
 module.exports = require('./readable').PassThrough
 
-},{"./readable":167}],167:[function(require,module,exports){
+},{"./readable":169}],169:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = exports;
 exports.Readable = exports;
@@ -70314,13 +73658,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":157,"./lib/_stream_passthrough.js":158,"./lib/_stream_readable.js":159,"./lib/_stream_transform.js":160,"./lib/_stream_writable.js":161}],168:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":159,"./lib/_stream_passthrough.js":160,"./lib/_stream_readable.js":161,"./lib/_stream_transform.js":162,"./lib/_stream_writable.js":163}],170:[function(require,module,exports){
 module.exports = require('./readable').Transform
 
-},{"./readable":167}],169:[function(require,module,exports){
+},{"./readable":169}],171:[function(require,module,exports){
 module.exports = require('./lib/_stream_writable.js');
 
-},{"./lib/_stream_writable.js":161}],170:[function(require,module,exports){
+},{"./lib/_stream_writable.js":163}],172:[function(require,module,exports){
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
 var Buffer = buffer.Buffer
@@ -70384,7 +73728,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
   return buffer.SlowBuffer(size)
 }
 
-},{"buffer":55}],171:[function(require,module,exports){
+},{"buffer":57}],173:[function(require,module,exports){
 // Generated by CoffeeScript 1.9.2
 (function() {
   var hasProp = {}.hasOwnProperty,
@@ -70408,7 +73752,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 }).call(this);
 
-},{}],172:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 (function (factory) {
     if (typeof exports === 'object') {
         // Node/CommonJS
@@ -71113,7 +74457,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
     return SparkMD5;
 }));
 
-},{}],173:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -71242,7 +74586,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":68,"inherits":87,"readable-stream/duplex.js":156,"readable-stream/passthrough.js":166,"readable-stream/readable.js":167,"readable-stream/transform.js":168,"readable-stream/writable.js":169}],174:[function(require,module,exports){
+},{"events":70,"inherits":89,"readable-stream/duplex.js":158,"readable-stream/passthrough.js":168,"readable-stream/readable.js":169,"readable-stream/transform.js":170,"readable-stream/writable.js":171}],176:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -71465,7 +74809,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":55}],175:[function(require,module,exports){
+},{"buffer":57}],177:[function(require,module,exports){
 module.exports = {
   encode: function (decodedKey) {
     return '\xff' + decodedKey[0] + '\xff' + decodedKey[1]
@@ -71480,7 +74824,7 @@ module.exports = {
 }
 
 
-},{}],176:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 /* Copyright (c) 2012-2014 LevelUP contributors
  * See list at <https://github.com/rvagg/node-levelup#contributing>
  * MIT License
@@ -71504,7 +74848,7 @@ module.exports = {
   , EncodingError       : createError('EncodingError', LevelUPError)
 }
 
-},{"errno":182}],177:[function(require,module,exports){
+},{"errno":184}],179:[function(require,module,exports){
 var nut   = require('./nut')
 var shell = require('./shell') //the shell surrounds the nut
 var Codec = require('level-codec')
@@ -71519,7 +74863,7 @@ module.exports = function (db) {
 }
 
 
-},{"./codec/legacy":175,"./nut":178,"./read-stream":179,"./shell":180,"level-codec":91}],178:[function(require,module,exports){
+},{"./codec/legacy":177,"./nut":180,"./read-stream":181,"./shell":182,"level-codec":93}],180:[function(require,module,exports){
 var ltgt = require('ltgt')
 
 function isFunction (f) {
@@ -71701,7 +75045,7 @@ module.exports = function (db, precodec, codec, compare) {
 
 }
 
-},{"ltgt":184}],179:[function(require,module,exports){
+},{"ltgt":186}],181:[function(require,module,exports){
 /* Copyright (c) 2012-2014 LevelUP contributors
  * See list at <https://github.com/rvagg/node-levelup#contributing>
  * MIT License <https://github.com/rvagg/node-levelup/blob/master/LICENSE.md>
@@ -71796,7 +75140,7 @@ ReadStream.prototype.toString = function () {
 module.exports = ReadStream
 
 
-},{"./errors":176,"inherits":87,"readable-stream":191}],180:[function(require,module,exports){
+},{"./errors":178,"inherits":89,"readable-stream":193}],182:[function(require,module,exports){
 (function (process){
 var EventEmitter = require('events').EventEmitter
 
@@ -71941,7 +75285,7 @@ var sublevel = module.exports = function (nut, prefix, createStream, options) {
 }
 
 }).call(this,require('_process'))
-},{"./errors":176,"_process":134,"events":68}],181:[function(require,module,exports){
+},{"./errors":178,"_process":136,"events":70}],183:[function(require,module,exports){
 var prr = require('prr')
 
 function init (type, message, cause) {
@@ -71998,11 +75342,11 @@ module.exports = function (errno) {
   }
 }
 
-},{"prr":185}],182:[function(require,module,exports){
-arguments[4][66][0].apply(exports,arguments)
-},{"./custom":181,"dup":66}],183:[function(require,module,exports){
-arguments[4][95][0].apply(exports,arguments)
-},{"dup":95}],184:[function(require,module,exports){
+},{"prr":187}],184:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"./custom":183,"dup":68}],185:[function(require,module,exports){
+arguments[4][97][0].apply(exports,arguments)
+},{"dup":97}],186:[function(require,module,exports){
 (function (Buffer){
 
 exports.compare = function (a, b) {
@@ -72152,13 +75496,13 @@ exports.filter = function (range, compare) {
 }
 
 }).call(this,{"isBuffer":require("../../../is-buffer/index.js")})
-},{"../../../is-buffer/index.js":88}],185:[function(require,module,exports){
-arguments[4][140][0].apply(exports,arguments)
-},{"dup":140}],186:[function(require,module,exports){
-arguments[4][96][0].apply(exports,arguments)
-},{"./_stream_readable":188,"./_stream_writable":190,"_process":134,"core-util-is":56,"dup":96,"inherits":87}],187:[function(require,module,exports){
-arguments[4][97][0].apply(exports,arguments)
-},{"./_stream_transform":189,"core-util-is":56,"dup":97,"inherits":87}],188:[function(require,module,exports){
+},{"../../../is-buffer/index.js":90}],187:[function(require,module,exports){
+arguments[4][142][0].apply(exports,arguments)
+},{"dup":142}],188:[function(require,module,exports){
+arguments[4][98][0].apply(exports,arguments)
+},{"./_stream_readable":190,"./_stream_writable":192,"_process":136,"core-util-is":58,"dup":98,"inherits":89}],189:[function(require,module,exports){
+arguments[4][99][0].apply(exports,arguments)
+},{"./_stream_transform":191,"core-util-is":58,"dup":99,"inherits":89}],190:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -73144,7 +76488,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"_process":134,"buffer":55,"core-util-is":56,"events":68,"inherits":87,"isarray":183,"stream":173,"string_decoder/":174}],189:[function(require,module,exports){
+},{"_process":136,"buffer":57,"core-util-is":58,"events":70,"inherits":89,"isarray":185,"stream":175,"string_decoder/":176}],191:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -73356,7 +76700,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":186,"core-util-is":56,"inherits":87}],190:[function(require,module,exports){
+},{"./_stream_duplex":188,"core-util-is":58,"inherits":89}],192:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -73746,7 +77090,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":186,"_process":134,"buffer":55,"core-util-is":56,"inherits":87,"stream":173}],191:[function(require,module,exports){
+},{"./_stream_duplex":188,"_process":136,"buffer":57,"core-util-is":58,"inherits":89,"stream":175}],193:[function(require,module,exports){
 var Stream = require('stream'); // hack to fix a circular dependency issue when used with browserify
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = Stream;
@@ -73756,7 +77100,7 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":186,"./lib/_stream_passthrough.js":187,"./lib/_stream_readable.js":188,"./lib/_stream_transform.js":189,"./lib/_stream_writable.js":190,"stream":173}],192:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":188,"./lib/_stream_passthrough.js":189,"./lib/_stream_readable.js":190,"./lib/_stream_transform.js":191,"./lib/_stream_writable.js":192,"stream":175}],194:[function(require,module,exports){
 (function (global){
 
 /**
@@ -73827,16 +77171,16 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],193:[function(require,module,exports){
-arguments[4][87][0].apply(exports,arguments)
-},{"dup":87}],194:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"dup":89}],196:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],195:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -74426,7 +77770,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":194,"_process":134,"inherits":193}],196:[function(require,module,exports){
+},{"./support/isBuffer":196,"_process":136,"inherits":195}],198:[function(require,module,exports){
 'use strict';
 
 /**
@@ -74601,7 +77945,7 @@ exports.parse = function (str) {
   }
 };
 
-},{}],197:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -74665,7 +78009,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":134}],198:[function(require,module,exports){
+},{"_process":136}],200:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;

@@ -1518,6 +1518,16 @@ var pxsim;
             return result;
         }
         util.pathJoin = pathJoin;
+        function toArray(a) {
+            if (Array.isArray(a)) {
+                return a;
+            }
+            var r = [];
+            for (var i = 0; i < a.length; ++i)
+                r.push(a[i]);
+            return r;
+        }
+        util.toArray = toArray;
     })(util = pxsim.util || (pxsim.util = {}));
 })(pxsim || (pxsim = {}));
 /// <reference path="./debugProtocol.ts" />
@@ -1598,7 +1608,7 @@ var pxsim;
         return BreakpointMap;
     }());
     pxsim.BreakpointMap = BreakpointMap;
-    function getBreakpointMsg(s, brkId) {
+    function dumpHeap(v, heap) {
         function valToJSON(v) {
             switch (typeof v) {
                 case "string":
@@ -1612,8 +1622,13 @@ var pxsim;
                 case "object":
                     if (!v)
                         return null;
-                    if (v instanceof pxsim.RefObject)
-                        return { id: v.id };
+                    if (v instanceof pxsim.RefObject) {
+                        heap[v.id] = v;
+                        return {
+                            id: v.id,
+                            preview: pxsim.RefObject.toDebugString(v)
+                        };
+                    }
                     return { text: "(object)" };
                 default:
                     throw new Error();
@@ -1623,30 +1638,36 @@ var pxsim;
             var r = {};
             for (var _i = 0, _a = Object.keys(frame); _i < _a.length; _i++) {
                 var k = _a[_i];
-                if (/___\d+$/.test(k)) {
-                    r[k] = valToJSON(frame[k]);
+                // skip members starting with __
+                if (!/^__/.test(k) && /___\d+$/.test(k)) {
+                    r[k.replace(/___\d+$/, '')] = valToJSON(frame[k]);
                 }
             }
             return r;
         }
-        var r = {
+        return frameVars(v);
+    }
+    pxsim.dumpHeap = dumpHeap;
+    function getBreakpointMsg(s, brkId) {
+        var heap = {};
+        var msg = {
             type: "debugger",
             subtype: "breakpoint",
             breakpointId: brkId,
-            globals: frameVars(pxsim.runtime.globals),
-            stackframes: []
+            globals: dumpHeap(pxsim.runtime.globals, heap),
+            stackframes: [],
         };
         while (s != null) {
             var info = s.fn ? s.fn.info : null;
             if (info)
-                r.stackframes.push({
-                    locals: frameVars(s),
+                msg.stackframes.push({
+                    locals: dumpHeap(s, heap),
                     funcInfo: info,
                     breakpointId: s.lastBrkId
                 });
             s = s.parent;
         }
-        return r;
+        return { msg: msg, heap: heap };
     }
     pxsim.getBreakpointMsg = getBreakpointMsg;
     var SimDebugSession = /** @class */ (function (_super) {
@@ -1772,7 +1793,8 @@ var pxsim;
             this.lastBreak = breakMsg;
             this.state = new StoppedState(this.lastBreak, this.breakpoints, this.projectDir);
             if (breakMsg.exceptionMessage) {
-                this.sendEvent(new pxsim.protocol.StoppedEvent("exception", SimDebugSession.THREAD_ID, breakMsg.exceptionMessage));
+                var message = breakMsg.exceptionMessage.replace(/___\d+/g, '');
+                this.sendEvent(new pxsim.protocol.StoppedEvent("exception", SimDebugSession.THREAD_ID, message));
             }
             else {
                 this.sendEvent(new pxsim.protocol.StoppedEvent("breakpoint", SimDebugSession.THREAD_ID));
@@ -1843,7 +1865,6 @@ var pxsim;
         StoppedState.prototype.getFrames = function () {
             var _this = this;
             return this._message.stackframes.map(function (s, i) {
-                ;
                 var bp = _this._map.getById(s.breakpointId);
                 if (bp) {
                     _this._frames[s.breakpointId] = s;
@@ -2067,10 +2088,12 @@ var pxsim;
     }
     function initAppcache() {
         if (typeof window !== 'undefined') {
-            if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+            if (window.applicationCache.status === window.applicationCache.UPDATEREADY)
                 reload();
-            }
-            window.applicationCache.addEventListener("updateready", function () { return reload(); });
+            window.applicationCache.addEventListener("updateready", function () {
+                if (window.applicationCache.status === window.applicationCache.UPDATEREADY)
+                    reload();
+            });
         }
     }
     function reload() {
@@ -2683,12 +2706,25 @@ var pxsim;
             if (pxsim.runtime && pxsim.runtime.refCountingDebug)
                 console.log("RefObject id:" + this.id + " refs:" + this.refcnt);
         };
+        // render a debug preview string
+        RefObject.prototype.toDebugString = function () {
+            return "(object)";
+        };
         RefObject.toAny = function (o) {
-            if (o instanceof RefMap)
-                return o.toAny();
-            if (o instanceof pxsim.RefCollection)
+            if (o && o.toAny)
                 return o.toAny();
             return o;
+        };
+        RefObject.toDebugString = function (o) {
+            if (o === null)
+                return "null";
+            if (o === undefined)
+                return "undefined;";
+            if (o.toDebugString)
+                return o.toDebugString();
+            if (typeof o == "string")
+                return JSON.stringify(o);
+            return o.toString();
         };
         return RefObject;
     }());
@@ -3267,6 +3303,20 @@ var pxsim;
         };
         RefCollection.prototype.toAny = function () {
             return this.data.map(function (v) { return pxsim.RefObject.toAny(v); });
+        };
+        RefCollection.prototype.toDebugString = function () {
+            var s = "[";
+            for (var i = 0; i < this.data.length; ++i) {
+                if (i > 0)
+                    s += ",";
+                s += pxsim.RefObject.toDebugString(this.data[i]);
+                if (s.length > 15) {
+                    s += "...";
+                    break;
+                }
+            }
+            s += "]";
+            return s;
         };
         RefCollection.prototype.destroy = function () {
             var data = this.data;
@@ -3984,11 +4034,19 @@ var pxsim;
             });
         }
         U.removeClass = removeClass;
+        function remove(element) {
+            element.parentElement.removeChild(element);
+        }
+        U.remove = remove;
         function removeChildren(element) {
             while (element.firstChild)
                 element.removeChild(element.firstChild);
         }
         U.removeChildren = removeChildren;
+        function clear(element) {
+            removeChildren(element);
+        }
+        U.clear = clear;
         function assert(cond, msg) {
             if (msg === void 0) { msg = "Assertion failed"; }
             if (!cond) {
@@ -4212,6 +4270,7 @@ var pxsim;
             var yieldSteps = yieldMaxSteps;
             // ---
             var currResume;
+            var dbgHeap;
             var dbgResume;
             var breakFrame = null; // for step-over
             var lastYield = Date.now();
@@ -4270,11 +4329,15 @@ var pxsim;
             }
             function breakpoint(s, retPC, brkId, r0) {
                 U.assert(!dbgResume);
+                U.assert(!dbgHeap);
                 s.pc = retPC;
                 s.r0 = r0;
-                Runtime.postMessage(pxsim.getBreakpointMsg(s, brkId));
+                var _a = pxsim.getBreakpointMsg(s, brkId), msg = _a.msg, heap = _a.heap;
+                dbgHeap = heap;
+                Runtime.postMessage(msg);
                 dbgResume = function (m) {
                     dbgResume = null;
+                    dbgHeap = null;
                     if (__this.dead)
                         return;
                     pxsim.runtime = __this;
@@ -4342,6 +4405,21 @@ var pxsim;
                         if (dbgResume)
                             dbgResume(msg);
                         break;
+                    case "variables":
+                        var vmsg = msg;
+                        var vars = undefined;
+                        if (dbgHeap) {
+                            var v = dbgHeap[vmsg.variablesReference];
+                            if (v !== undefined)
+                                vars = pxsim.dumpHeap(v, dbgHeap);
+                        }
+                        Runtime.postMessage({
+                            type: "debugger",
+                            subtype: "variables",
+                            req_seq: msg.seq,
+                            variables: vars
+                        });
+                        break;
                 }
             }
             function loop(p) {
@@ -4367,7 +4445,7 @@ var pxsim;
                         __this.errorHandler(e);
                     else {
                         console.error("Simulator crashed, no error handler", e.stack);
-                        var msg_1 = pxsim.getBreakpointMsg(p, p.lastBrkId);
+                        var msg_1 = pxsim.getBreakpointMsg(p, p.lastBrkId).msg;
                         msg_1.exceptionMessage = e.message;
                         msg_1.exceptionStack = e.stack;
                         Runtime.postMessage(msg_1);
@@ -4498,8 +4576,9 @@ var pxsim;
                 this.liveRefObjs[id + ""] = object;
             return id;
         };
-        Runtime.prototype.unregisterLiveObject = function (object) {
-            U.assert(object.refcnt == 0, "ref count is not 0");
+        Runtime.prototype.unregisterLiveObject = function (object, keepAlive) {
+            if (!keepAlive)
+                U.assert(object.refcnt == 0, "ref count is not 0");
             delete this.liveRefObjs[object.id + ""];
         };
         Runtime.prototype.runningTime = function () {
@@ -4605,6 +4684,8 @@ var pxsim;
             this.runOptions = {};
             this.state = SimulatorState.Unloaded;
             this.frameCleanupTimeout = 0;
+            this.debuggerSeq = 1;
+            this.debuggerResolvers = {};
         }
         SimulatorDriver.prototype.setHwDebugger = function (hw) {
             if (hw) {
@@ -4633,8 +4714,30 @@ var pxsim;
         SimulatorDriver.prototype.setState = function (state) {
             if (this.state != state) {
                 this.state = state;
+                this.freeze(this.state == SimulatorState.Paused); // don't allow interaction when pause
                 if (this.options.onStateChanged)
                     this.options.onStateChanged(this.state);
+            }
+        };
+        SimulatorDriver.prototype.freeze = function (value) {
+            var cls = "pause-overlay";
+            if (!value) {
+                pxsim.util.toArray(this.container.querySelectorAll("div.simframe div." + cls))
+                    .forEach(function (overlay) { return overlay.parentElement.removeChild(overlay); });
+            }
+            else {
+                pxsim.util.toArray(this.container.querySelectorAll("div.simframe"))
+                    .forEach(function (frame) {
+                    if (frame.querySelector("div." + cls))
+                        return;
+                    var div = document.createElement("div");
+                    div.className = cls;
+                    div.onclick = function (ev) {
+                        ev.preventDefault();
+                        return false;
+                    };
+                    frame.appendChild(div);
+                });
             }
         };
         SimulatorDriver.prototype.postMessage = function (msg, source) {
@@ -4666,6 +4769,7 @@ var pxsim;
             var frame = document.createElement('iframe');
             frame.id = 'sim-frame-' + this.nextId();
             frame.allowFullscreen = true;
+            frame.setAttribute('allow', 'autoplay; fullscreen');
             frame.setAttribute('sandbox', 'allow-same-origin allow-scripts');
             frame.sandbox.value = "allow-scripts allow-same-origin";
             var simUrl = this.options.simUrl || (window.pxtConfig || {}).simUrl || "/sim/simulator.html";
@@ -4680,6 +4784,7 @@ var pxsim;
         };
         SimulatorDriver.prototype.stop = function (unload) {
             if (unload === void 0) { unload = false; }
+            this.clearDebugger();
             this.postMessage({ type: 'stop' });
             this.setState(SimulatorState.Stopped);
             if (unload)
@@ -4695,7 +4800,7 @@ var pxsim;
         };
         SimulatorDriver.prototype.unload = function () {
             this.cancelFrameCleanup();
-            this.container.innerHTML = '';
+            pxsim.U.removeChildren(this.container);
             this.setState(SimulatorState.Unloaded);
         };
         SimulatorDriver.prototype.mute = function (mute) {
@@ -4760,6 +4865,7 @@ var pxsim;
         };
         SimulatorDriver.prototype.run = function (js, opts) {
             if (opts === void 0) { opts = {}; }
+            this.clearDebugger();
             this.runOptions = opts;
             this.runId = this.nextId();
             this.addEventListeners();
@@ -4896,13 +5002,34 @@ var pxsim;
             this.traceInterval = intervalMs;
             this.postDebuggerMessage("traceConfig", { interval: intervalMs });
         };
+        SimulatorDriver.prototype.variablesAsync = function (id) {
+            return this.postDebuggerMessageAsync("variables", { variablesReference: id })
+                .then(function (msg) { return msg; }, function (e) { return undefined; });
+        };
         SimulatorDriver.prototype.handleSimulatorCommand = function (msg) {
             if (this.options.onSimulatorCommand)
                 this.options.onSimulatorCommand(msg);
         };
+        SimulatorDriver.prototype.clearDebugger = function () {
+            var _this = this;
+            var e = new Error("Debugging cancelled");
+            Object.keys(this.debuggerResolvers)
+                .forEach(function (k) {
+                var reject = _this.debuggerResolvers[k].reject;
+                reject(e);
+            });
+            this.debuggerResolvers = {};
+            this.debuggerSeq++;
+        };
         SimulatorDriver.prototype.handleDebuggerMessage = function (msg) {
             if (msg.subtype !== "trace") {
                 console.log("DBG-MSG", msg.subtype, msg);
+            }
+            // resolve any request
+            if (msg.seq) {
+                var resolve = this.debuggerResolvers[msg.seq].resolve;
+                if (resolve)
+                    resolve(msg);
             }
             switch (msg.subtype) {
                 case "warning":
@@ -4928,13 +5055,34 @@ var pxsim;
                         this.options.onTraceMessage(msg);
                     }
                     break;
+                default:
+                    var seq = msg.req_seq;
+                    if (seq) {
+                        var resolve = this.debuggerResolvers[seq].resolve;
+                        if (resolve) {
+                            delete this.debuggerResolvers[seq];
+                            resolve(msg);
+                        }
+                    }
+                    break;
             }
         };
-        SimulatorDriver.prototype.postDebuggerMessage = function (subtype, data) {
+        SimulatorDriver.prototype.postDebuggerMessageAsync = function (subtype, data) {
+            var _this = this;
+            if (data === void 0) { data = {}; }
+            return new Promise(function (resolve, reject) {
+                var seq = _this.debuggerSeq++;
+                _this.debuggerResolvers[seq.toString()] = { resolve: resolve, reject: reject };
+                _this.postDebuggerMessage(subtype, data, seq);
+            });
+        };
+        SimulatorDriver.prototype.postDebuggerMessage = function (subtype, data, seq) {
             if (data === void 0) { data = {}; }
             var msg = JSON.parse(JSON.stringify(data));
             msg.type = "debugger";
             msg.subtype = subtype;
+            if (seq)
+                msg.seq = seq;
             this.postMessage(msg);
         };
         SimulatorDriver.prototype.nextId = function () {
@@ -5007,10 +5155,6 @@ var pxsim;
         function EventBus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        EventBus.prototype.queue = function (id, evid, value) {
-            if (value === void 0) { value = 0; }
-            _super.prototype.queue.call(this, id, evid, value);
-        };
         return EventBus;
     }(EventBusGeneric));
     pxsim.EventBus = EventBus;
@@ -5116,6 +5260,9 @@ var pxsim;
             if (_vca)
                 _vca.gain.value = 0;
             _frequency = 0;
+            if (audio) {
+                audio.pause();
+            }
         }
         AudioContextManager.stop = stop;
         function frequency() {
@@ -5162,6 +5309,7 @@ var pxsim;
                 res += String.fromCharCode(input[i]);
             return res;
         }
+        var audio;
         function playBufferAsync(buf) {
             if (!buf)
                 return Promise.resolve();
@@ -5172,7 +5320,7 @@ var pxsim;
                     resolve = undefined;
                 }
                 var url = "data:audio/wav;base64," + window.btoa(uint8ArrayToString(buf.data));
-                var audio = new Audio(url);
+                audio = new Audio(url);
                 if (_mute)
                     audio.volume = 0;
                 audio.onended = function () { return res(); };
@@ -6067,7 +6215,9 @@ var pxsim;
             var removeAll = function (arr, e) {
                 var res = 0;
                 var idx;
+                /* tslint:disable:no-conditional-assignment */
                 while (0 <= (idx = arr.indexOf(e))) {
+                    /* tslint:enable:no-conditional-assignment */
                     arr.splice(idx, 1);
                     res += 1;
                 }
@@ -6227,7 +6377,7 @@ var pxsim;
                 };
                 mkChannel(BAR_HEIGHT + MID_HEIGHT / 2, CHANNEL_HEIGHT, "sim-bb-mid-channel");
                 mkChannel(BAR_HEIGHT, SMALL_CHANNEL_HEIGHT, "sim-bb-sml-channel");
-                mkChannel(BAR_HEIGHT + MID_HEIGHT, SMALL_CHANNEL_HEIGHT), "sim-bb-sml-channel";
+                mkChannel(BAR_HEIGHT + MID_HEIGHT, SMALL_CHANNEL_HEIGHT, "sim-bb-sml-channel");
                 //-----pins
                 var getMidTopOrBot = function (rowIdx) { return rowIdx < visuals.BREADBOARD_MID_ROWS / 2.0 ? "b" : "t"; };
                 var getBarTopOrBot = function (colIdx) { return colIdx < POWER_COLS / 2.0 ? "b" : "t"; };

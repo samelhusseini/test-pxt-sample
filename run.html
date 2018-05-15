@@ -83,9 +83,8 @@
         var pxtConfig = {
     "relprefix": "/test-pxt-sample/",
     "workerjs": "/test-pxt-sample/worker.js",
-    "tdworkerjs": "/test-pxt-sample/tdworker.js",
     "monacoworkerjs": "/test-pxt-sample/monacoworker.js",
-    "pxtVersion": "3.9.1",
+    "pxtVersion": "3.14.5",
     "pxtRelId": "",
     "pxtCdnUrl": "/test-pxt-sample/",
     "commitCdnUrl": "/test-pxt-sample/",
@@ -124,8 +123,11 @@
         }
 
         function initAppCache() {
+            if (window.applicationCache.status === window.applicationCache.UPDATEREADY)
+                    window.location.reload();
             window.applicationCache.addEventListener('updateready', () => {
-                window.location.reload();
+                if (window.applicationCache.status === window.applicationCache.UPDATEREADY)
+                    window.location.reload();
             });
         }
         initAppCache();

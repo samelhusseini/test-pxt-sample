@@ -646,6 +646,7 @@ var pxt;
             var folder;
             var allScripts = [];
             var currentTarget;
+            var currentTargetVersion;
             function lookup(id) {
                 return allScripts.filter(function (x) { return x.id == id; })[0];
             }
@@ -674,6 +675,7 @@ var pxt;
                 var modTime = Math.round(time[0] / 1000) || U.nowSeconds();
                 var hd = {
                     target: currentTarget,
+                    targetVersion: e.header ? e.header.targetVersion : currentTargetVersion,
                     name: pkg.config.name,
                     meta: {},
                     editor: pxt.JAVASCRIPT_PROJECT_NAME,
@@ -700,9 +702,10 @@ var pxt;
                     eh.icon = hd.icon;
                 }
             }
-            function initAsync(target) {
+            function initAsync(target, version) {
                 allScripts = [];
                 currentTarget = target;
+                currentTargetVersion = version;
                 var applicationData = Windows.Storage.ApplicationData.current;
                 var localFolder = applicationData.localFolder;
                 pxt.debug("winrt: initializing workspace");
@@ -797,7 +800,6 @@ var pxt;
                 h.id = path;
                 h.recentUse = U.nowSeconds();
                 h.modificationTime = h.recentUse;
-                h.target = currentTarget;
                 var e = {
                     id: h.id,
                     header: h,

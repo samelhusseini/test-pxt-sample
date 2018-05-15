@@ -5,9 +5,8 @@
     var pxtConfig = {
     "relprefix": "/test-pxt-sample/",
     "workerjs": "/test-pxt-sample/worker.js",
-    "tdworkerjs": "/test-pxt-sample/tdworker.js",
     "monacoworkerjs": "/test-pxt-sample/monacoworker.js",
-    "pxtVersion": "3.9.1",
+    "pxtVersion": "3.14.5",
     "pxtRelId": "",
     "pxtCdnUrl": "/test-pxt-sample/",
     "commitCdnUrl": "/test-pxt-sample/",
@@ -27,17 +26,10 @@
     var scripts = [
         "/test-pxt-sample/highlight.js/highlight.pack.js",
         "/test-pxt-sample/bluebird.min.js",
-        "/test-pxt-sample/typescript.js",
         "/test-pxt-sample/semantic.js",
         "/test-pxt-sample/marked/marked.min.js",
-        "/test-pxt-sample/lzma/lzma_worker-min.js",
-        "/test-pxt-sample/pxtlib.js",
-        "/test-pxt-sample/pxtcompiler.js",
-        "/test-pxt-sample/pxtblockly.js",
-        "/test-pxt-sample/pxteditor.js",
-        "/test-pxt-sample/pxtsim.js",
         "/test-pxt-sample/target.js",
-        "/test-pxt-sample/pxtrunner.js"
+        "/test-pxt-sample/pxtembed.js"
     ]
 
     if (typeof jQuery == "undefined")

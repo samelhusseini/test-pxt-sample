@@ -33,17 +33,17 @@ var pxt;
     var exceptionLogger;
     function initAnalyticsAsync() {
         if (isNativeApp()) {
-            initializeAppInsights(true);
+            initializeAppInsightsInternal(true);
             return;
         }
         if (isSandboxMode()) {
-            initializeAppInsights(false);
+            initializeAppInsightsInternal(false);
             return;
         }
         getCookieBannerAsync(document.domain, detectLocale(), function (bannerErr, info) {
             if (bannerErr || info.Error) {
                 // Start app insights, just don't drop any cookies
-                initializeAppInsights(false);
+                initializeAppInsightsInternal(false);
                 return;
             }
             // Clear the cookies if the consent is too old, mscc won't do it automatically
@@ -59,12 +59,21 @@ var pxt;
                 document.body.insertBefore(bannerDiv, document.body.firstChild);
             }
             // The markup is trusted because it's from our backend, so it shouldn't need to be scrubbed
+            /* tslint:disable:no-inner-html */
             bannerDiv.innerHTML = info.Markup;
+            /* tslint:enable:no-inner-html */
             if (info.Css && info.Css.length) {
                 info.Css.forEach(injectStylesheet);
             }
             all(info.Js || [], injectScriptAsync, function (msccError) {
-                initializeAppInsights(!msccError && typeof mscc !== "undefined" && mscc.hasConsent());
+                if (!msccError && typeof mscc !== "undefined") {
+                    if (mscc.hasConsent()) {
+                        initializeAppInsightsInternal(true);
+                    }
+                    else {
+                        mscc.on("consent", function () { return initializeAppInsightsInternal(true); });
+                    }
+                }
             });
         });
     }
@@ -131,7 +140,7 @@ var pxt;
         }
         return true;
     }
-    function initializeAppInsights(includeCookie) {
+    function initializeAppInsightsInternal(includeCookie) {
         if (includeCookie === void 0) { includeCookie = false; }
         // loadAppInsights is defined in docfiles/tracking.html
         var loadAI = window.loadAppInsights;
@@ -141,6 +150,7 @@ var pxt;
             queues.forEach(function (a) { return a.flush(); });
         }
     }
+    pxt.initializeAppInsightsInternal = initializeAppInsightsInternal;
     function httpGetAsync(url, cb) {
         try {
             var client_1;
@@ -199,10 +209,11 @@ var pxt;
         }
     }
     /**
-     * Checks for winrt
+     * Checks for winrt and pxt-electron
      */
     function isNativeApp() {
-        return typeof Windows !== "undefined";
+        return typeof Windows !== "undefined" ||
+            (typeof window !== "undefined" && !!window.pxtElectron);
     }
     /**
      * checks for sandbox

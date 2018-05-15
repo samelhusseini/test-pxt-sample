@@ -26,7 +26,7 @@
 
 <meta name="msapplication-TileColor" content="">
 <meta name="msapplication-TileImage" content="">
-<meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+<meta name="msapplication-config" content="none"/>
 <meta name="theme-color" content="">
 
 <meta name="twitter:card" content="summary" />
@@ -47,17 +47,12 @@
 <!-- end include appmeta.html -->
 
 
-    <link id="blocklycss" rel="stylesheet" data-rtl="/test-pxt-sample/rtlblockly.css" href="/test-pxt-sample/blockly.css" type="text/css">
     <link rel="stylesheet" data-rtl="/test-pxt-sample/rtlsemantic.css" href="/test-pxt-sample/semantic.css" type="text/css">
-    <style type="text/css">
-        @import "/test-pxt-sample/custom.css";
-        @import "/test-pxt-sample/icons.css";
-    </style>
 </head>
 
 <body class="main">
     <div id='loading' class="ui active dimmer">
-        <div class="ui large loader"></div>
+        <div class="ui large main loader"></div>
     </div>
 
     <div id='custom-content'>
@@ -83,9 +78,8 @@
         var pxtConfig = {
     "relprefix": "/test-pxt-sample/",
     "workerjs": "/test-pxt-sample/worker.js",
-    "tdworkerjs": "/test-pxt-sample/tdworker.js",
     "monacoworkerjs": "/test-pxt-sample/monacoworker.js",
-    "pxtVersion": "3.9.1",
+    "pxtVersion": "3.14.5",
     "pxtRelId": "",
     "pxtCdnUrl": "/test-pxt-sample/",
     "commitCdnUrl": "/test-pxt-sample/",
@@ -128,6 +122,22 @@
                 telemetryItem.properties["cookie"] = includeCookie;
                 if (typeof Windows !== "undefined")
                     telemetryItem.properties["WindowsApp"] = 1;
+                var userAgent = navigator.userAgent.toLowerCase();
+                var userAgentRegexResult = /\belectron\/(\d+\.\d+\.\d+.*?)(?: |$)/i.exec(userAgent); // Example navigator.userAgent: "Mozilla/5.0 Chrome/61.0.3163.100 Electron/2.0.0 Safari/537.36"
+                if (userAgentRegexResult) {
+                    telemetryItem.properties["Electron"] = 1;
+                    telemetryItem.properties["ElectronVersion"] = userAgentRegexResult[1];
+                }
+                if (typeof pxtElectron !== "undefined") {
+                    telemetryItem.properties["PxtElectron"] = 1;
+                    telemetryItem.properties["ElectronVersion"] = pxtElectron.versions.electronVersion;
+                    telemetryItem.properties["ChromiumVersion"] = pxtElectron.versions.chromiumVersion;
+                    telemetryItem.properties["NodeVersion"] = pxtElectron.versions.nodeVersion;
+                    telemetryItem.properties["PxtElectronVersion"] = pxtElectron.versions.pxtElectronVersion;
+                    telemetryItem.properties["PxtCoreVersion"] = pxtElectron.versions.pxtCoreVersion;
+                    telemetryItem.properties["PxtTargetVersion"] = pxtElectron.versions.pxtTargetVersion;
+                    telemetryItem.properties["PxtElectronIsProd"] = pxtElectron.versions.isProd;
+                }
             });
         });
         appInsights.trackPageView(null, scrubUrl(window.location.toString()), {urlReferrer: scrubUrl(document.referrer.toString())});
@@ -142,10 +152,7 @@
 </script>
 <!-- end include apptracking.html -->
 
-    <script type="text/javascript" src="/test-pxt-sample/pxtlib.js"></script>
-    <script type="text/javascript" src="/test-pxt-sample/pxtwinrt.js"></script>
-    <script type="text/javascript" src="/test-pxt-sample/pxteditor.js"></script>
-    <script type="text/javascript" src="/test-pxt-sample/pxtsim.js"></script>
+    <script type="text/javascript" src="/test-pxt-sample/pxtapp.js"></script>
     <script type="text/javascript" src="/test-pxt-sample/target.js"></script>
     <script id="mainscript" type="text/javascript" src="/test-pxt-sample/main.js"></script>
     <xml id="blocklyToolboxDefinitionCategory" style="display: none">
@@ -183,7 +190,9 @@
             "vs/language/typescript/src/worker": "/test-pxt-sample/vs/language/typescript/src/worker.js",
             "lzma/lzma_worker-min.js": "/test-pxt-sample/lzma/lzma_worker-min.js",
             "smoothie/smoothie_compressed.js": "/test-pxt-sample/smoothie/smoothie_compressed.js",
-            "pxtblockly.js": "/test-pxt-sample/pxtblockly.js"
+            "pxtblockly.js": "/test-pxt-sample/pxtblockly.js",
+            "blockly.css": "/test-pxt-sample/blockly.css",
+            "rtlblockly.css": "/test-pxt-sample/rtlblockly.css"
         }
     </script>
 </body>

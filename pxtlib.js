@@ -1585,7 +1585,6 @@ var pxt;
         var r = {
             relprefix: "/--",
             workerjs: "/worker.js",
-            tdworkerjs: "/tdworker.js",
             monacoworkerjs: "/monacoworker.js",
             pxtVersion: "local",
             pxtRelId: "",
@@ -1624,18 +1623,12 @@ var pxt;
         return pxt.U.lookup(pxt.appTarget.bundledpkgs || {}, id);
     }
     pxt.getEmbeddedScript = getEmbeddedScript;
-    var _targetConfig = undefined;
     var _targetConfigPromise = undefined;
     function targetConfigAsync() {
-        if (_targetConfig)
-            return Promise.resolve(_targetConfig);
-        if (!pxt.Cloud.isOnline())
-            return Promise.resolve(undefined);
-        if (_targetConfigPromise)
-            return _targetConfigPromise;
-        return _targetConfigPromise = pxt.Cloud.downloadTargetConfigAsync()
-            .then(function (js) { _targetConfig = js; }, function (err) { _targetConfig = undefined; })
-            .then(function () { return _targetConfig; });
+        if (!_targetConfigPromise)
+            _targetConfigPromise = pxt.Cloud.downloadTargetConfigAsync()
+                .then(function (js) { return js || {}; }, function (err) { return {}; });
+        return _targetConfigPromise;
     }
     pxt.targetConfigAsync = targetConfigAsync;
     function packagesConfigAsync() {
@@ -1816,6 +1809,17 @@ var pxt;
                         appendField: pxt.Util.lf("{id:while}do")
                     }
                 },
+                'pxt_controls_for': {
+                    name: pxt.Util.lf("a loop that repeats the number of times you say"),
+                    tooltip: pxt.Util.lf("Have the variable '{0}' take on the values from 0 to the end number, counting by 1, and do the specified blocks."),
+                    url: 'blocks/loops/for',
+                    category: 'loops',
+                    block: {
+                        message0: pxt.Util.lf("for %1 from 0 to %2"),
+                        variable: pxt.Util.lf("{id:var}index"),
+                        appendField: pxt.Util.lf("{id:for}do")
+                    }
+                },
                 'controls_simple_for': {
                     name: pxt.Util.lf("a loop that repeats the number of times you say"),
                     tooltip: pxt.Util.lf("Have the variable '{0}' take on the values from 0 to the end number, counting by 1, and do the specified blocks."),
@@ -1825,6 +1829,17 @@ var pxt;
                         message0: pxt.Util.lf("for %1 from 0 to %2"),
                         variable: pxt.Util.lf("{id:var}index"),
                         appendField: pxt.Util.lf("{id:for}do")
+                    }
+                },
+                'pxt_controls_for_of': {
+                    name: pxt.Util.lf("a loop that repeats for each value in an array"),
+                    tooltip: pxt.Util.lf("Have the variable '{0}' take the value of each item in the array one by one, and do the specified blocks."),
+                    url: 'blocks/loops/for-of',
+                    category: 'loops',
+                    block: {
+                        message0: pxt.Util.lf("for element %1 of %2"),
+                        variable: pxt.Util.lf("{id:var}value"),
+                        appendField: pxt.Util.lf("{id:for_of}do")
                     }
                 },
                 'controls_for_of': {
@@ -1968,6 +1983,15 @@ var pxt;
                         VARIABLES_GET_CREATE_SET: pxt.Util.lf("Create 'set %1'")
                     }
                 },
+                'variables_get_reporter': {
+                    name: pxt.Util.lf("get the value of a variable"),
+                    tooltip: pxt.Util.lf("Returns the value of this variable."),
+                    url: '/blocks/variables',
+                    category: 'variables',
+                    block: {
+                        VARIABLES_GET_CREATE_SET: pxt.Util.lf("Create 'set %1'")
+                    }
+                },
                 'variables_set': {
                     name: pxt.Util.lf("assign the value of a variable"),
                     tooltip: pxt.Util.lf("Sets this variable to be equal to the input."),
@@ -2002,8 +2026,8 @@ var pxt;
                     category: 'arrays',
                     blockTextSearch: "LISTS_CREATE_WITH_INPUT_WITH",
                     block: {
-                        LISTS_CREATE_EMPTY_TITLE: pxt.Util.lf("create empty array"),
-                        LISTS_CREATE_WITH_INPUT_WITH: pxt.Util.lf("create array with"),
+                        LISTS_CREATE_EMPTY_TITLE: pxt.Util.lf("empty array"),
+                        LISTS_CREATE_WITH_INPUT_WITH: pxt.Util.lf("array of"),
                         LISTS_CREATE_WITH_CONTAINER_TITLE_ADD: pxt.Util.lf("array"),
                         LISTS_CREATE_WITH_ITEM_TITLE: pxt.Util.lf("value")
                     }
@@ -2521,20 +2545,54 @@ var pxt;
         }
         BrowserUtils.loadImageAsync = loadImageAsync;
         function resolveCdnUrl(path) {
+            // don't expand full urls
+            if (/^https?:\/\//i.test(path))
+                return path;
             var monacoPaths = window.MonacoPaths || {};
-            var url = monacoPaths[path] || (pxt.webConfig.commitCdnUrl + path);
-            return url;
+            var blobPath = monacoPaths[path];
+            // find compute blob url
+            if (blobPath)
+                return blobPath;
+            // might have been exanded already
+            if (pxt.U.startsWith(path, pxt.webConfig.commitCdnUrl))
+                return path;
+            // append CDN
+            return pxt.webConfig.commitCdnUrl + path;
         }
+        function loadStyleAsync(path, rtl) {
+            if (rtl)
+                path = "rtl" + path;
+            var id = "style-" + path;
+            if (document.getElementById(id))
+                return Promise.resolve();
+            var url = resolveCdnUrl(path);
+            var links = pxt.Util.toArray(document.head.getElementsByTagName("link"));
+            var link = links.filter(function (l) { return l.getAttribute("href") == url; })[0];
+            if (link) {
+                if (!link.id)
+                    link.id = id;
+                return Promise.resolve();
+            }
+            return new Promise(function (resolve, reject) {
+                var el = document.createElement("link");
+                el.href = url;
+                el.rel = "stylesheet";
+                el.type = "text/css";
+                el.id = id;
+                el.addEventListener('load', function () { return resolve(); });
+                el.addEventListener('error', function (e) { return reject(e); });
+                document.head.appendChild(el);
+            });
+        }
+        BrowserUtils.loadStyleAsync = loadStyleAsync;
         function loadScriptAsync(path) {
             var url = resolveCdnUrl(path);
-            var id = "script-" + url;
-            if (document.getElementById(id))
-                return Promise.resolve(); // already in DOM
+            pxt.debug("script: loading " + url);
             return new Promise(function (resolve, reject) {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.src = url;
-                script.id = id;
+                script.async = true;
                 script.addEventListener('load', function () { return resolve(); });
                 script.addEventListener('error', function (e) { return reject(e); });
                 document.body.appendChild(script);
@@ -2562,15 +2620,15 @@ var pxt;
         var loadBlocklyPromise;
         function loadBlocklyAsync() {
             if (!loadBlocklyPromise) {
-                if (typeof Blockly === "undefined") {
-                    pxt.debug("blockly: delay load");
-                    loadBlocklyPromise = pxt.BrowserUtils.loadScriptAsync("pxtblockly.js")
-                        .then(function () {
-                        pxt.debug("blockly: loaded");
-                    });
-                }
-                else
-                    loadBlocklyPromise = Promise.resolve();
+                pxt.debug("blockly: delay load");
+                var p = pxt.BrowserUtils.loadStyleAsync("blockly.css", ts.pxtc.Util.isUserLanguageRtl());
+                // js not loaded yet?
+                if (typeof Blockly === "undefined")
+                    p = p.then(function () { return pxt.BrowserUtils.loadScriptAsync("pxtblockly.js"); });
+                p = p.then(function () {
+                    pxt.debug("blockly: loaded");
+                });
+                loadBlocklyPromise = p;
             }
             return loadBlocklyPromise;
         }
@@ -2587,7 +2645,7 @@ var pxt;
                 if (theme.accentColor) {
                     var style = document.createElement('style');
                     style.type = 'text/css';
-                    style.innerHTML = ".ui.accent { color: " + theme.accentColor + "; }\n                .ui.inverted.menu .accent.active.item, .ui.inverted.accent.menu  { background-color: " + theme.accentColor + "; }";
+                    style.appendChild(document.createTextNode(".ui.accent { color: " + theme.accentColor + "; }\n                .ui.inverted.menu .accent.active.item, .ui.inverted.accent.menu  { background-color: " + theme.accentColor + "; }"));
                     document.getElementsByTagName('head')[0].appendChild(style);
                 }
             }
@@ -2606,13 +2664,14 @@ var pxt;
                         semanticLink.setAttribute("href", semanticHref);
                     }
                 }
-                // replace blockly.css with rtlblockly.css
+                // replace blockly.css with rtlblockly.css if possible
                 var blocklyLink = links.filter(function (l) { return pxt.Util.endsWith(l.getAttribute("href"), "blockly.css"); })[0];
                 if (blocklyLink) {
                     var blocklyHref = blocklyLink.getAttribute("data-rtl");
                     if (blocklyHref) {
                         pxt.debug("swapping to " + blocklyHref);
                         blocklyLink.setAttribute("href", blocklyHref);
+                        blocklyLink.removeAttribute("data-rtl");
                     }
                 }
             }
@@ -2664,31 +2723,41 @@ var pxt;
         commands.browserDownloadAsync = undefined;
         commands.saveOnlyAsync = undefined;
         commands.showUploadInstructionsAsync = undefined;
+        commands.saveProjectAsync = undefined;
     })(commands = pxt.commands || (pxt.commands = {}));
 })(pxt || (pxt = {}));
 /// <reference path="../localtypings/pxtarget.d.ts"/>
 var pxt;
 (function (pxt) {
+    var lzmaPromise;
     function getLzmaAsync() {
-        if (pxt.U.isNodeJS)
-            return Promise.resolve(require("lzma"));
-        else {
-            var lz = window.LZMA;
-            if (lz)
-                return Promise.resolve(lz);
-            return pxt.BrowserUtils.loadScriptAsync('lzma/lzma_worker-min.js')
-                .then(function () { return window.LZMA; });
+        var lzmaPromise;
+        if (!lzmaPromise) {
+            if (pxt.U.isNodeJS)
+                lzmaPromise = Promise.resolve(require("lzma"));
+            else
+                lzmaPromise = Promise.resolve(window.LZMA);
+            lzmaPromise.then(function (res) {
+                if (!res)
+                    pxt.reportError('lzma', 'failed to load');
+                return res;
+            });
         }
+        return lzmaPromise;
     }
     function lzmaDecompressAsync(buf) {
         return getLzmaAsync()
             .then(function (lzma) { return new Promise(function (resolve, reject) {
             try {
                 lzma.decompress(buf, function (res, error) {
+                    if (error)
+                        pxt.debug("lzma decompression failed");
                     resolve(error ? undefined : res);
                 });
             }
             catch (e) {
+                if (e)
+                    pxt.debug("lzma decompression failed");
                 resolve(undefined);
             }
         }); });
@@ -2699,10 +2768,13 @@ var pxt;
             .then(function (lzma) { return new Promise(function (resolve, reject) {
             try {
                 lzma.compress(text, 7, function (res, error) {
+                    if (error)
+                        pxt.reportException(error);
                     resolve(error ? undefined : new Uint8Array(res));
                 });
             }
             catch (e) {
+                pxt.reportException(e);
                 resolve(undefined);
             }
         }); });
@@ -2839,6 +2911,7 @@ var pxt;
                 sourcePath = "/pxtapp/";
             var pxtConfig = "// Configuration defines\n";
             var pointersInc = "\nPXT_SHIMS_BEGIN\n";
+            var abiInc = "";
             var includesInc = "#include \"pxt.h\"\n";
             var fullCS = "";
             var thisErrors = "";
@@ -3141,6 +3214,19 @@ var pxt;
                         }
                         return;
                     }
+                    m = /^PXT_ABI\((\w+)\)/.exec(ln);
+                    if (m) {
+                        pointersInc += "PXT_FNPTR(::" + m[1] + "),\n";
+                        abiInc += "extern \"C\" void " + m[1] + "();\n";
+                        res.functions.push({
+                            name: m[1],
+                            argsFmt: "",
+                            value: 0
+                        });
+                    }
+                    m = /^#define\s+PXT_COMM_BASE\s+([0-9a-fx]+)/.exec(ln);
+                    if (m)
+                        res.commBase = parseInt(m[1]);
                     // function definition
                     m = /^\s*(\w+)([\*\&]*\s+[\*\&]*)(\w+)\s*\(([^\(\)]*)\)\s*(;\s*$|\{|$)/.exec(ln);
                     if (currAttrs && m) {
@@ -3565,7 +3651,7 @@ var pxt;
                 pxtConfig += "#define PXT_VM 0\n";
             }
             if (!isCSharp) {
-                res.generatedFiles[sourcePath + "pointers.cpp"] = includesInc + protos.finish() + pointersInc + "\nPXT_SHIMS_END\n";
+                res.generatedFiles[sourcePath + "pointers.cpp"] = includesInc + protos.finish() + abiInc + pointersInc + "\nPXT_SHIMS_END\n";
                 res.generatedFiles[sourcePath + "pxtconfig.h"] = pxtConfig;
                 if (isYotta)
                     res.generatedFiles["/config.json"] = JSON.stringify(configJson, null, 4) + "\n";
@@ -3796,7 +3882,9 @@ var pxt;
                 var curr = pxt.getOnlineCdnUrl();
                 if (curr)
                     return (cdnUrlPromise = Promise.resolve(curr));
-                return (cdnUrlPromise = pxt.Cloud.privateGetAsync("clientconfig").then(function (r) { return r.primaryCdnUrl; }));
+                var forceLive = pxt.webConfig && pxt.webConfig.isStatic;
+                return (cdnUrlPromise = pxt.Cloud.privateGetAsync("clientconfig", forceLive)
+                    .then(function (r) { return r.primaryCdnUrl; }));
             }
         }
         function downloadHexInfoCoreAsync(extInfo) {
@@ -3848,6 +3936,27 @@ var pxt;
             });
         }
         function downloadHexInfoLocalAsync(extInfo) {
+            if (pxt.webConfig && pxt.webConfig.isStatic) {
+                return pxt.Util.requestAsync({
+                    url: pxt.webConfig.cdnUrl + "hexcache/" + extInfo.sha + ".hex"
+                })
+                    .then(function (resp) {
+                    if (resp.text) {
+                        var result = {
+                            enums: [],
+                            functions: [],
+                            hex: resp.text.split(/\r?\n/)
+                        };
+                        return Promise.resolve(result);
+                    }
+                    pxt.log("Hex info not found in bundled hex cache");
+                    return Promise.resolve();
+                })
+                    .catch(function (e) {
+                    pxt.log("Error fetching hex info from bundled hex cache");
+                    return Promise.resolve();
+                });
+            }
             if (!pxt.Cloud.localToken || !window || !pxt.Cloud.isLocalHost()) {
                 return Promise.resolve();
             }
@@ -3864,13 +3973,7 @@ var pxt;
             });
         }
         function apiAsync(path, data) {
-            return pxt.U.requestAsync({
-                url: "/api/" + path,
-                headers: { "Authorization": pxt.Cloud.localToken },
-                method: data ? "POST" : "GET",
-                data: data || undefined,
-                allowHttpErrors: true
-            }).then(function (r) { return r.json; });
+            return pxt.Cloud.localRequestAsync(path, data).then(function (r) { return r.json; });
         }
         function storeWithLimitAsync(host, idxkey, newkey, newval, maxLen) {
             if (maxLen === void 0) { maxLen = 10; }
@@ -3974,7 +4077,9 @@ var pxt;
                     buf = "";
                     var cnt = parseInt(nxt, 16);
                     while (cnt-- > 0) {
+                        /* tslint:disable:no-octal-literal */
                         buf += "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+                        /* tslint:enable:no-octal-literal */
                     }
                 }
                 else {
@@ -4506,6 +4611,8 @@ var pxt;
             }
             if (theme.boardName)
                 params["boardname"] = html2Quote(theme.boardName);
+            if (theme.boardNickname)
+                params["boardnickname"] = html2Quote(theme.boardNickname);
             if (theme.driveDisplayName)
                 params["drivename"] = html2Quote(theme.driveDisplayName);
             if (theme.homeUrl)
@@ -5084,6 +5191,93 @@ var pxt;
             test(templ0, inp1, outp1);
         }
     })(docs = pxt.docs || (pxt.docs = {}));
+})(pxt || (pxt = {}));
+var pxt;
+(function (pxt) {
+    var gallery;
+    (function (gallery) {
+        function parseExampleMarkdown(name, md) {
+            if (!md)
+                return undefined;
+            var m = /```(blocks?|typescript)\s+((.|\s)+?)\s*```/i.exec(md);
+            if (!m)
+                return undefined;
+            var pm = /```package\s+((.|\s)+?)\s*```/i.exec(md);
+            var dependencies = undefined;
+            if (pm) {
+                dependencies = {};
+                pm[1].split('\n').map(function (s) { return s.replace(/\s*/g, ''); }).filter(function (s) { return !!s; })
+                    .map(function (l) { return l.split('='); })
+                    .forEach(function (kv) { return dependencies[kv[0]] = kv[1] || "*"; });
+            }
+            var src = m[2];
+            // extract text between first sample and title
+            var comment = md.substring(0, m.index)
+                .replace(/^(#+.*|\s*)$/igm, '')
+                .trim();
+            if (comment) {
+                src = "/**\n" + comment.split('\n').map(function (line) { return '* ' + line; }).join('\n') + "\n*/\n" + src;
+            }
+            return {
+                name: name,
+                filesOverride: {
+                    "main.blocks": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"></xml>",
+                    "main.ts": src
+                },
+                dependencies: dependencies
+            };
+        }
+        gallery.parseExampleMarkdown = parseExampleMarkdown;
+        function parseGalleryMardown(md) {
+            if (!md)
+                return [];
+            // second level titles are categories
+            // ## foo bar
+            // fenced code ```cards are sections of cards
+            var galleries = [];
+            var incard = false;
+            var name = undefined;
+            var cards = "";
+            md.split(/\r?\n/).forEach(function (line) {
+                // new category
+                if (/^##/.test(line)) {
+                    name = line.substr(2).trim();
+                }
+                else if (/^```codecard$/.test(line)) {
+                    incard = true;
+                }
+                else if (/^```$/.test(line)) {
+                    incard = false;
+                    if (name && cards) {
+                        try {
+                            var cardsJSON = JSON.parse(cards);
+                            if (cardsJSON && cardsJSON.length > 0)
+                                galleries.push({ name: name, cards: cardsJSON });
+                        }
+                        catch (e) {
+                            pxt.log('invalid card format in gallery');
+                        }
+                    }
+                    cards = "";
+                    name = undefined;
+                }
+                else if (incard)
+                    cards += line + '\n';
+            });
+            return galleries;
+        }
+        gallery.parseGalleryMardown = parseGalleryMardown;
+        function loadGalleryAsync(name) {
+            return pxt.Cloud.downloadMarkdownAsync(name, pxt.Util.userLanguage(), pxt.Util.localizeLive)
+                .then(function (md) { return parseGalleryMardown(md); });
+        }
+        gallery.loadGalleryAsync = loadGalleryAsync;
+        function loadExampleAsync(name, path) {
+            return pxt.Cloud.downloadMarkdownAsync(path, pxt.Util.userLanguage(), pxt.Util.localizeLive)
+                .then(function (md) { return parseExampleMarkdown(name, md); });
+        }
+        gallery.loadExampleAsync = loadExampleAsync;
+    })(gallery = pxt.gallery || (pxt.gallery = {}));
 })(pxt || (pxt = {}));
 var pxt;
 (function (pxt) {
@@ -6550,7 +6744,7 @@ var pxt;
             }
             Helpers.mkWhile = mkWhile;
             function mkComment(text) {
-                return mkStmt(mkText("// " + text));
+                return mkText("// " + text);
             }
             Helpers.mkComment = mkComment;
             function mkMultiComment(text) {
@@ -6576,7 +6770,7 @@ var pxt;
             }
             Helpers.mkMultiComment = mkMultiComment;
             function mkAssign(x, e) {
-                return mkStmt(mkSimpleCall("=", [x, e]));
+                return mkSimpleCall("=", [x, e]);
             }
             Helpers.mkAssign = mkAssign;
             function mkParenthesizedExpression(expression) {
@@ -6795,7 +6989,7 @@ var pxt;
             }
             this.addedBy = [addedBy];
         }
-        Package.getConfigAsync = function (id, fullVers) {
+        Package.getConfigAsync = function (pkgTargetVersion, id, fullVers) {
             return Promise.resolve().then(function () {
                 if (pxt.github.isGithubId(fullVers)) {
                     var repoInfo_1 = pxt.github.parseRepoId(fullVers);
@@ -6806,7 +7000,9 @@ var pxt;
                 else {
                     // If it's not from GH, assume it's a bundled package
                     // TODO: Add logic for shared packages if we enable that
-                    return JSON.parse(pxt.appTarget.bundledpkgs[Package.upgradePackageReference(id, fullVers)][pxt.CONFIG_NAME]);
+                    var updatedRef = Package.upgradePackageReference(pkgTargetVersion, id, fullVers);
+                    var bundledPkg = pxt.appTarget.bundledpkgs[updatedRef];
+                    return JSON.parse(bundledPkg[pxt.CONFIG_NAME]);
                 }
             });
         };
@@ -6815,19 +7011,19 @@ var pxt;
             return Object.keys(pkgs).map(function (id) { return JSON.parse(pkgs[id][pxt.CONFIG_NAME]); })
                 .filter(function (cfg) { return !!cfg; });
         };
-        Package.upgradePackageReference = function (pkg, val) {
+        Package.upgradePackageReference = function (pkgTargetVersion, pkg, val) {
             if (val != "*")
                 return pkg;
-            var upgrades = pxt.appTarget.compile ? pxt.appTarget.compile.upgrades : undefined;
+            var upgrades = pxt.patching.computePatches(pkgTargetVersion);
             var newPackage = pkg;
             if (upgrades) {
                 upgrades.filter(function (rule) { return rule.type == "package"; })
                     .forEach(function (rule) {
-                    for (var match in rule.map) {
+                    Object.keys(rule.map).forEach(function (match) {
                         if (newPackage == match) {
                             newPackage = rule.map[match];
                         }
-                    }
+                    });
                 });
             }
             return newPackage;
@@ -6847,6 +7043,13 @@ var pxt;
             if (p)
                 return this.version().slice(p.length + 1);
             return this.version();
+        };
+        Package.prototype.targetVersion = function () {
+            return (this.parent && this.parent != this)
+                ? this.parent.targetVersion()
+                : this.config.targetVersions
+                    ? this.config.targetVersions.target
+                    : undefined;
         };
         Package.prototype.commonDownloadAsync = function () {
             var _this = this;
@@ -6970,7 +7173,7 @@ var pxt;
             // Build the RegExp that will determine whether the dependency is in use. Try to use upgrade rules,
             // otherwise fallback to the package's name
             var regex = null;
-            var upgrades = pxt.appTarget.compile ? pxt.appTarget.compile.upgrades : undefined;
+            var upgrades = pxt.patching.computePatches(this.targetVersion());
             if (upgrades) {
                 upgrades.filter(function (rule) { return rule.type == "missingPackage"; }).forEach(function (rule) {
                     Object.keys(rule.map).forEach(function (match) {
@@ -6986,12 +7189,11 @@ var pxt;
             return regex.test(ts);
         };
         Package.prototype.getMissingPackages = function (config, ts) {
-            var upgrades = pxt.appTarget.compile ? pxt.appTarget.compile.upgrades : undefined;
+            var upgrades = pxt.patching.computePatches(this.targetVersion(), "missingPackage");
             var missing = {};
             if (ts && upgrades)
-                upgrades.filter(function (rule) { return rule.type == "missingPackage"; })
-                    .forEach(function (rule) {
-                    var _loop_5 = function (match) {
+                upgrades.forEach(function (rule) {
+                    Object.keys(rule.map).forEach(function (match) {
                         var regex = new RegExp(match, 'g');
                         var pkg = rule.map[match];
                         ts.replace(regex, function (m) {
@@ -7000,10 +7202,7 @@ var pxt;
                             }
                             return "";
                         });
-                    };
-                    for (var match in rule.map) {
-                        _loop_5(match);
-                    }
+                    });
                 });
             return missing;
         };
@@ -7019,7 +7218,7 @@ var pxt;
                 .then(function () {
                 // Get the package config if it's not already provided
                 if (typeof pkgOrId === "string") {
-                    return Package.getConfigAsync(pkgOrId, version);
+                    return Package.getConfigAsync(_this.targetVersion(), pkgOrId, version);
                 }
                 else {
                     return Promise.resolve(pkgOrId);
@@ -7110,11 +7309,10 @@ var pxt;
             });
         };
         Package.prototype.upgradeAPI = function (fileContents) {
-            var upgrades = pxt.appTarget.compile ? pxt.appTarget.compile.upgrades : undefined;
+            var upgrades = pxt.patching.computePatches(this.targetVersion(), "api");
             var updatedContents = fileContents;
             if (upgrades) {
-                upgrades.filter(function (rule) { return rule.type == "api"; })
-                    .forEach(function (rule) {
+                upgrades.forEach(function (rule) {
                     for (var match in rule.map) {
                         var regex = new RegExp(match, 'g');
                         updatedContents = updatedContents.replace(regex, rule.map[match]);
@@ -7128,7 +7326,7 @@ var pxt;
             this.config = cfg;
             var currentConfig = JSON.stringify(this.config);
             for (var dep in this.config.dependencies) {
-                var value = Package.upgradePackageReference(dep, this.config.dependencies[dep]);
+                var value = Package.upgradePackageReference(this.targetVersion(), dep, this.config.dependencies[dep]);
                 if (value != dep) {
                     delete this.config.dependencies[dep];
                     if (value) {
@@ -7151,8 +7349,10 @@ var pxt;
             // no core package? add the first one
             if (corePackages.length == 0) {
                 var allCorePkgs = pxt.Package.corePackages();
+                /* tslint:disable:no-unused-expression TODO(tslint): */
                 if (allCorePkgs.length)
                     this.config.dependencies[allCorePkgs[0].name];
+                /* tslint:enable:no-unused-expression */
             }
             else if (corePackages.length > 1) {
                 // keep last package
@@ -7284,7 +7484,7 @@ var pxt;
         };
         Package.prototype.addSnapshot = function (files, exts) {
             if (exts === void 0) { exts = [""]; }
-            var _loop_6 = function (fn) {
+            var _loop_5 = function (fn) {
                 if (exts.some(function (e) { return pxt.U.endsWith(fn, e); })) {
                     files[this_1.id + "/" + fn] = this_1.readFile(fn);
                 }
@@ -7292,7 +7492,7 @@ var pxt;
             var this_1 = this;
             for (var _i = 0, _a = this.getFiles(); _i < _a.length; _i++) {
                 var fn = _a[_i];
-                _loop_6(fn);
+                _loop_5(fn);
             }
             files[this.id + "/" + pxt.CONFIG_NAME] = this.readFile(pxt.CONFIG_NAME);
         };
@@ -7387,9 +7587,10 @@ var pxt;
                 return dep.packageLocalizationStringsAsync(lang)
                     .then(function (depLoc) {
                     if (depLoc)
-                        for (var k in depLoc)
+                        Object.keys(depLoc).forEach(function (k) {
                             if (!loc[k])
                                 loc[k] = depLoc[k];
+                        });
                 });
             }))
                 .then(function () { return loc; });
@@ -7484,16 +7685,18 @@ var pxt;
                     var programText_1 = JSON.stringify(files);
                     return pxt.lzmaCompressAsync(headerString_1 + programText_1)
                         .then(function (buf) {
-                        opts.embedMeta = JSON.stringify({
-                            compression: "LZMA",
-                            headerSize: headerString_1.length,
-                            textSize: programText_1.length,
-                            name: _this.config.name,
-                            eURL: pxt.appTarget.appTheme.embedUrl,
-                            eVER: pxt.appTarget.versions ? pxt.appTarget.versions.target : "",
-                            pxtTarget: pxt.appTarget.id,
-                        });
-                        opts.embedBlob = ts.pxtc.encodeBase64(pxt.U.uint8ArrayToString(buf));
+                        if (buf) {
+                            opts.embedMeta = JSON.stringify({
+                                compression: "LZMA",
+                                headerSize: headerString_1.length,
+                                textSize: programText_1.length,
+                                name: _this.config.name,
+                                eURL: pxt.appTarget.appTheme.embedUrl,
+                                eVER: pxt.appTarget.versions ? pxt.appTarget.versions.target : "",
+                                pxtTarget: pxt.appTarget.id,
+                            });
+                            opts.embedBlob = ts.pxtc.encodeBase64(pxt.U.uint8ArrayToString(buf));
+                        }
                     });
                 }
                 else {
@@ -7545,7 +7748,7 @@ var pxt;
                 return pxt.U.sortObjectFields(files);
             });
         };
-        MainPackage.prototype.compressToFileAsync = function (editor) {
+        MainPackage.prototype.saveToJsonAsync = function (editor) {
             var _this = this;
             return this.filesToBePublishedAsync(true)
                 .then(function (files) {
@@ -7558,8 +7761,12 @@ var pxt;
                     },
                     source: JSON.stringify(files, null, 2)
                 };
-                return pxt.lzmaCompressAsync(JSON.stringify(project, null, 2));
+                return project;
             });
+        };
+        MainPackage.prototype.compressToFileAsync = function (editor) {
+            return this.saveToJsonAsync(editor)
+                .then(function (project) { return pxt.lzmaCompressAsync(JSON.stringify(project, null, 2)); });
         };
         MainPackage.prototype.computePartDefinitions = function (parts) {
             if (!parts || !parts.length)
@@ -7569,10 +7776,10 @@ var pxt;
                 var pjson = d.readFile("pxtparts.json");
                 if (pjson) {
                     try {
-                        var p = JSON.parse(pjson);
-                        for (var k in p) {
+                        var p_1 = JSON.parse(pjson);
+                        Object.keys(p_1).forEach(function (k) {
                             if (parts.indexOf(k) >= 0) {
-                                var part = res[k] = p[k];
+                                var part = res[k] = p_1[k];
                                 if (typeof part.visual.image === "string" && /\.svg$/i.test(part.visual.image)) {
                                     var f = d.readFile(part.visual.image);
                                     if (!f)
@@ -7580,7 +7787,7 @@ var pxt;
                                     part.visual.image = "data:image/svg+xml," + encodeURIComponent(f);
                                 }
                             }
-                        }
+                        });
                     }
                     catch (e) {
                         pxt.reportError("parts", "invalid pxtparts.json file");
@@ -7592,6 +7799,26 @@ var pxt;
         return MainPackage;
     }(Package));
     pxt.MainPackage = MainPackage;
+})(pxt || (pxt = {}));
+var pxt;
+(function (pxt) {
+    var patching;
+    (function (patching) {
+        function computePatches(version, kind) {
+            var patches = pxt.appTarget.compile ? pxt.appTarget.compile.patches : undefined;
+            if (!patches)
+                return undefined;
+            var v = pxt.semver.tryParse(version || "0.0.0") || pxt.semver.tryParse("0.0.0");
+            var r = [];
+            Object.keys(patches)
+                .filter(function (rng) { return pxt.semver.inRange(rng, v); })
+                .forEach(function (rng) { return r = r.concat(patches[rng]); });
+            if (kind)
+                r = r.filter(function (p) { return p.type == kind; });
+            return r.length ? r : undefined;
+        }
+        patching.computePatches = computePatches;
+    })(patching = pxt.patching || (pxt.patching = {}));
 })(pxt || (pxt = {}));
 // see http://semver.org/
 var pxt;
@@ -7690,6 +7917,21 @@ var pxt;
                 return cmp(aa, bb);
         }
         semver.strcmp = strcmp;
+        function inRange(rng, v) {
+            var rngs = rng.split(' - ');
+            if (rngs.length != 2)
+                return false;
+            var minInclusive = tryParse(rngs[0]);
+            var maxExclusive = tryParse(rngs[1]);
+            if (!minInclusive || !maxExclusive)
+                return false;
+            if (!v)
+                return true;
+            var lwr = cmp(minInclusive, v);
+            var hr = cmp(v, maxExclusive);
+            return lwr <= 0 && hr < 0;
+        }
+        semver.inRange = inRange;
         function test() {
             console.log("Test semver");
             var d = [
@@ -7719,6 +7961,12 @@ var pxt;
                         pxt.U.assert(x == 0);
                 }
             }
+            var v = tryParse("1.2.3");
+            pxt.U.assert(inRange("0.1.2 - 2.2.3", v));
+            pxt.U.assert(inRange("1.2.3 - 2.2.3", v));
+            pxt.U.assert(!inRange("0.0.0 - 1.2.3", v));
+            pxt.U.assert(!inRange("1.2.4 - 4.2.3", v));
+            pxt.U.assert(!inRange("0.0.0 - 0.0.1", v));
         }
         semver.test = test;
     })(semver = pxt.semver || (pxt.semver = {}));
@@ -7767,7 +8015,7 @@ var ts;
             if (!resp.usedSymbols || !pxt.appTarget.simulator || !pxt.appTarget.simulator.parts)
                 return [];
             var parts = [];
-            for (var symbol in resp.usedSymbols) {
+            Object.keys(resp.usedSymbols).forEach(function (symbol) {
                 var info = resp.usedSymbols[symbol];
                 if (info && info.attributes.parts) {
                     var partsRaw = info.attributes.parts;
@@ -7780,7 +8028,7 @@ var ts;
                         });
                     }
                 }
-            }
+            });
             if (ignoreBuiltin) {
                 var builtinParts_1 = pxt.appTarget.simulator.boardDefinition.onboardComponents;
                 if (builtinParts_1)
@@ -7807,23 +8055,45 @@ var ts;
             var combinedSet = {};
             var combinedGet = {};
             var combinedChange = {};
-            function addCombined(tp, s) {
-                var isGet = tp == "get";
-                var m = isGet ? combinedGet :
-                    tp == "set" ? combinedSet : combinedChange;
-                var ex = pxtc.U.lookup(m, s.namespace);
+            function addCombined(rtp, s) {
+                var isGet = rtp == "get";
+                var isSet = rtp == "set";
+                var isNumberType = s.retType == "number";
+                var m = isGet ? combinedGet : (isSet ? combinedSet : combinedChange);
+                var mkey = s.namespace + "." + s.retType;
+                var ex = pxtc.U.lookup(m, mkey);
                 if (!ex) {
-                    var paramName = s.namespace.toLowerCase();
-                    ex = m[s.namespace] = {
+                    var tp = "@" + rtp + "@";
+                    var paramNameShadow = void 0, paramValueShadow = void 0;
+                    if (s.attributes.blockCombineShadow) {
+                        // allowable %blockCombineShadow strings:-
+                        //   '{name shadow},' or '{value shadow}' or ',{value shadow}' or '{name shadow},{value shadow}'
+                        var attribute = s.attributes.blockCombineShadow;
+                        var match = attribute.match(/^([^,.]*),?([^,.]*)$/);
+                        if (match && match.length == 3) {
+                            paramNameShadow = match[1].trim();
+                            paramValueShadow = match[2].trim();
+                            if (paramValueShadow.length == 0 && !pxtc.Util.endsWith(attribute, ",")) {
+                                paramValueShadow = paramNameShadow;
+                                paramNameShadow = "";
+                            }
+                        }
+                    }
+                    var paramName = s.namespace.toLowerCase() + "=" + (paramNameShadow || "");
+                    var paramValue = "value=" + (paramValueShadow || "");
+                    ex = m[mkey] = {
                         attributes: {
+                            blockId: (isNumberType ? s.namespace : mkey) + "_blockCombine_" + rtp,
                             callingConvention: pxtc.ir.CallingConvention.Plain,
+                            group: s.attributes.group,
                             paramDefl: {},
                             jsDoc: isGet
                                 ? pxtc.U.lf("Read value of a property on an object")
                                 : pxtc.U.lf("Update value of property on an object")
                         },
-                        name: "@" + tp + "@",
+                        name: tp,
                         namespace: s.namespace,
+                        qName: mkey + "." + tp,
                         pkg: s.pkg,
                         kind: SymbolKind.Property,
                         parameters: [
@@ -7837,22 +8107,19 @@ var ts;
                             },
                             {
                                 name: "value",
-                                description: tp == "set" ?
+                                description: isSet ?
                                     pxtc.U.lf("the new value of the property") :
                                     pxtc.U.lf("the amount by which to change the property"),
-                                type: "number"
+                                type: s.retType,
                             }
                         ].slice(0, isGet ? 1 : 2),
-                        retType: isGet ? "number" : "void",
-                        combinedProperties: [],
+                        retType: isGet ? s.retType : "void",
+                        combinedProperties: []
                     };
-                    ex.attributes.block = isGet ? "%" + paramName + " %property" :
-                        tp == "set" ?
-                            "set %" + paramName + " %property to %value" :
-                            "change %" + paramName + " %property by %value";
-                    ex.attributes.blockId = ex.namespace + "_blockCombine_" + tp;
-                    ex.attributes.group = s.attributes.group; // first group wins
-                    ex.qName = ex.namespace + "." + ex.name;
+                    ex.attributes.block =
+                        isGet ? "%" + paramName + " %property" :
+                            isSet ? "set %" + paramName + " %property to %" + paramValue :
+                                "change %" + paramName + " %property by %" + paramValue;
                     updateBlockDef(ex.attributes);
                     blocks.push(ex);
                 }
@@ -7861,12 +8128,15 @@ var ts;
             for (var _i = 0, _a = pxtc.Util.values(info.byQName); _i < _a.length; _i++) {
                 var s = _a[_i];
                 if (s.attributes.blockCombine) {
-                    if (!s.isReadOnly) {
-                        addCombined("set", s);
-                        addCombined("change", s);
-                    }
-                    if (!/@set/.test(s.name))
+                    if (!/@set/.test(s.name)) {
                         addCombined("get", s);
+                    }
+                    if (!s.isReadOnly) {
+                        if (s.retType == 'number') {
+                            addCombined("change", s);
+                        }
+                        addCombined("set", s);
+                    }
                 }
                 else if (!!s.attributes.block
                     && !s.attributes.fixedInstance
@@ -7985,7 +8255,8 @@ var ts;
             "optionalVariableArgs",
             "blockHidden",
             "constantShim",
-            "blockCombine"
+            "blockCombine",
+            "decompileIndirectFixedInstances"
         ];
         function parseCommentString(cmt) {
             var res = {
@@ -8145,7 +8416,7 @@ var ts;
             var tokens = [];
             var currentWord;
             var strIndex = 0;
-            var _loop_7 = function () {
+            var _loop_6 = function () {
                 var char = def[strIndex];
                 var newToken = void 0;
                 switch (char) {
@@ -8207,7 +8478,7 @@ var ts;
                 }
             };
             for (; strIndex < def.length; strIndex++) {
-                var state_2 = _loop_7();
+                var state_2 = _loop_6();
                 if (typeof state_2 === "object")
                     return state_2.value;
             }
@@ -8269,6 +8540,7 @@ var ts;
                     parts.push({ kind: "label", text: currentLabel, style: styles });
                     currentLabel = "";
                 }
+                /* tslint:disable:possible-timing-attack  (not a security critical codepath) */
                 if (token == 64 /* Parameter */) {
                     var param = { kind: "param", name: tokens[i].content, shadowBlockId: tokens[i].type };
                     parts.push(param);
@@ -8283,6 +8555,7 @@ var ts;
                 else if (token == 32 /* Pipe */) {
                     parts.push({ kind: "break" });
                 }
+                /* tslint:enable:possible-timing-attack */
             }
             if (open)
                 return undefined; // error: style marks should terminate
@@ -8657,6 +8930,766 @@ var pxt;
 })(pxt || (pxt = {}));
 var pxt;
 (function (pxt) {
+    var svgUtil;
+    (function (svgUtil) {
+        var PatternUnits;
+        (function (PatternUnits) {
+            PatternUnits[PatternUnits["userSpaceOnUse"] = 0] = "userSpaceOnUse";
+            PatternUnits[PatternUnits["objectBoundingBox"] = 1] = "objectBoundingBox";
+        })(PatternUnits = svgUtil.PatternUnits || (svgUtil.PatternUnits = {}));
+        var LengthUnit;
+        (function (LengthUnit) {
+            LengthUnit[LengthUnit["em"] = 0] = "em";
+            LengthUnit[LengthUnit["ex"] = 1] = "ex";
+            LengthUnit[LengthUnit["px"] = 2] = "px";
+            LengthUnit[LengthUnit["in"] = 3] = "in";
+            LengthUnit[LengthUnit["cm"] = 4] = "cm";
+            LengthUnit[LengthUnit["mm"] = 5] = "mm";
+            LengthUnit[LengthUnit["pt"] = 6] = "pt";
+            LengthUnit[LengthUnit["pc"] = 7] = "pc";
+            LengthUnit[LengthUnit["percent"] = 8] = "percent";
+        })(LengthUnit = svgUtil.LengthUnit || (svgUtil.LengthUnit = {}));
+        var BaseElement = /** @class */ (function () {
+            function BaseElement(type) {
+                this.el = elt(type);
+            }
+            BaseElement.prototype.attr = function (attributes) {
+                var _this = this;
+                Object.keys(attributes).forEach(function (at) {
+                    _this.setAttribute(at, attributes[at]);
+                });
+                return this;
+            };
+            BaseElement.prototype.setAttribute = function (name, value) {
+                this.el.setAttribute(name, value.toString());
+                return this;
+            };
+            BaseElement.prototype.id = function (id) {
+                return this.setAttribute("id", id);
+            };
+            BaseElement.prototype.setClass = function () {
+                var classes = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    classes[_i] = arguments[_i];
+                }
+                return this.setAttribute("class", classes.join(" "));
+            };
+            BaseElement.prototype.appendClass = function (className) {
+                addClass(this.el, className);
+                return this;
+            };
+            BaseElement.prototype.removeClass = function (className) {
+                removeClass(this.el, className);
+            };
+            BaseElement.prototype.title = function (text) {
+                if (!this.titleElement) {
+                    this.titleElement = elt("title");
+                    // Title has to be the first child in the DOM
+                    if (this.el.firstChild) {
+                        this.el.insertBefore(this.titleElement, this.el.firstChild);
+                    }
+                    else {
+                        this.el.appendChild(this.titleElement);
+                    }
+                }
+                this.titleElement.textContent = text;
+            };
+            BaseElement.prototype.setVisible = function (visible) {
+                return this.setAttribute("visibility", visible ? "visible" : "hidden");
+            };
+            return BaseElement;
+        }());
+        svgUtil.BaseElement = BaseElement;
+        var DrawContext = /** @class */ (function (_super) {
+            __extends(DrawContext, _super);
+            function DrawContext() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            DrawContext.prototype.draw = function (type) {
+                var el = drawable(type /*FIXME?*/);
+                this.el.appendChild(el.el);
+                return el;
+            };
+            DrawContext.prototype.element = function (type, cb) {
+                cb(this.draw(type /*FIXME?*/));
+                return this;
+            };
+            DrawContext.prototype.group = function () {
+                var g = new Group();
+                this.el.appendChild(g.el);
+                return g;
+            };
+            DrawContext.prototype.appendChild = function (child) {
+                this.el.appendChild(child.el);
+            };
+            return DrawContext;
+        }(BaseElement));
+        svgUtil.DrawContext = DrawContext;
+        var SVG = /** @class */ (function (_super) {
+            __extends(SVG, _super);
+            function SVG(parent) {
+                var _this = _super.call(this, "svg") || this;
+                if (parent) {
+                    parent.appendChild(_this.el);
+                }
+                return _this;
+            }
+            SVG.prototype.define = function (cb) {
+                if (!this.defs) {
+                    this.defs = new DefsElement(this.el);
+                }
+                cb(this.defs);
+                return this;
+            };
+            return SVG;
+        }(DrawContext));
+        svgUtil.SVG = SVG;
+        var Group = /** @class */ (function (_super) {
+            __extends(Group, _super);
+            function Group(parent) {
+                var _this = _super.call(this, "g") || this;
+                if (parent) {
+                    parent.appendChild(_this.el);
+                }
+                return _this;
+            }
+            Group.prototype.translate = function (x, y) {
+                this.left = x;
+                this.top = y;
+                return this.updateTransform();
+            };
+            Group.prototype.scale = function (factor) {
+                this.scaleFactor = factor;
+                return this.updateTransform();
+            };
+            Group.prototype.updateTransform = function () {
+                var transform = "";
+                if (this.left != undefined) {
+                    transform += "translate(" + this.left + " " + this.top + ")";
+                }
+                if (this.scaleFactor != undefined) {
+                    transform += " scale(" + this.scaleFactor + ")";
+                }
+                this.setAttribute("transform", transform);
+                return this;
+            };
+            return Group;
+        }(DrawContext));
+        svgUtil.Group = Group;
+        var Pattern = /** @class */ (function (_super) {
+            __extends(Pattern, _super);
+            function Pattern() {
+                return _super.call(this, "pattern") || this;
+            }
+            Pattern.prototype.units = function (kind) {
+                return this.setAttribute("patternUnits", kind === PatternUnits.objectBoundingBox ? "objectBoundingBox" : "userSpaceOnUse");
+            };
+            Pattern.prototype.contentUnits = function (kind) {
+                return this.setAttribute("patternContentUnits", kind === PatternUnits.objectBoundingBox ? "objectBoundingBox" : "userSpaceOnUse");
+            };
+            Pattern.prototype.size = function (width, height) {
+                this.setAttribute("width", width);
+                this.setAttribute("height", height);
+                return this;
+            };
+            return Pattern;
+        }(DrawContext));
+        svgUtil.Pattern = Pattern;
+        var DefsElement = /** @class */ (function (_super) {
+            __extends(DefsElement, _super);
+            function DefsElement(parent) {
+                var _this = _super.call(this, "defs") || this;
+                parent.appendChild(_this.el);
+                return _this;
+            }
+            DefsElement.prototype.create = function (type, id) {
+                var el;
+                switch (type) {
+                    case "path":
+                        el = new Path();
+                        break;
+                    case "pattern":
+                        el = new Pattern();
+                        break;
+                    case "radialGradient":
+                        el = new RadialGradient();
+                        break;
+                    case "linearGradient":
+                        el = new LinearGradient();
+                        break;
+                    default: el = new BaseElement(type);
+                }
+                el.id(id);
+                this.el.appendChild(el.el);
+                return el;
+            };
+            return DefsElement;
+        }(BaseElement));
+        svgUtil.DefsElement = DefsElement;
+        var Drawable = /** @class */ (function (_super) {
+            __extends(Drawable, _super);
+            function Drawable() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            Drawable.prototype.at = function (x, y) {
+                this.setAttribute("x", x);
+                this.setAttribute("y", y);
+                return this;
+            };
+            Drawable.prototype.moveTo = function (x, y) {
+                return this.at(x, y);
+            };
+            Drawable.prototype.fill = function (color, opacity) {
+                this.setAttribute("fill", color);
+                if (opacity != undefined) {
+                    this.opacity(opacity);
+                }
+                return this;
+            };
+            Drawable.prototype.opacity = function (opacity) {
+                return this.setAttribute("fill-opacity", opacity);
+            };
+            Drawable.prototype.stroke = function (color, width) {
+                this.setAttribute("stroke", color);
+                if (width != undefined) {
+                    this.strokeWidth(width);
+                }
+                return this;
+            };
+            Drawable.prototype.strokeWidth = function (width) {
+                return this.setAttribute("stroke-width", width);
+            };
+            Drawable.prototype.strokeOpacity = function (opacity) {
+                return this.setAttribute("stroke-opacity", opacity);
+            };
+            Drawable.prototype.onDown = function (handler) {
+                svgUtil.events.down(this.el, handler);
+                return this;
+            };
+            Drawable.prototype.onUp = function (handler) {
+                svgUtil.events.up(this.el, handler);
+                return this;
+            };
+            Drawable.prototype.onMove = function (handler) {
+                svgUtil.events.move(this.el, handler);
+                return this;
+            };
+            Drawable.prototype.onEnter = function (handler) {
+                svgUtil.events.enter(this.el, handler);
+                return this;
+            };
+            Drawable.prototype.onLeave = function (handler) {
+                svgUtil.events.leave(this.el, handler);
+                return this;
+            };
+            Drawable.prototype.onClick = function (handler) {
+                svgUtil.events.click(this.el, handler);
+                return this;
+            };
+            return Drawable;
+        }(DrawContext));
+        svgUtil.Drawable = Drawable;
+        var Text = /** @class */ (function (_super) {
+            __extends(Text, _super);
+            function Text(text) {
+                var _this = _super.call(this, "text") || this;
+                if (text != undefined) {
+                    _this.text(text);
+                }
+                return _this;
+            }
+            Text.prototype.text = function (text) {
+                this.el.textContent = text;
+                return this;
+            };
+            Text.prototype.fontFamily = function (family) {
+                return this.setAttribute("font-family", family);
+            };
+            Text.prototype.fontSize = function (size, units) {
+                return this.setAttribute("font-size", lengthWithUnits(size, units));
+            };
+            Text.prototype.offset = function (dx, dy, units) {
+                if (dx !== 0) {
+                    this.setAttribute("dx", lengthWithUnits(dx, units));
+                }
+                if (dy !== 0) {
+                    this.setAttribute("dy", lengthWithUnits(dy, units));
+                }
+                return this;
+            };
+            Text.prototype.anchor = function (type) {
+                return this.setAttribute("text-anchor", type);
+            };
+            return Text;
+        }(Drawable));
+        svgUtil.Text = Text;
+        var Rect = /** @class */ (function (_super) {
+            __extends(Rect, _super);
+            function Rect() {
+                return _super.call(this, "rect") || this;
+            }
+            ;
+            Rect.prototype.width = function (width, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                return this.setAttribute("width", lengthWithUnits(width, unit));
+            };
+            Rect.prototype.height = function (height, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                return this.setAttribute("height", lengthWithUnits(height, unit));
+            };
+            Rect.prototype.corner = function (radius) {
+                return this.corners(radius, radius);
+            };
+            Rect.prototype.corners = function (rx, ry) {
+                this.setAttribute("rx", rx);
+                this.setAttribute("ry", ry);
+                return this;
+            };
+            Rect.prototype.size = function (width, height, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                this.width(width, unit);
+                this.height(height, unit);
+                return this;
+            };
+            return Rect;
+        }(Drawable));
+        svgUtil.Rect = Rect;
+        var Circle = /** @class */ (function (_super) {
+            __extends(Circle, _super);
+            function Circle() {
+                return _super.call(this, "circle") || this;
+            }
+            Circle.prototype.at = function (cx, cy) {
+                this.setAttribute("cx", cx);
+                this.setAttribute("cy", cy);
+                return this;
+            };
+            Circle.prototype.radius = function (r) {
+                return this.setAttribute("r", r);
+            };
+            return Circle;
+        }(Drawable));
+        svgUtil.Circle = Circle;
+        var Ellipse = /** @class */ (function (_super) {
+            __extends(Ellipse, _super);
+            function Ellipse() {
+                return _super.call(this, "ellipse") || this;
+            }
+            Ellipse.prototype.at = function (cx, cy) {
+                this.setAttribute("cx", cx);
+                this.setAttribute("cy", cy);
+                return this;
+            };
+            Ellipse.prototype.radius = function (rx, ry) {
+                this.setAttribute("rx", rx);
+                this.setAttribute("ry", ry);
+                return this;
+            };
+            return Ellipse;
+        }(Drawable));
+        var Line = /** @class */ (function (_super) {
+            __extends(Line, _super);
+            function Line() {
+                return _super.call(this, "line") || this;
+            }
+            Line.prototype.at = function (x1, y1, x2, y2) {
+                this.from(x1, y1);
+                if (x2 != undefined && y2 != undefined) {
+                    this.to(x2, y2);
+                }
+                return this;
+            };
+            Line.prototype.from = function (x1, y1) {
+                this.setAttribute("x1", x1);
+                this.setAttribute("y1", y1);
+                return this;
+            };
+            Line.prototype.to = function (x2, y2) {
+                this.setAttribute("x2", x2);
+                this.setAttribute("y2", y2);
+                return this;
+            };
+            return Line;
+        }(Drawable));
+        svgUtil.Line = Line;
+        var PolyElement = /** @class */ (function (_super) {
+            __extends(PolyElement, _super);
+            function PolyElement() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            PolyElement.prototype.points = function (points) {
+                return this.setAttribute("points", points);
+            };
+            PolyElement.prototype.with = function (points) {
+                return this.points(points.map(function (_a) {
+                    var x = _a.x, y = _a.y;
+                    return x + " " + y;
+                }).join(","));
+            };
+            return PolyElement;
+        }(Drawable));
+        svgUtil.PolyElement = PolyElement;
+        var Polyline = /** @class */ (function (_super) {
+            __extends(Polyline, _super);
+            function Polyline() {
+                return _super.call(this, "polyline") || this;
+            }
+            return Polyline;
+        }(PolyElement));
+        svgUtil.Polyline = Polyline;
+        var Polygon = /** @class */ (function (_super) {
+            __extends(Polygon, _super);
+            function Polygon() {
+                return _super.call(this, "polygon") || this;
+            }
+            return Polygon;
+        }(PolyElement));
+        svgUtil.Polygon = Polygon;
+        var Path = /** @class */ (function (_super) {
+            __extends(Path, _super);
+            function Path() {
+                var _this = _super.call(this, "path") || this;
+                _this.d = new PathContext();
+                return _this;
+            }
+            Path.prototype.update = function () {
+                return this.setAttribute("d", this.d.toAttribute());
+            };
+            Path.prototype.path = function (cb) {
+                cb(this.d);
+                return this.update();
+            };
+            return Path;
+        }(Drawable));
+        svgUtil.Path = Path;
+        var Image = /** @class */ (function (_super) {
+            __extends(Image, _super);
+            function Image() {
+                return _super.call(this, "image") || this;
+            }
+            Image.prototype.src = function (url) {
+                return this.setAttribute("href", url);
+            };
+            Image.prototype.width = function (width, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                return this.setAttribute("width", lengthWithUnits(width, unit));
+            };
+            Image.prototype.height = function (height, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                return this.setAttribute("height", lengthWithUnits(height, unit));
+            };
+            Image.prototype.size = function (width, height, unit) {
+                if (unit === void 0) { unit = LengthUnit.px; }
+                this.width(width, unit);
+                this.height(height, unit);
+                return this;
+            };
+            return Image;
+        }(Drawable));
+        svgUtil.Image = Image;
+        var Gradient = /** @class */ (function (_super) {
+            __extends(Gradient, _super);
+            function Gradient() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            Gradient.prototype.units = function (kind) {
+                return this.setAttribute("gradientUnits", kind === PatternUnits.objectBoundingBox ? "objectBoundingBox" : "userSpaceOnUse");
+            };
+            Gradient.prototype.stop = function (offset, color, opacity) {
+                var s = elt("stop");
+                s.setAttribute("offset", offset + "%");
+                if (color != undefined) {
+                    s.setAttribute("stop-color", color);
+                }
+                if (opacity != undefined) {
+                    s.setAttribute("stop-opacity", opacity);
+                }
+                this.el.appendChild(s);
+                return this;
+            };
+            return Gradient;
+        }(BaseElement));
+        svgUtil.Gradient = Gradient;
+        var LinearGradient = /** @class */ (function (_super) {
+            __extends(LinearGradient, _super);
+            function LinearGradient() {
+                return _super.call(this, "linearGradient") || this;
+            }
+            LinearGradient.prototype.start = function (x1, y1) {
+                this.setAttribute("x1", x1);
+                this.setAttribute("y1", y1);
+                return this;
+            };
+            LinearGradient.prototype.end = function (x2, y2) {
+                this.setAttribute("x2", x2);
+                this.setAttribute("y2", y2);
+                return this;
+            };
+            return LinearGradient;
+        }(Gradient));
+        svgUtil.LinearGradient = LinearGradient;
+        var RadialGradient = /** @class */ (function (_super) {
+            __extends(RadialGradient, _super);
+            function RadialGradient() {
+                return _super.call(this, "radialGradient") || this;
+            }
+            RadialGradient.prototype.center = function (cx, cy) {
+                this.setAttribute("cx", cx);
+                this.setAttribute("cy", cy);
+                return this;
+            };
+            RadialGradient.prototype.focus = function (fx, fy, fr) {
+                this.setAttribute("fx", fx);
+                this.setAttribute("fy", fy);
+                this.setAttribute("fr", fr);
+                return this;
+            };
+            RadialGradient.prototype.radius = function (r) {
+                return this.setAttribute("r", r);
+            };
+            return RadialGradient;
+        }(Gradient));
+        svgUtil.RadialGradient = RadialGradient;
+        function elt(type) {
+            var el = document.createElementNS("http://www.w3.org/2000/svg", type);
+            return el;
+        }
+        function drawable(type) {
+            switch (type) {
+                case "text": return new Text();
+                case "circle": return new Circle();
+                case "rect": return new Rect();
+                case "line": return new Line();
+                case "polygon": return new Polygon();
+                case "polyline": return new Polyline();
+                case "path": return new Path();
+                default: return new Drawable(type);
+            }
+        }
+        var PathContext = /** @class */ (function () {
+            function PathContext() {
+                this.ops = [];
+            }
+            PathContext.prototype.clear = function () {
+                this.ops = [];
+            };
+            PathContext.prototype.moveTo = function (x, y) {
+                return this.op("M", x, y);
+            };
+            PathContext.prototype.moveBy = function (dx, dy) {
+                return this.op("m", dx, dy);
+            };
+            PathContext.prototype.lineTo = function (x, y) {
+                return this.op("L", x, y);
+            };
+            PathContext.prototype.lineBy = function (dx, dy) {
+                return this.op("l", dx, dy);
+            };
+            PathContext.prototype.cCurveTo = function (c1x, c1y, c2x, c2y, x, y) {
+                return this.op("C", c1x, c1y, c2x, c2y, x, y);
+            };
+            PathContext.prototype.cCurveBy = function (dc1x, dc1y, dc2x, dc2y, dx, dy) {
+                return this.op("c", dc1x, dc1y, dc2x, dc2y, dx, dy);
+            };
+            PathContext.prototype.qCurveTo = function (cx, cy, x, y) {
+                return this.op("Q", cx, cy, x, y);
+            };
+            PathContext.prototype.qCurveBy = function (dcx, dcy, dx, dy) {
+                return this.op("q", dcx, dcy, dx, dy);
+            };
+            PathContext.prototype.sCurveTo = function (cx, cy, x, y) {
+                return this.op("S", cx, cy, x, y);
+            };
+            PathContext.prototype.sCurveBy = function (dcx, dcy, dx, dy) {
+                return this.op("s", dcx, dcy, dx, dy);
+            };
+            PathContext.prototype.tCurveTo = function (x, y) {
+                return this.op("T", x, y);
+            };
+            PathContext.prototype.tCurveBy = function (dx, dy) {
+                return this.op("t", dx, dy);
+            };
+            PathContext.prototype.arcTo = function (rx, ry, xRotate, large, sweepClockwise, x, y) {
+                return this.op("A", rx, ry, xRotate, large ? 1 : 0, sweepClockwise ? 1 : 0, x, y);
+            };
+            PathContext.prototype.close = function () {
+                return this.op("z");
+            };
+            PathContext.prototype.toAttribute = function () {
+                return this.ops.map(function (op) { return op.op + " " + op.args.join(" "); }).join(" ");
+            };
+            PathContext.prototype.op = function (op) {
+                var args = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    args[_i - 1] = arguments[_i];
+                }
+                this.ops.push({
+                    op: op,
+                    args: args
+                });
+                return this;
+            };
+            return PathContext;
+        }());
+        svgUtil.PathContext = PathContext;
+        function lengthWithUnits(value, unit) {
+            switch (unit) {
+                case LengthUnit.em: return value + "em";
+                case LengthUnit.ex: return value + "ex";
+                case LengthUnit.px: return value + "px";
+                case LengthUnit.in: return value + "in";
+                case LengthUnit.cm: return value + "cm";
+                case LengthUnit.mm: return value + "mm";
+                case LengthUnit.pt: return value + "pt";
+                case LengthUnit.pc: return value + "pc";
+                case LengthUnit.percent: return value + "%";
+                default: return value.toString();
+            }
+        }
+        function addClass(el, cls) {
+            if (el.classList)
+                el.classList.add(cls);
+            else if (el.className.baseVal.indexOf(cls) < 0)
+                el.className.baseVal += ' ' + cls;
+        }
+        function removeClass(el, cls) {
+            if (el.classList)
+                el.classList.remove(cls);
+            else
+                el.className.baseVal = el.className.baseVal.replace(cls, '').replace(/\s{2,}/, ' ');
+        }
+    })(svgUtil = pxt.svgUtil || (pxt.svgUtil = {}));
+})(pxt || (pxt = {}));
+(function (pxt) {
+    var svgUtil;
+    (function (svgUtil) {
+        var events;
+        (function (events) {
+            function isTouchEnabled() {
+                return typeof window !== "undefined" &&
+                    ('ontouchstart' in window // works on most browsers
+                        || (navigator && navigator.maxTouchPoints > 0)); // works on IE10/11 and Surface);
+            }
+            events.isTouchEnabled = isTouchEnabled;
+            function hasPointerEvents() {
+                return typeof window != "undefined" && !!window.PointerEvent;
+            }
+            events.hasPointerEvents = hasPointerEvents;
+            function down(el, handler) {
+                if (hasPointerEvents()) {
+                    el.addEventListener("pointerdown", handler);
+                }
+                else if (isTouchEnabled()) {
+                    el.addEventListener("mousedown", handler);
+                    el.addEventListener("touchstart", handler);
+                }
+                else {
+                    el.addEventListener("mousedown", handler);
+                }
+            }
+            events.down = down;
+            function up(el, handler) {
+                if (hasPointerEvents()) {
+                    el.addEventListener("pointerup", handler);
+                }
+                else if (isTouchEnabled()) {
+                    el.addEventListener("mouseup", handler);
+                }
+                else {
+                    el.addEventListener("mouseup", handler);
+                }
+            }
+            events.up = up;
+            function enter(el, handler) {
+                if (hasPointerEvents()) {
+                    el.addEventListener("pointerover", function (e) {
+                        handler(!!(e.buttons & 1));
+                    });
+                }
+                else if (isTouchEnabled()) {
+                    el.addEventListener("touchstart", function (e) {
+                        handler(true);
+                    });
+                }
+                else {
+                    el.addEventListener("mouseover", function (e) {
+                        handler(!!(e.buttons & 1));
+                    });
+                }
+            }
+            events.enter = enter;
+            function leave(el, handler) {
+                if (hasPointerEvents()) {
+                    el.addEventListener("pointerleave", handler);
+                }
+                else if (isTouchEnabled()) {
+                    el.addEventListener("touchend", handler);
+                }
+                else {
+                    el.addEventListener("mouseleave", handler);
+                }
+            }
+            events.leave = leave;
+            function move(el, handler) {
+                if (hasPointerEvents()) {
+                    el.addEventListener("pointermove", handler);
+                }
+                else if (isTouchEnabled()) {
+                    el.addEventListener("touchmove", handler);
+                }
+                else {
+                    el.addEventListener("mousemove", handler);
+                }
+            }
+            events.move = move;
+            function click(el, handler) {
+                el.addEventListener("click", handler);
+            }
+            events.click = click;
+        })(events = svgUtil.events || (svgUtil.events = {}));
+    })(svgUtil = pxt.svgUtil || (pxt.svgUtil = {}));
+})(pxt || (pxt = {}));
+(function (pxt) {
+    var svgUtil;
+    (function (svgUtil) {
+        var helpers;
+        (function (helpers) {
+            var CenteredText = /** @class */ (function (_super) {
+                __extends(CenteredText, _super);
+                function CenteredText() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                CenteredText.prototype.at = function (cx, cy) {
+                    this.cx = cx;
+                    this.cy = cy;
+                    this.rePosition();
+                    return this;
+                };
+                CenteredText.prototype.text = function (text, fontSizePixels) {
+                    if (fontSizePixels === void 0) { fontSizePixels = 12; }
+                    _super.prototype.text.call(this, text);
+                    this.fontSizePixels = fontSizePixels;
+                    this.setAttribute("font-size", fontSizePixels + "px");
+                    this.rePosition();
+                    return this;
+                };
+                CenteredText.prototype.rePosition = function () {
+                    if (this.cx == undefined || this.cy == undefined || this.fontSizePixels == undefined) {
+                        return;
+                    }
+                    this.setAttribute("x", this.cx);
+                    this.setAttribute("y", this.cy);
+                    this.setAttribute("text-anchor", "middle");
+                    this.setAttribute("alignment-baseline", "middle");
+                };
+                return CenteredText;
+            }(svgUtil.Text));
+            helpers.CenteredText = CenteredText;
+        })(helpers = svgUtil.helpers || (svgUtil.helpers = {}));
+    })(svgUtil = pxt.svgUtil || (pxt.svgUtil = {}));
+})(pxt || (pxt = {}));
+var pxt;
+(function (pxt) {
     var toolbox;
     (function (toolbox) {
         toolbox.blockColors = {
@@ -8668,7 +9701,11 @@ var pxt;
             functions: '#005a9e',
             text: '#996600',
             arrays: '#A94400',
-            advanced: '#3c3c3c'
+            advanced: '#3c3c3c',
+            addpackage: '#717171',
+            search: '#000',
+            debug: '#e03030',
+            default: '#dddddd'
         };
         toolbox.blockIcons = {
             loops: '\uf01e',
@@ -8677,14 +9714,15 @@ var pxt;
             variables: '\uf039',
             functions: '\uf109',
             text: '\uf035',
-            arrays: '\uf0cb'
+            arrays: '\uf0cb',
+            advancedcollapsed: '\uf078',
+            advancedexpanded: '\uf077',
+            more: '\uf141',
+            addpackage: '\uf055',
+            search: '\uf002',
+            debug: '\uf111',
+            default: '\uf12e'
         };
-        var CategoryMode;
-        (function (CategoryMode) {
-            CategoryMode[CategoryMode["All"] = 0] = "All";
-            CategoryMode[CategoryMode["None"] = 1] = "None";
-            CategoryMode[CategoryMode["Basic"] = 2] = "Basic";
-        })(CategoryMode = toolbox.CategoryMode || (toolbox.CategoryMode = {}));
         var toolboxStyle;
         var toolboxStyleBuffer = '';
         function appendToolboxIconCss(className, i) {
@@ -8699,33 +9737,6 @@ var pxt;
             }
         }
         toolbox.appendToolboxIconCss = appendToolboxIconCss;
-        function injectToolboxIconCss(extraCss) {
-            if (extraCss)
-                toolboxStyleBuffer += extraCss;
-            if (!toolboxStyle) {
-                toolboxStyle = document.createElement('style');
-                toolboxStyle.id = "blocklyToolboxIcons";
-                toolboxStyle.type = 'text/css';
-                var head = document.head || document.getElementsByTagName('head')[0];
-                head.appendChild(toolboxStyle);
-            }
-            if (toolboxStyle.sheet) {
-                toolboxStyle.textContent = toolboxStyleBuffer + namespaceStyleBuffer;
-            }
-            else {
-                toolboxStyle.appendChild(document.createTextNode(toolboxStyleBuffer + namespaceStyleBuffer));
-            }
-        }
-        toolbox.injectToolboxIconCss = injectToolboxIconCss;
-        var namespaceStyleBuffer = '';
-        function appendNamespaceCss(namespace, color) {
-            var ns = namespace.toLowerCase();
-            color = color || '#dddddd'; // Default toolbox color
-            if (namespaceStyleBuffer.indexOf(ns) > -1)
-                return;
-            namespaceStyleBuffer += "\n            span.docs." + ns + " {\n                background-color: " + color + " !important;\n                border-color: " + fadeColor(color, 0.2, true) + " !important;\n            }\n        ";
-        }
-        toolbox.appendNamespaceCss = appendNamespaceCss;
         function getNamespaceColor(ns) {
             if (pxt.appTarget.appTheme.blockColors && pxt.appTarget.appTheme.blockColors[ns])
                 return pxt.appTarget.appTheme.blockColors[ns];
@@ -8778,6 +9789,60 @@ var pxt;
         }
         toolbox.fadeColor = fadeColor;
     })(toolbox = pxt.toolbox || (pxt.toolbox = {}));
+})(pxt || (pxt = {}));
+var pxt;
+(function (pxt) {
+    var tutorial;
+    (function (tutorial) {
+        function parseTutorialSteps(tutorialId, tutorialmd) {
+            // Download tutorial markdown
+            var steps = tutorialmd.split(/^##[^#].*$/gmi);
+            var newAuthoring = true;
+            if (steps.length <= 1) {
+                // try again, using old logic.
+                steps = tutorialmd.split(/^###[^#].*$/gmi);
+                newAuthoring = false;
+            }
+            if (steps[0].indexOf("# Not found") == 0) {
+                pxt.log("Tutorial not found: " + tutorialId);
+                throw new Error("Tutorial not found: " + tutorialId);
+            }
+            var stepInfo = [];
+            tutorialmd.replace(newAuthoring ? /^##[^#](.*)$/gmi : /^###[^#](.*)$/gmi, function (f, s) {
+                var info = {
+                    fullscreen: /@(fullscreen|unplugged)/.test(s),
+                    unplugged: /@unplugged/.test(s)
+                };
+                stepInfo.push(info);
+                return "";
+            });
+            if (steps.length < 1)
+                return undefined; // Promise.resolve();
+            var options = steps[0];
+            steps = steps.slice(1, steps.length); // Remove tutorial title
+            for (var i = 0; i < steps.length; i++) {
+                var stepContent = steps[i].trim();
+                var contentLines = stepContent.split('\n');
+                stepInfo[i].headerContentMd = contentLines[0];
+                stepInfo[i].contentMd = stepContent;
+                stepInfo[i].hasHint = contentLines.length > 1;
+            }
+            return stepInfo;
+        }
+        tutorial.parseTutorialSteps = parseTutorialSteps;
+        function bundleTutorialCode(tutorialmd) {
+            tutorialmd = tutorialmd.replace(/((?!.)\s)+/g, "\n");
+            var regex = /```(sim|block|blocks|filterblocks)\s*\n([\s\S]*?)\n```/gmi;
+            var code = '';
+            // Concatenate all blocks in separate code blocks and decompile so we can detect what blocks are used (for the toolbox)
+            tutorialmd.replace(regex, function (m0, m1, m2) {
+                code += "\n { \n " + m2 + "\n } \n";
+                return "";
+            });
+            return code;
+        }
+        tutorial.bundleTutorialCode = bundleTutorialCode;
+    })(tutorial = pxt.tutorial || (pxt.tutorial = {}));
 })(pxt || (pxt = {}));
 /// <reference path='../built/typescriptServices.d.ts' />
 var ts;
@@ -9195,6 +10260,7 @@ var pxt;
         worker_1.makeWebSocket = makeWebSocket;
     })(worker = pxt.worker || (pxt.worker = {}));
 })(pxt || (pxt = {}));
+/* tslint:disable:no-conditional-assignment */
 // TODO: add a macro facility to make 8-bit assembly easier?
 var ts;
 (function (ts) {
@@ -9416,6 +10482,7 @@ var ts;
                     this.labels = {};
                     this.stackpointers = {};
                     this.stack = 0;
+                    this.commPtr = 0;
                     this.peepOps = 0;
                     this.peepDel = 0;
                     this.peepCounts = {};
@@ -9747,6 +10814,15 @@ var ts;
                             else
                                 this.directiveError(lf("expecting number"));
                             break;
+                        case ".p2align":
+                            expectOne();
+                            num0 = this.parseOneInt(words[1]);
+                            if (num0 != null) {
+                                this.align(1 << num0);
+                            }
+                            else
+                                this.directiveError(lf("expecting number"));
+                            break;
                         case ".byte":
                             this.emitBytes(words);
                             break;
@@ -9766,6 +10842,7 @@ var ts;
                             break;
                         case ".word":
                         case ".4bytes":
+                        case ".long":
                             // TODO: a word is machine-dependent (16-bit for AVR, 32-bit for ARM)
                             this.parseNumbers(words).forEach(function (n) {
                                 // we allow negative numbers
@@ -9800,15 +10877,18 @@ var ts;
                             this.stackpointers[words[1]] = this.stack;
                             break;
                         case "@stackempty":
-                            if (this.stackpointers[words[1]] == null)
-                                this.directiveError(lf("no such saved stack"));
-                            else if (this.stackpointers[words[1]] != this.stack)
-                                this.directiveError(lf("stack mismatch"));
+                            if (this.checkStack) {
+                                if (this.stackpointers[words[1]] == null)
+                                    this.directiveError(lf("no such saved stack"));
+                                else if (this.stackpointers[words[1]] != this.stack)
+                                    this.directiveError(lf("stack mismatch"));
+                            }
                             break;
                         case "@scope":
                             this.scope = words[1] || "";
                             this.currLineNo = this.scope ? 0 : this.realCurrLineNo;
                             break;
+                        case ".syntax":
                         case "@nostackcheck":
                             this.checkStack = false;
                             break;
@@ -9822,6 +10902,29 @@ var ts;
                             this.stack = 0;
                             this.scope = "$S" + this.scopeId++;
                             break;
+                        case ".comm": {
+                            words = words.filter(function (x) { return x != ","; });
+                            words.shift();
+                            var sz = this.parseOneInt(words[1]);
+                            var align = 0;
+                            if (words[2])
+                                align = this.parseOneInt(words[2]);
+                            else
+                                align = 4; // not quite what AS does...
+                            var val = this.lookupLabel(words[0]);
+                            if (val == null) {
+                                if (!this.commPtr) {
+                                    this.commPtr = this.lookupExternalLabel("_pxt_comm_base") || 0;
+                                    if (!this.commPtr)
+                                        this.directiveError(lf("PXT_COMM_BASE not defined"));
+                                }
+                                while (this.commPtr & (align - 1))
+                                    this.commPtr++;
+                                this.labels[this.scopedName(words[0])] = this.commPtr - this.baseOffset;
+                                this.commPtr += sz;
+                            }
+                            break;
+                        }
                         case ".file":
                         case ".text":
                         case ".cpu":
@@ -9830,6 +10933,13 @@ var ts;
                         case ".code":
                         case ".thumb_func":
                         case ".type":
+                        case ".fnstart":
+                        case ".save":
+                        case ".size":
+                        case ".fnend":
+                        case ".pad":
+                        case ".globl": // TODO might need this one
+                        case ".local":
                             break;
                         case "@":
                             // @ sp needed
@@ -10059,6 +11169,10 @@ var ts;
                         }
                     }
                 };
+                File.prototype.clearLabels = function () {
+                    this.labels = {};
+                    this.commPtr = 0;
+                };
                 File.prototype.peepPass = function (reallyFinal) {
                     if (this.disablePeepHole)
                         return;
@@ -10068,7 +11182,7 @@ var ts;
                     this.peepHole();
                     this.throwOnError = true;
                     this.finalEmit = false;
-                    this.labels = {};
+                    this.clearLabels();
                     this.iterLines();
                     pxtc.assert(!this.checkStack || this.stack == 0);
                     this.finalEmit = true;
@@ -10087,7 +11201,7 @@ var ts;
                     this.prepLines(text);
                     if (this.errors.length > 0)
                         return;
-                    this.labels = {};
+                    this.clearLabels();
                     this.iterLines();
                     if (this.checkStack && this.stack != 0)
                         this.directiveError(lf("stack misaligned at the end of the file"));
@@ -10095,7 +11209,7 @@ var ts;
                         return;
                     this.ei.expandLdlit(this);
                     this.ei.commonalize(this);
-                    this.labels = {};
+                    this.clearLabels();
                     this.iterLines();
                     this.finalEmit = true;
                     this.reallyFinalEmit = this.disablePeepHole;
@@ -10394,8 +11508,18 @@ var pxt;
             }
         }
         Cloud.isLocalHost = isLocalHost;
+        function localRequestAsync(path, data) {
+            return pxt.U.requestAsync({
+                url: "/api/" + path,
+                headers: { "Authorization": Cloud.localToken },
+                method: data ? "POST" : "GET",
+                data: data || undefined,
+                allowHttpErrors: true
+            });
+        }
+        Cloud.localRequestAsync = localRequestAsync;
         function privateRequestAsync(options) {
-            options.url = pxt.webConfig && pxt.webConfig.isStatic ? pxt.webConfig.relprefix + options.url : Cloud.apiRoot + options.url;
+            options.url = pxt.webConfig && pxt.webConfig.isStatic && !options.forceLiveEndpoint ? pxt.webConfig.relprefix + options.url : Cloud.apiRoot + options.url;
             options.allowGzipPost = true;
             if (!Cloud.isOnline()) {
                 return offlineError(options.url);
@@ -10424,8 +11548,9 @@ var pxt;
             return privateRequestAsync({ url: path }).then(function (resp) { return resp.text; });
         }
         Cloud.privateGetTextAsync = privateGetTextAsync;
-        function privateGetAsync(path) {
-            return privateRequestAsync({ url: path }).then(function (resp) { return resp.json; });
+        function privateGetAsync(path, forceLiveEndpoint) {
+            if (forceLiveEndpoint === void 0) { forceLiveEndpoint = false; }
+            return privateRequestAsync({ url: path, forceLiveEndpoint: forceLiveEndpoint }).then(function (resp) { return resp.json; });
         }
         Cloud.privateGetAsync = privateGetAsync;
         function downloadTargetConfigAsync() {
@@ -10433,39 +11558,41 @@ var pxt;
                 return Promise.resolve(undefined);
             var url = pxt.webConfig && pxt.webConfig.isStatic ? "targetconfig.json" : "config/" + pxt.appTarget.id + "/targetconfig";
             if (Cloud.isLocalHost())
-                return Util.requestAsync({
-                    url: "/api/" + url,
-                    headers: { "Authorization": Cloud.localToken },
-                    method: "GET",
-                    allowHttpErrors: true
-                }).then(function (resp) { return resp.json; });
+                return localRequestAsync(url).then(function (r) { return r ? r.json : undefined; });
             else
                 return Cloud.privateGetAsync(url);
         }
         Cloud.downloadTargetConfigAsync = downloadTargetConfigAsync;
         function downloadScriptFilesAsync(id) {
-            return privateRequestAsync({ url: id + "/text" }).then(function (resp) {
+            return privateRequestAsync({ url: id + "/text", forceLiveEndpoint: true }).then(function (resp) {
                 return JSON.parse(resp.text);
             });
         }
         Cloud.downloadScriptFilesAsync = downloadScriptFilesAsync;
         function downloadMarkdownAsync(docid, locale, live) {
             var packaged = pxt.webConfig && pxt.webConfig.isStatic;
-            var url = packaged
-                ? "docs/" + docid + ".md"
-                : "md/" + pxt.appTarget.id + "/" + docid.replace(/^\//, "") + "?targetVersion=" + encodeURIComponent(pxt.webConfig.targetVersion);
+            var url;
+            if (packaged) {
+                url = docid;
+                var isUnderDocs = /\/docs\//.test(url);
+                var hasExt = /\.\w+$/.test(url);
+                if (!isUnderDocs) {
+                    url = "docs/" + url;
+                }
+                if (!hasExt) {
+                    url = url + ".md";
+                }
+            }
+            else {
+                url = "md/" + pxt.appTarget.id + "/" + docid.replace(/^\//, "") + "?targetVersion=" + encodeURIComponent(pxt.webConfig.targetVersion);
+            }
             if (!packaged && locale != "en") {
                 url += "&lang=" + encodeURIComponent(Util.userLanguage());
                 if (live)
                     url += "&live=1";
             }
             if (Cloud.isLocalHost() && !live)
-                return Util.requestAsync({
-                    url: "/api/" + url,
-                    headers: { "Authorization": Cloud.localToken },
-                    method: "GET",
-                    allowHttpErrors: true
-                }).then(function (resp) {
+                return localRequestAsync(url).then(function (resp) {
                     if (resp.statusCode == 404)
                         return privateGetTextAsync(url);
                     else
@@ -10479,8 +11606,9 @@ var pxt;
             return privateRequestAsync({ url: path, method: "DELETE" }).then(function (resp) { return resp.json; });
         }
         Cloud.privateDeleteAsync = privateDeleteAsync;
-        function privatePostAsync(path, data) {
-            return privateRequestAsync({ url: path, data: data || {} }).then(function (resp) { return resp.json; });
+        function privatePostAsync(path, data, forceLiveEndpoint) {
+            if (forceLiveEndpoint === void 0) { forceLiveEndpoint = false; }
+            return privateRequestAsync({ url: path, data: data || {}, forceLiveEndpoint: forceLiveEndpoint }).then(function (resp) { return resp.json; });
         }
         Cloud.privatePostAsync = privatePostAsync;
         function isLoggedIn() { return !!Cloud.accessToken; }

@@ -134,7 +134,7 @@ var pxt;
                             case "renderblocks": {
                                 var rendermsg_1 = data;
                                 p = p.then(function () { return projectView.renderBlocksAsync(rendermsg_1); })
-                                    .then(function (img) { resp_1 = img; });
+                                    .then(function (r) { resp_1 = r.xml; });
                                 break;
                             }
                             case "toggletrace": {
